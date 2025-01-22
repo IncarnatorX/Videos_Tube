@@ -1,6 +1,17 @@
 import Video from "../models/video_model.js";
-import videoRouter from "../routes/video_route.js";
 
-const getAllUserVideos = async () => {};
+const getAllVideos = async (req, res) => {
+  try {
+    const allVideos = await Video.find({});
 
-export { getAllUserVideos };
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, allVideos, "Fetched all the videos successfully.")
+      );
+  } catch (error) {
+    console.error("Unable to fetch all videos: ", error.message);
+  }
+};
+
+export { getAllVideos };
