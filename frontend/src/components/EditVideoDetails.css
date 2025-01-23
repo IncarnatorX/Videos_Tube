@@ -1,0 +1,78 @@
+dialog {
+  opacity: 1;
+  scale: 1;
+  transition: all 0.25s linear;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  margin: auto;
+  width: 400px;
+  height: 300px;
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+form .input-field {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+.input-field input {
+  border: 1.5px solid rgb(137, 57, 57);
+  padding: 1rem;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+}
+
+.input-field label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: 0.2s;
+  color: #666;
+}
+
+input:focus {
+  border: 1.5px solid teal;
+}
+
+input:focus ~ label {
+  top: 0;
+  font-size: 1rem;
+  padding: 0 10px;
+  background-color: #fff;
+  color: #666;
+}
+
+.save-btn {
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  border: none;
+  overflow: none;
+  cursor: pointer;
+  background-color: #0077ed;
+}
