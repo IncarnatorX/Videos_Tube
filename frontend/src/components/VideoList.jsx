@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import VideoListDiv from "./VideoListDiv";
 import "./VideoList.css";
 
 const VideoList = () => {
@@ -19,17 +20,10 @@ const VideoList = () => {
   }, []);
 
   return (
-    <div className="video-list">
-      {videos.map((video) => (
-        <div key={video._id} className="video-item">
-          <img src={video.thumbnail} alt={video.title} loading="lazy" />
-          <div className="video-info">
-            <h4>{video.title}</h4>
-            <p>{video.description}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+    <>
+      <h1 className="title">Videos</h1>
+      <VideoListDiv videos={videos} />
+    </>
   );
 };
 

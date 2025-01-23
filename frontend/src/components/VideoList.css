@@ -1,17 +1,16 @@
 .video-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 }
 
 .video-list .video-item {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 10px;
+  gap: 1rem;
+  padding: 0.7rem;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background: #f9f9f9;
   transition: box-shadow 0.3s;
 }
@@ -24,30 +23,39 @@
   width: 120px;
   height: 90px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 0.5rem;
+}
+
+.video-info {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .video-list .video-item .video-info h4 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.1rem;
   color: #333;
 }
 
 .video-list .video-item .video-info p {
-  margin: 5px 0 0;
-  font-size: 14px;
+  margin: 0.3rem 0 0;
+  font-size: 1rem;
   color: #666;
 }
 
 .video-list .loader {
   text-align: center;
-  font-size: 16px;
+  font-size: 1rem;
   color: #999;
 }
 
 .video-list .end-message {
   text-align: center;
-  font-size: 16px;
+  font-size: 1rem;
   color: #444;
   font-weight: bold;
+}
+
+.title {
+  text-align: center;
 }
