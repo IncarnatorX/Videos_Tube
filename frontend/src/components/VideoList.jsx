@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { VideoContext } from "../Context/VideoContext";
 import VideoListDiv from "./VideoListDiv";
 import "./VideoList.css";
 
 const VideoList = () => {
   const [videos, setVideos] = useState([]);
+
+  const { detailsUpdated } = useContext(VideoContext);
 
   const fetchVideos = async () => {
     try {
@@ -17,7 +20,7 @@ const VideoList = () => {
 
   useEffect(() => {
     fetchVideos();
-  }, []);
+  }, [detailsUpdated]);
 
   return (
     <>

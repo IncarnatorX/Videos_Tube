@@ -1,12 +1,15 @@
-import React from 'react'
-import VideoList from './components/VideoList'
+import { useState } from "react";
+import VideoList from "./components/VideoList";
+import { VideoContext } from "./Context/VideoContext";
 
 const App = () => {
-  return (
-    <>
-    <VideoList/>
-    </>
-  )
-}
+  const [detailsUpdated, setDetailsUpdated] = useState(false);
 
-export default App
+  return (
+    <VideoContext.Provider value={{ detailsUpdated, setDetailsUpdated }}>
+      <VideoList />
+    </VideoContext.Provider>
+  );
+};
+
+export default App;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import EditVideoDetails from "./EditVideoDetails";
 import PropTypes from "prop-types";
+import ToastComponent from "./ToastContainer";
 
 const VideoListDiv = ({ videos }) => {
   const [currentVideoID, setCurrentVideoId] = useState("");
@@ -41,6 +42,7 @@ const VideoListDiv = ({ videos }) => {
         ))}
       </div>
       <EditVideoDetails currentVideoID={currentVideoID} />
+      <ToastComponent />
     </>
   );
 };

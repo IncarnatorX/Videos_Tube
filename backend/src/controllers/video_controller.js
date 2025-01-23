@@ -13,9 +13,11 @@ const getAllVideos = async (req, res) => {
 const editTitleAndDesc = async (req, res) => {
   try {
     const { title, description, _id } = req.body;
-    console.log(`${title}: ${description}`);
-    console.log(_id);
-    res.status(200).json({ message: "Title and Description received" });
+    await Video.findByIdAndUpdate(_id, {
+      $set: { title, description },
+    });
+
+    res.status(200).json({ message: "Title and Description updated" });
   } catch (error) {
     console.error(error.message);
   }
