@@ -51,7 +51,8 @@ form .input-field {
   transform: translateY(-50%);
   pointer-events: none;
   transition: 0.2s;
-  color: #666;
+  color: #fff;
+  opacity: 0;
 }
 
 input:focus {
@@ -64,6 +65,7 @@ input:focus ~ label {
   padding: 0 10px;
   background-color: #fff;
   color: #666;
+  opacity: 1;
 }
 
 .save-btn {

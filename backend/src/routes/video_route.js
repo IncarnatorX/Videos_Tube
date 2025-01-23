@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { Video } from "../models/video_model.js";
-import { getAllVideos } from "../controllers/video_controller.js";
+import {
+  editTitleAndDesc,
+  getAllVideos,
+} from "../controllers/video_controller.js";
 
 const videoRouter = Router();
 
 videoRouter.route("/getAllVideos").get(getAllVideos);
+
+videoRouter.route("/edit").post(editTitleAndDesc);
 export default videoRouter;

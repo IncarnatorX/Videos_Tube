@@ -1,10 +1,14 @@
+import { useState } from "react";
 import EditVideoDetails from "./EditVideoDetails";
 import PropTypes from "prop-types";
 
 const VideoListDiv = ({ videos }) => {
-  function HandleDialogOpening() {
+  const [currentVideoID, setCurrentVideoId] = useState("");
+
+  function HandleDialogOpening(id) {
     const dialog = document.querySelector("dialog");
     dialog.showModal();
+    setCurrentVideoId(id);
   }
 
   return (
@@ -15,7 +19,7 @@ const VideoListDiv = ({ videos }) => {
             <video
               src={video.videoFile}
               controls
-              width={250}
+              width={350}
               height={250}
             ></video>
 
@@ -26,7 +30,7 @@ const VideoListDiv = ({ videos }) => {
                 <p>{video.description}</p>
                 <button
                   className="edit-button btn"
-                  onClick={HandleDialogOpening}
+                  onClick={() => HandleDialogOpening(video._id)}
                 >
                   Edit
                 </button>
@@ -36,7 +40,7 @@ const VideoListDiv = ({ videos }) => {
           </div>
         ))}
       </div>
-      <EditVideoDetails />
+      <EditVideoDetails currentVideoID={currentVideoID} />
     </>
   );
 };

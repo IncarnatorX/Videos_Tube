@@ -10,4 +10,15 @@ const getAllVideos = async (req, res) => {
   }
 };
 
-export { getAllVideos };
+const editTitleAndDesc = async (req, res) => {
+  try {
+    const { title, description, _id } = req.body;
+    console.log(`${title}: ${description}`);
+    console.log(_id);
+    res.status(200).json({ message: "Title and Description received" });
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export { getAllVideos, editTitleAndDesc };
