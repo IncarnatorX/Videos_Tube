@@ -1,0 +1,35 @@
+#upload-input {
+  width: 100%;
+  padding: 1rem;
+  cursor: pointer;
+  outline: none;
+  border: 1.5px solid rebeccapurple;
+  border-radius: 0.5rem;
+  &::file-selector-button {
+    padding: 0.5rem;
+    color: #fff;
+    background-color: #0077ed;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  &::file-selector-button:hover {
+    background-color: rebeccapurple;
+    transition: background 250ms linear;
+  }
+}
+
+#upload-btn {
+  width: fit-content;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #0077ed;
+  color: #fff;
+  &:hover {
+    background-color: rebeccapurple;
+    transition: background 250ms linear;
+  }
+}

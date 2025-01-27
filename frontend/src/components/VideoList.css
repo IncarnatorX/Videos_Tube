@@ -1,15 +1,14 @@
 .video-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.5rem;
   width: 100%;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 400px);
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
 }
 
 .video-list .video-item {
-  width: 45%;
+  width: 400px;
   display: flex;
   flex-direction: column;
   gap: 1rem;

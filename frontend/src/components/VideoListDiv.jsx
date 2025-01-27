@@ -1,14 +1,21 @@
 import { useState } from "react";
 import EditVideoDetails from "./EditVideoDetails";
-import PropTypes from "prop-types";
+import ReUploadVideoComponent from "./ReUploadVideoComponent";
 import ToastComponent from "./ToastContainer";
+import PropTypes from "prop-types";
 
 const VideoListDiv = ({ videos }) => {
   const [currentVideoID, setCurrentVideoId] = useState("");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [reuploadDialog, setReUploadDialog] = useState(false);
 
-  function HandleDialogOpening(id) {
-    const dialog = document.querySelector("dialog");
-    dialog.showModal();
+  function HandleEditDialogOpening(id) {
+    setEditDialogOpen(!editDialogOpen);
+    setCurrentVideoId(id);
+  }
+
+  function HandleReUploadDialog(id) {
+    setReUploadDialog(!reuploadDialog);
     setCurrentVideoId(id);
   }
 
@@ -20,7 +27,7 @@ const VideoListDiv = ({ videos }) => {
             <video
               src={video.videoFile}
               controls
-              width={350}
+              width={300}
               height={250}
             ></video>
 
@@ -31,17 +38,31 @@ const VideoListDiv = ({ videos }) => {
                 <p>{video.description}</p>
                 <button
                   className="edit-button btn"
-                  onClick={() => HandleDialogOpening(video._id)}
+                  onClick={() => HandleEditDialogOpening(video._id)}
                 >
                   Edit
                 </button>
-                <button className="re-upload-button btn">Re-Upload</button>
+                <button
+                  className="re-upload-button btn"
+                  onClick={() => HandleReUploadDialog(video._id)}
+                >
+                  Re-Upload
+                </button>
               </div>
             </section>
           </div>
         ))}
       </div>
-      <EditVideoDetails currentVideoID={currentVideoID} />
+      <EditVideoDetails
+        currentVideoID={currentVideoID}
+        editDialogOpen={editDialogOpen}
+        setEditDialogOpen={setEditDialogOpen}
+      />
+      <ReUploadVideoComponent
+        currentVideoID={currentVideoID}
+        reuploadDialog={reuploadDialog}
+        setReUploadDialog={setReUploadDialog}
+      />
       <ToastComponent />
     </>
   );

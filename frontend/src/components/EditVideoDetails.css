@@ -15,6 +15,13 @@ dialog {
   }
 }
 
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
@@ -68,7 +75,14 @@ input:focus ~ label {
   opacity: 1;
 }
 
-.save-btn {
+textarea {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  outline: none;
+  border: 1.5px solid rgb(137, 57, 57);
+}
+
+.btn {
   width: fit-content;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -76,5 +90,12 @@ input:focus ~ label {
   border: none;
   overflow: none;
   cursor: pointer;
+}
+
+.save-btn {
   background-color: #0077ed;
+}
+
+.close-btn {
+  background-color: #ef5350;
 }
