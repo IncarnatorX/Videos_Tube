@@ -45,7 +45,7 @@ const ReUploadVideoComponent = ({ currentVideoID, reuploadRef }) => {
   };
 
   return (
-    <dialog ref={reuploadRef}>
+    <dialog ref={reuploadRef} className="reupload-dialog">
       <form
         method="dialog"
         encType="multipart/form-data"

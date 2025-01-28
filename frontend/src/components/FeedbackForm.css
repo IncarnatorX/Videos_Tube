@@ -1,0 +1,83 @@
+.feedback-form-dialog {
+  opacity: 1;
+  scale: 1;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.35, 0.58);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  margin: auto;
+  width: 500px;
+  /* height: 500px; */
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+
+.feedback-form-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.feedback-form div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#fullname,
+#email {
+  width: 70%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #7986cb;
+  outline: none;
+  caret-color: chocolate;
+  font-size: 0.9rem;
+}
+
+.close-feedback-form {
+  width: fit-content;
+}
+
+.feedback-textarea {
+  align-self: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #7986cb;
+  caret-color: chocolate;
+  outline: none;
+  resize: none;
+  font-size: 1rem;
+}
+
+.feedback-form .rating-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.close-feedback-form {
+  width: fit-content;
+  align-self: center;
+  margin-block: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  border: none;
+  overflow: none;
+  cursor: pointer;
+  background-color: #ef5350;
+}

@@ -38,7 +38,7 @@ const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
   };
 
   return (
-    <dialog ref={editDialogRef}>
+    <dialog ref={editDialogRef} className="edit-dialog">
       <form method="dialog" onSubmit={uploadTitleAndDesc}>
         <div className="input-field">
           <input type="text" id="title" name="title" size={30} ref={titleRef} />
