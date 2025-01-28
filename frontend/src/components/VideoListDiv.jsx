@@ -1,24 +1,39 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import EditVideoDetails from "./EditVideoDetails";
 import ReUploadVideoComponent from "./ReUploadVideoComponent";
+import FeedbackForm from "./FeedbackForm";
 import ToastComponent from "./ToastContainer";
-import PropTypes from "prop-types";
-import RatingComponent from "./RatingComponent";
 import "./VideoList.css";
+import PropTypes from "prop-types";
 
 const VideoListDiv = ({ videos }) => {
   const [currentVideoID, setCurrentVideoId] = useState("");
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [reuploadDialog, setReUploadDialog] = useState(false);
 
+  const editDialogRef = useRef(null);
+  const reuploadRef = useRef(null);
+  const feedbackFormRef = useRef(null);
+
+  // EDIT BUTTON DIALOG HANDLINGS
   function HandleEditDialogOpening(id) {
-    setEditDialogOpen(!editDialogOpen);
+    if (editDialogRef.current) {
+      editDialogRef.current.showModal();
+      setCurrentVideoId(id);
+    }
+  }
+
+  // RE-UPLOAD DIALOG HANDLING
+  function handleReuploadDialogOpen(id) {
+    const { current } = reuploadRef;
+    current.showModal();
     setCurrentVideoId(id);
   }
 
-  function HandleReUploadDialog(id) {
-    setReUploadDialog(!reuploadDialog);
-    setCurrentVideoId(id);
+  // FEEDBACK FORM HANDLING
+  function handleFeedbackFormDialog(id) {
+    if (feedbackFormRef.current) {
+      feedbackFormRef.current.showModal();
+      setCurrentVideoId(id);
+    }
   }
 
   return (
@@ -46,12 +61,16 @@ const VideoListDiv = ({ videos }) => {
                 </button>
                 <button
                   className="re-upload-button btn"
-                  onClick={() => HandleReUploadDialog(video._id)}
+                  onClick={() => handleReuploadDialogOpen(video._id)}
                 >
                   Re-Upload
                 </button>
-                <button className="btn feedback-btn">Submit Feedback</button>
-                <RatingComponent />
+                <button
+                  className="btn feedback-btn"
+                  onClick={() => handleFeedbackFormDialog(video._id)}
+                >
+                  Submit Feedback
+                </button>
               </div>
             </section>
           </div>
@@ -59,14 +78,13 @@ const VideoListDiv = ({ videos }) => {
       </div>
       <EditVideoDetails
         currentVideoID={currentVideoID}
-        editDialogOpen={editDialogOpen}
-        setEditDialogOpen={setEditDialogOpen}
+        editDialogRef={editDialogRef}
       />
       <ReUploadVideoComponent
         currentVideoID={currentVideoID}
-        reuploadDialog={reuploadDialog}
-        setReUploadDialog={setReUploadDialog}
+        reuploadRef={reuploadRef}
       />
+      <FeedbackForm feedbackFormRef={feedbackFormRef} />
       <ToastComponent />
     </>
   );

@@ -1,37 +1,15 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { VideoContext } from "../Context/VideoContext";
 import { ThreeDot } from "react-loading-indicators";
 import "./ReUploadVideoComponent.css";
 import PropTypes from "prop-types";
 
-const ReUploadVideoComponent = ({
-  currentVideoID,
-  reuploadDialog,
-  setReUploadDialog,
-}) => {
-  const reuploadRef = useRef(null);
+const ReUploadVideoComponent = ({ currentVideoID, reuploadRef }) => {
   const fileInputRef = useRef(null);
   const { setDetailsUpdated, detailsUpdated } = useContext(VideoContext);
 
   const [uploading, setUploading] = useState(false);
-
-  const handleReuploadDialogOpen = () => {
-    const { current } = reuploadRef;
-    current.showModal();
-  };
-
-  const handleReuploadDialogClose = () => {
-    const { current } = reuploadRef;
-    if (reuploadDialog) {
-      current.close();
-      setReUploadDialog(!reuploadDialog);
-    }
-  };
-
-  useEffect(() => {
-    if (reuploadDialog) handleReuploadDialogOpen();
-  }, [reuploadDialog]);
 
   // FUNCTION TO HANDLE FORM SUBMISSION
 
@@ -53,7 +31,7 @@ const ReUploadVideoComponent = ({
       const data = await response.json();
       if (response.ok) {
         toast.success(data.message);
-        handleReuploadDialogClose();
+        reuploadRef.current.close();
       } else {
         toast.error(data.message);
       }
@@ -93,7 +71,10 @@ const ReUploadVideoComponent = ({
           </button>
         )}
       </form>
-      <button className="btn close-btn" onClick={handleReuploadDialogClose}>
+      <button
+        className="btn close-btn"
+        onClick={() => reuploadRef.current.close()}
+      >
         Close
       </button>
     </dialog>
@@ -102,8 +83,7 @@ const ReUploadVideoComponent = ({
 
 ReUploadVideoComponent.propTypes = {
   currentVideoID: PropTypes.string,
-  reuploadDialog: PropTypes.bool,
-  setReUploadDialog: PropTypes.func,
+  reuploadRef: PropTypes.object,
 };
 
 export default ReUploadVideoComponent;

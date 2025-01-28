@@ -1,17 +1,12 @@
 import { toast } from "react-toastify";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 import { VideoContext } from "../Context/VideoContext";
 import "./EditVideoDetails.css";
 import PropTypes from "prop-types";
 
-const EditVideoDetails = ({
-  currentVideoID,
-  editDialogOpen,
-  setEditDialogOpen,
-}) => {
+const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
   const titleRef = useRef(null);
   const descRef = useRef(null);
-  const dialogRef = useRef(null);
 
   const { setDetailsUpdated, detailsUpdated } = useContext(VideoContext);
 
@@ -42,23 +37,8 @@ const EditVideoDetails = ({
     }
   };
 
-  const handleDialogOpen = () => {
-    const { current } = dialogRef;
-    current.showModal();
-  };
-
-  const handleDialogClose = () => {
-    const { current } = dialogRef;
-    current.close();
-    setEditDialogOpen(!editDialogOpen);
-  };
-
-  useEffect(() => {
-    if (editDialogOpen) handleDialogOpen();
-  }, [editDialogOpen]);
-
   return (
-    <dialog ref={dialogRef}>
+    <dialog ref={editDialogRef}>
       <form method="dialog" onSubmit={uploadTitleAndDesc}>
         <div className="input-field">
           <input type="text" id="title" name="title" size={30} ref={titleRef} />
@@ -79,7 +59,10 @@ const EditVideoDetails = ({
           Save Changes
         </button>
       </form>
-      <button className="btn close-btn" onClick={handleDialogClose}>
+      <button
+        className="btn close-btn"
+        onClick={() => editDialogRef.current.close()}
+      >
         Close
       </button>
     </dialog>
@@ -88,8 +71,7 @@ const EditVideoDetails = ({
 
 EditVideoDetails.propTypes = {
   currentVideoID: PropTypes.string,
-  editDialogOpen: PropTypes.bool,
-  setEditDialogOpen: PropTypes.func,
+  editDialogRef: PropTypes.object,
 };
 
 export default EditVideoDetails;
