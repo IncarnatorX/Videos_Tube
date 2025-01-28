@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { VideoContext } from "../Context/VideoContext";
 import VideoListDiv from "./VideoListDiv";
+import axios from "axios";
 import "./VideoList.css";
 
 const VideoList = () => {
@@ -24,7 +24,6 @@ const VideoList = () => {
 
   return (
     <>
-      <h1 className="title">Videos</h1>
       <VideoListDiv videos={videos} />
     </>
   );
