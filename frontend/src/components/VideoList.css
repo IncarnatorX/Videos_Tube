@@ -54,6 +54,10 @@
   background-color: rgb(69, 169, 69);
 }
 
+.feedback-btn {
+  background-color: #0077ed;
+}
+
 .video-list .video-item .video-info h4 {
   margin: 0;
   font-size: 1.1rem;

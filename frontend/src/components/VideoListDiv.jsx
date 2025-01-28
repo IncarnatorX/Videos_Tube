@@ -3,6 +3,8 @@ import EditVideoDetails from "./EditVideoDetails";
 import ReUploadVideoComponent from "./ReUploadVideoComponent";
 import ToastComponent from "./ToastContainer";
 import PropTypes from "prop-types";
+import RatingComponent from "./RatingComponent";
+import "./VideoList.css";
 
 const VideoListDiv = ({ videos }) => {
   const [currentVideoID, setCurrentVideoId] = useState("");
@@ -48,6 +50,8 @@ const VideoListDiv = ({ videos }) => {
                 >
                   Re-Upload
                 </button>
+                <button className="btn feedback-btn">Submit Feedback</button>
+                <RatingComponent />
               </div>
             </section>
           </div>
