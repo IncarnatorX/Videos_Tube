@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { VideoContext } from "./Context/VideoContext";
 import HomePage from "./pages/HomePage";
-import axios from "axios";
 import "./App.css";
 
 const App = () => {
@@ -10,8 +9,9 @@ const App = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getAllVideos");
-      setVideos(response.data);
+      const response = await fetch("http://localhost:8080/getAllVideos");
+      const data = response.json();
+      setVideos(data);
     } catch (error) {
       console.error("Error fetching videos:", error.message);
     }
