@@ -25,6 +25,8 @@ const VideoComponent = ({
             <div className="video-info">
               <h4>{video.title}</h4>
               <p>{video.description}</p>
+            </div>
+            <div className="video-btns">
               <button
                 className="edit-button btn"
                 onClick={() => HandleEditDialogOpening(video._id)}

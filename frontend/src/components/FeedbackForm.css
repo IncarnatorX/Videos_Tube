@@ -45,6 +45,9 @@
   outline: none;
   caret-color: chocolate;
   font-size: 0.9rem;
+  &:focus {
+    border-color: #ffa000;
+  }
 }
 
 .close-feedback-form {
@@ -60,6 +63,9 @@
   outline: none;
   resize: none;
   font-size: 1rem;
+  &:focus {
+    border-color: #ffa000;
+  }
 }
 
 .feedback-form .rating-div {
@@ -69,7 +75,7 @@
   width: 100%;
 }
 
-.close-feedback-form {
+.close-feedback-form-btn {
   width: fit-content;
   align-self: center;
   margin-block: 1rem;

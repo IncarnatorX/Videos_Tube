@@ -17,7 +17,7 @@ const FeedbackForm = ({ feedbackFormRef }) => {
         </div>
 
         <div>
-          <label htmlFor="">Email address: </label>
+          <label htmlFor="email">Email address: </label>
           <input
             type="email"
             name="email"
@@ -43,7 +43,7 @@ const FeedbackForm = ({ feedbackFormRef }) => {
         </div>
       </form>
       <button
-        className="close-feedback-form"
+        className="close-feedback-form-btn"
         onClick={() => feedbackFormRef.current.close()}
       >
         Close Form
