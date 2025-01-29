@@ -5,7 +5,6 @@ import FeedbackForm from "./FeedbackForm";
 import ToastComponent from "./ToastContainer";
 import VideoComponent from "./VideoComponent";
 import PropTypes from "prop-types";
-import "./VideoList.css";
 
 const VideoListDiv = () => {
   const [currentVideoID, setCurrentVideoId] = useState("");

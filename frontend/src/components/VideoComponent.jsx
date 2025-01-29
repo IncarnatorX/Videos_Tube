@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { VideoContext } from "../Context/VideoContext";
 import PropTypes from "prop-types";
+import "./VideoComponent.css";
 
 const VideoComponent = ({
   HandleEditDialogOpening,
@@ -19,12 +20,11 @@ const VideoComponent = ({
             width={300}
             height={250}
           ></video>
-
           <section>
             {/* <img src={video.thumbnail} alt={video.title} loading="lazy" /> */}
             <div className="video-info">
-              <h4>{video.title}</h4>
-              <p>{video.description}</p>
+              <h4 className="video-title">{video.title}</h4>
+              <p className="video-desc">{video.description}</p>
             </div>
             <div className="video-btns">
               <button
@@ -46,6 +46,16 @@ const VideoComponent = ({
                 Submit Feedback
               </button>
             </div>
+          </section>
+          <section className="review-ratings">
+            <p>No. of Reviews: {video.feedback.length} </p>
+            <p>
+              Average Rating:{" "}
+              {video.feedback.reduce((sum, r) => sum + Number(r.rating), 0) /
+                video.feedback.length || 0}{" "}
+              stars
+            </p>
+            <span className="more-btn">More....</span>
           </section>
         </div>
       ))}

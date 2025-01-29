@@ -2,8 +2,12 @@ import RatingComponent from "./RatingComponent";
 import PropTypes from "prop-types";
 import "./FeedbackForm.css";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { VideoContext } from "../Context/VideoContext";
 
 const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
+  const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);
+
   async function handleFeedbackFromSubmission(event) {
     const form = event.target;
 
@@ -31,6 +35,7 @@ const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
       const data = await response.json();
       if (response.ok) {
         toast.success(data.message);
+        setDetailsUpdated(!detailsUpdated);
       }
     } catch (error) {
       console.error(error.message);

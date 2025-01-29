@@ -7,7 +7,7 @@
   padding: 1rem;
 }
 
-.video-list .video-item {
+.video-item {
   width: 400px;
   display: flex;
   flex-direction: column;
@@ -17,13 +17,12 @@
   border-radius: 0.5rem;
   background: #f9f9f9;
   transition: box-shadow 0.3s;
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
-.video-list .video-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.video-list .video-item img {
+.video-item img {
   width: 120px;
   height: 90px;
   object-fit: cover;
@@ -34,6 +33,26 @@
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
+}
+
+.video-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.video-desc {
+  margin: 0.3rem 0 0;
+  font-size: 1rem;
+  color: #666;
+  text-wrap: wrap;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .btn {
@@ -58,22 +77,25 @@
   background-color: #0077ed;
 }
 
-.video-list .video-item .video-info h4 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #333;
-}
-
-.video-list .video-item .video-info p {
-  margin: 0.3rem 0 0;
-  font-size: 1rem;
-  color: #666;
-  text-wrap: wrap;
-  text-align: justify;
-}
-
 .video-btns {
   display: flex;
   column-gap: 0.5rem;
   padding: 0.5rem;
+}
+
+.review-ratings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  row-gap: 0.5rem;
+}
+
+.more-btn {
+  width: 100%;
+  text-align: right;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #666;
+  font-size: 0.85rem;
 }
