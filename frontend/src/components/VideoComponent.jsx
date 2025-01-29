@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import { VideoContext } from "../Context/VideoContext";
+
 import PropTypes from "prop-types";
 import "./VideoComponent.css";
+import { useNavigate } from "react-router";
 
 const VideoComponent = ({
   HandleEditDialogOpening,
@@ -9,6 +11,8 @@ const VideoComponent = ({
   handleFeedbackFormDialog,
 }) => {
   const { videos } = useContext(VideoContext);
+
+  const navigate = useNavigate();
 
   return (
     <div className="video-list">
@@ -55,7 +59,12 @@ const VideoComponent = ({
                 video.feedback.length || 0}{" "}
               stars
             </p>
-            <span className="more-btn">More....</span>
+            <span
+              className="more-btn"
+              onClick={() => navigate("/videoInfo", { state: video })}
+            >
+              More....
+            </span>
           </section>
         </div>
       ))}

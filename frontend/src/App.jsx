@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { VideoContext } from "./Context/VideoContext";
+import { BrowserRouter, Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
+import VideoInfoPage from "./pages/VideoInfoPage";
 import "./App.css";
 
 const App = () => {
@@ -10,7 +12,7 @@ const App = () => {
   const fetchVideos = async () => {
     try {
       const response = await fetch("http://localhost:8080/getAllVideos");
-      const data = response.json();
+      const data = await response.json();
       setVideos(data);
     } catch (error) {
       console.error("Error fetching videos:", error.message);
@@ -22,11 +24,16 @@ const App = () => {
   }, [detailsUpdated]);
 
   return (
-    <VideoContext.Provider
-      value={{ detailsUpdated, setDetailsUpdated, videos }}
-    >
-      <HomePage />
-    </VideoContext.Provider>
+    <BrowserRouter>
+      <VideoContext.Provider
+        value={{ detailsUpdated, setDetailsUpdated, videos }}
+      >
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/videoInfo" element={<VideoInfoPage />} />
+        </Routes>
+      </VideoContext.Provider>
+    </BrowserRouter>
   );
 };
 
