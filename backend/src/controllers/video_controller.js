@@ -48,4 +48,22 @@ const reUploadVideo = async (req, res) => {
   }
 };
 
-export { getAllVideos, editTitleAndDesc, reUploadVideo };
+const feedbackHandler = async (req, res) => {
+  try {
+    const { _id, ...feedback } = req.body;
+    const updatedVideo = await Video.findByIdAndUpdate(_id, {
+      $push: { feedback },
+    });
+
+    if (!updatedVideo)
+      res
+        .status(404)
+        .json({ message: "Error fetching and updating the video." });
+
+    res.status(200).json({ message: "Feedback Received" });
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export { getAllVideos, editTitleAndDesc, reUploadVideo, feedbackHandler };

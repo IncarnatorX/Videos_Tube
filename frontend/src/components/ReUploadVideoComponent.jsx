@@ -57,6 +57,7 @@ const ReUploadVideoComponent = ({ currentVideoID, reuploadRef }) => {
           name="videoFile"
           accept="video/mp4"
           ref={fileInputRef}
+          required
         />
 
         {uploading ? (

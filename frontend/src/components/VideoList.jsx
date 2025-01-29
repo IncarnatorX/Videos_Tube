@@ -52,7 +52,10 @@ const VideoListDiv = () => {
         currentVideoID={currentVideoID}
         reuploadRef={reuploadRef}
       />
-      <FeedbackForm feedbackFormRef={feedbackFormRef} />
+      <FeedbackForm
+        feedbackFormRef={feedbackFormRef}
+        currentVideoID={currentVideoID}
+      />
       <ToastComponent />
     </>
   );

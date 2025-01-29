@@ -7,7 +7,7 @@
   border: none;
   margin: auto;
   width: 400px;
-  height: 300px;
+  height: 400px;
 
   @starting-style {
     opacity: 0;
@@ -44,42 +44,26 @@ form .input-field {
   position: relative;
 }
 
-.input-field input {
-  border: 1.5px solid rgb(137, 57, 57);
+input {
+  border: 2px solid rgb(137, 57, 57);
   padding: 1rem;
   border-radius: 0.7rem;
   font-size: 1rem;
-}
-
-.input-field label {
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  transition: 0.2s;
-  color: #fff;
-  opacity: 0;
-}
-
-input:focus {
-  border: 1.5px solid teal;
-}
-
-input:focus ~ label {
-  top: 0;
-  font-size: 1rem;
-  padding: 0 10px;
-  background-color: #fff;
-  color: #666;
-  opacity: 1;
+  outline: none;
+  &:focus {
+    border: 2px solid #673ab7;
+  }
 }
 
 textarea {
   border-radius: 0.5rem;
   padding: 0.5rem;
   outline: none;
-  border: 1.5px solid rgb(137, 57, 57);
+  border: 2px solid rgb(137, 57, 57);
+  outline: none;
+  &:focus {
+    border: 2px solid #673ab7;
+  }
 }
 
 .btn {
@@ -94,6 +78,10 @@ textarea {
 
 .save-btn {
   background-color: #0077ed;
+  transition: background 250ms linear;
+  &:hover {
+    background-color: #0a72da;
+  }
 }
 
 .close-btn {

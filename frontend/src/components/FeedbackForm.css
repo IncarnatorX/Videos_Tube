@@ -28,6 +28,11 @@
   justify-content: center;
 }
 
+.feedback-form .form-title {
+  width: 100%;
+  text-align: center;
+}
+
 .feedback-form div {
   width: 100%;
   display: flex;
@@ -75,7 +80,7 @@
   width: 100%;
 }
 
-.close-feedback-form-btn {
+.btn {
   width: fit-content;
   align-self: center;
   margin-block: 1rem;
@@ -85,5 +90,12 @@
   border: none;
   overflow: none;
   cursor: pointer;
+}
+
+.submit-btn {
+  background-color: #0071e3;
+}
+
+.close-feedback-form-btn {
   background-color: #ef5350;
 }

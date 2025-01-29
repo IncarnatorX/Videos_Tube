@@ -10,7 +10,7 @@ const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
 
   const { setDetailsUpdated, detailsUpdated } = useContext(VideoContext);
 
-  const uploadTitleAndDesc = async (e) => {
+  const uploadTitleAndDescSubmission = async (e) => {
     const formData = new FormData(e.target);
     const editedDetails = {};
     for (const [name, value] of formData) {
@@ -39,22 +39,29 @@ const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
 
   return (
     <dialog ref={editDialogRef} className="edit-dialog">
-      <form method="dialog" onSubmit={uploadTitleAndDesc}>
-        <div className="input-field">
-          <input type="text" id="title" name="title" size={30} ref={titleRef} />
-          <label htmlFor="title">Enter Title: </label>
-        </div>
-        <div className="input-field">
-          <textarea
-            type="text"
-            id="description"
-            name="description"
-            size={30}
-            ref={descRef}
-            cols={35}
-            rows={5}
-          ></textarea>
-        </div>
+      <form method="dialog" onSubmit={uploadTitleAndDescSubmission}>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          size={30}
+          ref={titleRef}
+          placeholder="Enter Title"
+          required
+        />
+
+        <textarea
+          type="text"
+          id="description"
+          name="description"
+          size={30}
+          ref={descRef}
+          cols={35}
+          rows={5}
+          placeholder="Enter Description"
+          required
+        ></textarea>
+
         <button className="btn save-btn" type="submit">
           Save Changes
         </button>
@@ -63,7 +70,7 @@ const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
         className="btn close-btn"
         onClick={() => editDialogRef.current.close()}
       >
-        Close
+        Close Form
       </button>
     </dialog>
   );

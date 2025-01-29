@@ -6,7 +6,7 @@ const RatingComponent = () => {
   return (
     <>
       <Rating
-        name="half-rating"
+        name="rating"
         defaultValue={stars}
         precision={0.5}
         value={stars}
