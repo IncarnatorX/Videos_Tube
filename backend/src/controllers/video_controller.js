@@ -23,9 +23,13 @@ const getAllVideos = async (req, res) => {
     const cachedVideos = await client.get(cacheKey);
 
     if (cachedVideos) {
+      console.time("cache available.");
       console.log("Cache Hit!");
+      console.timeEnd("cache available.");
       return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
     }
+
+    console.time("cache not available.");
 
     console.log("Cache Miss");
 
@@ -34,6 +38,7 @@ const getAllVideos = async (req, res) => {
     client.setEx(cacheKey, 3600, JSON.stringify(allVideos));
 
     res.status(200).json(allVideos);
+    console.timeEnd("cache not available.");
   } catch (error) {
     console.error("Unable to fetch all videos: ", error.message);
   }

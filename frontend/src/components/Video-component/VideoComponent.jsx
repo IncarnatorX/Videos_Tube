@@ -13,6 +13,16 @@ const VideoComponent = ({
 
   const navigate = useNavigate();
 
+  function ratingDecimalFixer(video) {
+    const rating =
+      video.feedback.reduce((sum, r) => sum + Number(r.rating), 0) /
+      video.feedback.length;
+    if (isNaN(rating.toFixed(1))) {
+      return 0;
+    }
+    return rating.toFixed(1);
+  }
+
   return (
     <div className="video-list">
       {videos.map((video) => (
@@ -52,12 +62,7 @@ const VideoComponent = ({
           </section>
           <section className="review-ratings">
             <p>No. of Reviews: {video.feedback.length} </p>
-            <p>
-              Average Rating:{" "}
-              {video.feedback.reduce((sum, r) => sum + Number(r.rating), 0) /
-                video.feedback.length || 0}{" "}
-              stars
-            </p>
+            <p>Average Rating: {ratingDecimalFixer(video)} stars</p>
             <span
               className="more-btn"
               onClick={() => navigate("/videoInfo", { state: video })}
