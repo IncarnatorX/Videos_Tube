@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { VideoContext } from "../Context/VideoContext";
+import { VideoContext } from "../../Context/VideoContext";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 import "./VideoComponent.css";

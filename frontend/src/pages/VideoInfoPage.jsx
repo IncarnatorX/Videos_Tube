@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
-import VideoInfoComponent from "../components/VideoInfoComponent";
-import VideoInfoHeader from "../components/VideoInfoHeader";
+import VideoInfoComponent from "../components/Video-Info-Component/VideoInfoComponent";
+import VideoInfoHeader from "../components/Video-Info-header/VideoInfoHeader";
 
 const VideoInfoPage = () => {
   const { state: video } = useLocation();

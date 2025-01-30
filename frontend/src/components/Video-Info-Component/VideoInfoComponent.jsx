@@ -1,6 +1,6 @@
 import { Rating } from "@mui/material";
 import PropTypes from "prop-types";
-import "./VideoInfoPage.css";
+import "./VideoInfoComponent.css";
 
 const VideoInfoComponent = ({ video }) => {
   return (
