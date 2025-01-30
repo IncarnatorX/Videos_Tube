@@ -1,0 +1,54 @@
+.video-details {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border: 1.5px solid #fff;
+  border-radius: 0.5rem;
+  margin: 0 auto 0;
+  row-gap: 1rem;
+}
+
+.video-section {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.video-section video {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.details-section {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  flex: 1 1 35%;
+  box-shadow: 0 4px 12px #ccc;
+  margin: 1rem auto;
+}
+
+.reviews {
+  display: flex;
+  row-gap: 1rem;
+  flex-direction: column;
+}
+
+.review-div {
+  display: flex;
+  align-items: center;
+}
+
+.review {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}

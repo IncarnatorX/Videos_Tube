@@ -6,7 +6,7 @@ import ToastComponent from "./ToastContainer";
 import VideoComponent from "./VideoComponent";
 import PropTypes from "prop-types";
 
-const VideoListDiv = () => {
+const VideoList = () => {
   const [currentVideoID, setCurrentVideoId] = useState("");
 
   const editDialogRef = useRef(null);
@@ -60,8 +60,8 @@ const VideoListDiv = () => {
   );
 };
 
-VideoListDiv.propTypes = {
+VideoList.propTypes = {
   videos: PropTypes.array,
 };
 
-export default VideoListDiv;
+export default VideoList;

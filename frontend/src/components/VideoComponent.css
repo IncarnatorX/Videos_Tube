@@ -63,6 +63,11 @@
   border: none;
   overflow: none;
   cursor: pointer;
+  transition: all 0.4s ease-in;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+  }
 }
 
 .edit-button {
