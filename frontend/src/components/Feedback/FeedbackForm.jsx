@@ -64,11 +64,11 @@ const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
         </div>
 
         <div>
-          <label htmlFor="email">Email address: </label>
+          <label htmlFor="feedback-email">Email address: </label>
           <input
             type="email"
             name="email"
-            id="email"
+            id="feedback-email"
             placeholder="Enter email address"
             required
           />

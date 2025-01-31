@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 import VideoInfoPage from "./pages/VideoInfoPage";
 import "./App.css";
+import AuthPage from "./pages/AuthPage";
 
 const App = () => {
   const [detailsUpdated, setDetailsUpdated] = useState(false);
@@ -31,6 +32,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/videoInfo" element={<VideoInfoPage />} />
+          <Route path="/auth" element={<AuthPage />} />
         </Routes>
       </VideoContext.Provider>
     </BrowserRouter>
