@@ -9,6 +9,7 @@ import AuthPage from "./pages/AuthPage";
 const App = () => {
   const [detailsUpdated, setDetailsUpdated] = useState(false);
   const [videos, setVideos] = useState([]);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   const fetchVideos = async () => {
     try {
@@ -27,7 +28,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <VideoContext.Provider
-        value={{ detailsUpdated, setDetailsUpdated, videos }}
+        value={{
+          detailsUpdated,
+          setDetailsUpdated,
+          videos,
+          userLoggedIn,
+          setUserLoggedIn,
+        }}
       >
         <Routes>
           <Route path="/" element={<HomePage />} />

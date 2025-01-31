@@ -1,9 +1,9 @@
 import { useLocation } from "react-router";
 import Auth from "../components/Auth/Auth";
+import ToastComponent from "../components/ToastContainer";
 
 const AuthPage = () => {
   const location = useLocation();
-  console.log(location.state);
 
   const styles = {
     minWidth: "100%",
@@ -16,6 +16,7 @@ const AuthPage = () => {
   return (
     <div style={styles}>
       <Auth state={location.state} />
+      <ToastComponent />
     </div>
   );
 };

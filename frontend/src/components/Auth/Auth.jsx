@@ -1,11 +1,56 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router";
-import "./Auth.css";
+import { VideoContext } from "../../Context/VideoContext";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import "./Auth.css";
 
 const Form = ({ state }) => {
   const navigate = useNavigate();
+  const { userLoggedIn, setUserLoggedIn } = useContext(VideoContext);
+
+  // FUNCTION TO HANDLE FORM SUBMISSION
+  const handleAuthFormSubmit = async (event) => {
+    event.preventDefault();
+
+    const authFormDataObject = {};
+
+    const formData = new FormData(event.target);
+
+    for (const [name, value] of formData) {
+      authFormDataObject[name] = value;
+    }
+
+    if (authFormDataObject["password"] !== authFormDataObject["cnf-password"]) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    event.target.reset();
+
+    try {
+      const response = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(authFormDataObject),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setUserLoggedIn(!userLoggedIn);
+        navigate("/auth", { state: "login" });
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error while submitting the form:", error.message);
+    }
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleAuthFormSubmit}>
       <div style={{ width: "100%" }}>
         <button
           onClick={() => navigate("/")}
@@ -82,6 +127,20 @@ const Form = ({ state }) => {
           className="auth-input"
         />
       </div>
+
+      <div className="auth-div">
+        <label htmlFor="auth-cnf-password" className="label">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          id="auth-cnf-password"
+          name="cnf-password"
+          required
+          className="auth-input"
+        />
+      </div>
+
       <button type="submit" className="submit">
         {state === "login" ? "Login" : "Register"}
       </button>
