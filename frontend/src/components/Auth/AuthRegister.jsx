@@ -2,26 +2,27 @@ import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { VideoContext } from "../../Context/VideoContext";
 import { toast } from "react-toastify";
-import PropTypes from "prop-types";
-import "./Auth.css";
 
-const Form = ({ state }) => {
+const AuthRegister = () => {
   const navigate = useNavigate();
   const { userLoggedIn, setUserLoggedIn } = useContext(VideoContext);
 
   // FUNCTION TO HANDLE FORM SUBMISSION
-  const handleAuthFormSubmit = async (event) => {
+  const handleAuthFormRegister = async (event) => {
     event.preventDefault();
 
-    const authFormDataObject = {};
+    const authFormRegisterObject = {};
 
     const formData = new FormData(event.target);
 
     for (const [name, value] of formData) {
-      authFormDataObject[name] = value;
+      authFormRegisterObject[name] = value;
     }
 
-    if (authFormDataObject["password"] !== authFormDataObject["cnf-password"]) {
+    if (
+      authFormRegisterObject["password"] !==
+      authFormRegisterObject["cnf-password"]
+    ) {
       toast.error("Passwords do not match");
       return;
     }
@@ -33,7 +34,7 @@ const Form = ({ state }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(authFormDataObject),
+        body: JSON.stringify(authFormRegisterObject),
       });
 
       const data = await response.json();
@@ -50,7 +51,7 @@ const Form = ({ state }) => {
   };
 
   return (
-    <form className="form" onSubmit={handleAuthFormSubmit}>
+    <form className="form" onSubmit={handleAuthFormRegister}>
       <div style={{ width: "100%" }}>
         <button
           onClick={() => navigate("/")}
@@ -69,38 +70,32 @@ const Form = ({ state }) => {
           <span>Back</span>
         </button>
       </div>
-      <span className="auth-title">
-        {state === "login" ? "Login" : "Register"}
-      </span>
+      <span className="auth-title">Register</span>
 
-      {state === "register" && (
-        <>
-          <div className="auth-div">
-            <label htmlFor="auth-fullname" className="label">
-              Fullname
-            </label>
-            <input
-              type="text"
-              id="auth-fullname"
-              name="fullname"
-              required
-              className="auth-input"
-            />
-          </div>
-          <div className="auth-div">
-            <label htmlFor="auth-username" className="label">
-              Username
-            </label>
-            <input
-              type="text"
-              id="auth-username"
-              name="username"
-              required
-              className="auth-input"
-            />
-          </div>
-        </>
-      )}
+      <div className="auth-div">
+        <label htmlFor="auth-fullname" className="label">
+          Fullname
+        </label>
+        <input
+          type="text"
+          id="auth-fullname"
+          name="fullname"
+          required
+          className="auth-input"
+        />
+      </div>
+      <div className="auth-div">
+        <label htmlFor="auth-username" className="label">
+          Username
+        </label>
+        <input
+          type="text"
+          id="auth-username"
+          name="username"
+          required
+          className="auth-input"
+        />
+      </div>
 
       <div className="auth-div">
         <label htmlFor="auth-email" className="label">
@@ -142,14 +137,10 @@ const Form = ({ state }) => {
       </div>
 
       <button type="submit" className="submit">
-        {state === "login" ? "Login" : "Register"}
+        Register{" "}
       </button>
     </form>
   );
 };
 
-Form.propTypes = {
-  state: PropTypes.string,
-};
-
-export default Form;
+export default AuthRegister;
