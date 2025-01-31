@@ -11,11 +11,16 @@ const Navbar = () => {
       <div className="auth-buttons">
         <button
           className="auth-btn login-btn"
-          onClick={() => navigate("/auth")}
+          onClick={() => navigate("/auth", { state: "login" })}
         >
           Login
         </button>
-        <button className="auth-btn register-btn">Register</button>
+        <button
+          className="auth-btn register-btn"
+          onClick={() => navigate("/auth", { state: "register" })}
+        >
+          Register
+        </button>
       </div>
     </nav>
   );
