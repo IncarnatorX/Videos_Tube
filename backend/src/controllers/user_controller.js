@@ -1,5 +1,6 @@
 import { User } from "../models/user_model.js";
 import generateAccessAndRefreshToken from "../utils/generateTokens.js";
+import jwt from "jsonwebtoken";
 
 const registerUserController = async (req, res) => {
   const { fullname, email, password, username } = req.body;
@@ -104,4 +105,74 @@ const logoutUser = async (req, res) => {
   }
 };
 
-export { registerUserController, logInUserController };
+const verifyToken = async (req, res) => {
+  const incomingAccessToken = req.cookies.accessToken || req.body.accessToken;
+  if (!incomingAccessToken)
+    return res
+      .status(401)
+      .json({ message: "No Access Token found -- Try logging again" });
+
+  try {
+    const decodedUser = jwt.verify(
+      incomingAccessToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+
+    return res.status(200).json({ isAuthenticated: true, user: decodedUser });
+  } catch (error) {
+    console.error("Errored out in verifyToken controller: ", error.message);
+    res.status(401).json({ message: "Access token expired or not found." });
+  }
+};
+
+const generateNewAccessToken = async (req, res) => {
+  const incomingRefreshToken =
+    req.cookies.refreshToken || req.body.refreshToken;
+
+  if (!incomingRefreshToken) throw new Error("No refresh token found.");
+
+  try {
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedToken?._id);
+
+    if (!user) throw new Error("No user found - Invalid refresh token");
+
+    if (incomingRefreshToken !== user.refreshToken)
+      throw new Error(
+        "User refresh token doesn't match incoming refresh token."
+      );
+
+    const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+      user._id
+    );
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({ message: "New tokens generated" });
+  } catch (error) {
+    console.error("Error generating new access");
+    res.status(404).json({
+      message:
+        "Something wen't wrong while generating new access & refresh tokens.",
+    });
+  }
+};
+
+export {
+  registerUserController,
+  logInUserController,
+  logoutUser,
+  verifyToken,
+  generateNewAccessToken,
+};

@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(videoRouter);
 app.use(userRouter);
+app.use(cookieParser());
 
 connectDB().then(() =>
   app.listen(PORT, () => console.log(`Listening at PORT: ${PORT}.`))
