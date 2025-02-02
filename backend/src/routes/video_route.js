@@ -5,7 +5,7 @@ import {
   getAllVideos,
   reUploadVideo,
 } from "../controllers/video_controller.js";
-import upload from "../utils/multer_middleware.js";
+import upload from "../middlewares/multer_middleware.js";
 
 const videoRouter = Router();
 

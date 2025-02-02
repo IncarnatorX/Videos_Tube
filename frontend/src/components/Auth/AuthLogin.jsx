@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const AuthLogin = () => {
   const navigate = useNavigate();
 
-  const handleAuthFormLogin = (event) => {
+  const handleAuthFormLogin = async (event) => {
     event.preventDefault();
 
     const authFormLoginObject = {};
@@ -16,6 +17,28 @@ const AuthLogin = () => {
 
     console.log(authFormLoginObject);
     event.target.reset();
+
+    try {
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(authFormLoginObject),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/");
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

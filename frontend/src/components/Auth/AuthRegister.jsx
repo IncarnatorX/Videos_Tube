@@ -1,11 +1,8 @@
-import { useContext } from "react";
 import { useNavigate } from "react-router";
-import { VideoContext } from "../../Context/VideoContext";
 import { toast } from "react-toastify";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
-  const { userLoggedIn, setUserLoggedIn } = useContext(VideoContext);
 
   // FUNCTION TO HANDLE FORM SUBMISSION
   const handleAuthFormRegister = async (event) => {
@@ -39,7 +36,6 @@ const AuthRegister = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setUserLoggedIn(!userLoggedIn);
         navigate("/auth", { state: "login" });
         toast.success(data.message);
       } else {
