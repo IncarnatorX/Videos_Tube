@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  generateNewAccessToken,
   logInUserController,
   registerUserController,
   verifyToken,
@@ -11,6 +12,7 @@ const userRouter = Router();
 userRouter.route("/register").post(registerUserController);
 userRouter.route("/login").post(logInUserController);
 userRouter.route("/verify-token").get(verifyToken);
+userRouter.route("/refresh-token").post(generateNewAccessToken);
 
 userRouter.route("/logout").post(verifyJWT);
 
