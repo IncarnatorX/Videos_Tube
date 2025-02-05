@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { VideoContext } from "../../Context/VideoContext";
+import { VideoContext } from "../../Context/Context";
 import { ThreeDot } from "react-loading-indicators";
 import "./ReUploadVideoComponent.css";
 import PropTypes from "prop-types";

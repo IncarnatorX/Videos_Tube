@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "./FeedbackForm.css";
 import { toast } from "react-toastify";
 import { useContext } from "react";
-import { VideoContext } from "../../Context/VideoContext";
+import { VideoContext } from "../../Context/Context";
 
 const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
   const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);

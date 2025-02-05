@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { useContext, useRef } from "react";
-import { VideoContext } from "../../Context/VideoContext";
+import { VideoContext } from "../../Context/Context";
 import "./EditVideoDetails.css";
 import PropTypes from "prop-types";
 

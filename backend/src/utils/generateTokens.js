@@ -1,4 +1,4 @@
-import { User } from "../models/user_model";
+import { User } from "../models/user_model.js";
 
 const generateAccessAndRefreshToken = async (userID) => {
   try {

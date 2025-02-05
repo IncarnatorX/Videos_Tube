@@ -56,13 +56,20 @@ const logInUserController = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const isPasswordValid = user.isPasswordCorrect(password);
+    const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid)
       return res.status(404).json({ message: "Password Incorrect" });
 
-    const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
+
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+
+    if (!loggedInUser)
+      return res.status(404).json({ message: "User not found!" });
 
     const options = {
       httpOnly: true,
@@ -73,7 +80,12 @@ const logInUserController = async (req, res) => {
       .status(200)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ message: "Login Successful." });
+      .json({
+        message: "Login Successful.",
+        user: loggedInUser,
+        accessToken,
+        refreshToken,
+      });
   } catch (error) {
     console.error("Login Controller errored out: ", error.message);
     res.status(404).json({ message: "Login Unsuccessful" });
@@ -146,7 +158,7 @@ const generateNewAccessToken = async (req, res) => {
         "User refresh token doesn't match incoming refresh token."
       );
 
-    const { accessToken, refreshToken } = generateAccessAndRefreshToken(
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
 
@@ -169,10 +181,24 @@ const generateNewAccessToken = async (req, res) => {
   }
 };
 
+const getProfileController = async (req, res) => {
+  try {
+    if (!req.user) throw new Error({ message: "No user found..." });
+    console.log(req.user);
+    return res.status(200).json({ user: req.user });
+  } catch (error) {
+    console.error("Errored in getProfileController: ", error.message);
+    return res
+      .status(404)
+      .json({ message: "Something wen't wrong. Please login again" });
+  }
+};
+
 export {
   registerUserController,
   logInUserController,
   logoutUser,
   verifyToken,
   generateNewAccessToken,
+  getProfileController,
 };

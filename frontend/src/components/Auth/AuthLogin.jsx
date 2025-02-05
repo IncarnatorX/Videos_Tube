@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
+import { useContext } from "react";
+import { AuthContext } from "../../Context/Context";
 
 const AuthLogin = () => {
   const navigate = useNavigate();
+
+  const { setUserLoggedIn } = useContext(AuthContext);
 
   const handleAuthFormLogin = async (event) => {
     event.preventDefault();
@@ -16,39 +20,25 @@ const AuthLogin = () => {
       authFormLoginObject[name] = value;
     }
 
-    console.log(authFormLoginObject);
     event.target.reset();
-
-    // try {
-    //   const response = await fetch("http://localhost:8080/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-
-    //     body: JSON.stringify(authFormLoginObject),
-    //   });
-
-    //   const data = await response.json();
-
-    //   if (response.ok) {
-    //     navigate("/");
-    //     toast.success(data.message);
-    //   } else {
-    //     toast.error(data.message);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
 
     try {
       const response = await api.post("/login", authFormLoginObject);
-      toast.success(response.data.message);
+
+      console.log("Auth login response: ", response);
+      const { message, user } = response.data;
+
+      if (response.status === 200) {
+        sessionStorage.setItem("user", JSON.stringify(user));
+        toast.success(message);
+        setUserLoggedIn(true);
+        navigate("/");
+      }
     } catch (error) {
       toast.error(
-        "Login Error: ",
-        error.response.data.message || error.message
+        `Login Error: ${error.response.data.message || error.message}`
       );
+      navigate("/auth", { state: "login" });
     }
   };
 

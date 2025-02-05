@@ -1,11 +1,36 @@
 import { useNavigate } from "react-router";
 import "./Navbar.css";
 import { useContext } from "react";
-import { VideoContext } from "../../Context/VideoContext";
+import { AuthContext } from "../../Context/Context";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { userLoggedIn } = useContext(VideoContext);
+  const { userLoggedIn, user, setUser, setUserLoggedIn } =
+    useContext(AuthContext);
+  // let userLoggedIn = false;
+
+  async function handleUserLogout() {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/logout",
+        user._id,
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        sessionStorage.removeItem("user");
+        setUser("");
+        setUserLoggedIn(false);
+        toast.success(response.data.message);
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.error(error.message);
+    }
+  }
 
   return (
     <nav className="homepage-navbar">
@@ -13,7 +38,9 @@ const Navbar = () => {
       <h1 className="navbar-title">VideoTube</h1>
       <div className="auth-buttons">
         {userLoggedIn ? (
-          <button className="auth-btn">Logout</button>
+          <button className="auth-btn" onClick={handleUserLogout}>
+            Logout
+          </button>
         ) : (
           <>
             <button
