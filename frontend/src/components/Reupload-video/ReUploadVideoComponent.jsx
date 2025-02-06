@@ -54,7 +54,7 @@ const ReUploadVideoComponent = () => {
       >
         <input
           type="file"
-          id="upload-input"
+          id="re-upload-input"
           name="videoFile"
           accept="video/mp4"
           ref={fileInputRef}
@@ -69,7 +69,7 @@ const ReUploadVideoComponent = () => {
             textColor="#1920ea"
           />
         ) : (
-          <button type="submit" value="Upload" id="upload-btn">
+          <button type="submit" value="Upload" id="re-upload-btn">
             Upload
           </button>
         )}

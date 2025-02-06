@@ -42,7 +42,7 @@ const EditVideoDetails = () => {
       <form method="dialog" onSubmit={uploadTitleAndDescSubmission}>
         <input
           type="text"
-          id="title"
+          id="edit-title"
           name="title"
           size={30}
           ref={titleRef}
@@ -52,7 +52,7 @@ const EditVideoDetails = () => {
 
         <textarea
           type="text"
-          id="description"
+          id="edit-description"
           name="description"
           size={30}
           ref={descRef}

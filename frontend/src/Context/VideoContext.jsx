@@ -10,6 +10,7 @@ const VideoProvider = ({ children }) => {
   const editDialogRef = useRef(null);
   const reuploadRef = useRef(null);
   const feedbackFormRef = useRef(null);
+  const uploadVideoRef = useRef(null);
 
   const fetchVideos = async () => {
     try {
@@ -48,6 +49,12 @@ const VideoProvider = ({ children }) => {
     }
   }
 
+  function handleUploadVideoDialog() {
+    if (uploadVideoRef.current) {
+      uploadVideoRef.current.showModal();
+    }
+  }
+
   const contextValues = {
     detailsUpdated,
     setDetailsUpdated,
@@ -56,9 +63,11 @@ const VideoProvider = ({ children }) => {
     editDialogRef,
     reuploadRef,
     feedbackFormRef,
+    uploadVideoRef,
     HandleEditDialogOpening,
     handleReuploadDialogOpen,
     handleFeedbackFormDialog,
+    handleUploadVideoDialog,
   };
 
   return (

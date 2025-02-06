@@ -20,7 +20,7 @@
   row-gap: 1rem;
 }
 
-#upload-input {
+#re-upload-input {
   width: 100%;
   padding: 1rem;
   cursor: pointer;
@@ -41,7 +41,7 @@
   }
 }
 
-#upload-btn {
+#re-upload-btn {
   width: fit-content;
   padding: 0.5rem 1.5rem;
   cursor: pointer;

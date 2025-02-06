@@ -1,23 +1,21 @@
 import { useNavigate } from "react-router";
-import "./Navbar.css";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/Context";
-import axios from "axios";
+// import axios from "axios";
+import api from "../../utils/api";
 import { toast } from "react-toastify";
+import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { userLoggedIn, user, setUser, setUserLoggedIn } =
     useContext(AuthContext);
-  // let userLoggedIn = false;
 
   async function handleUserLogout() {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/logout",
-        user._id,
-        { withCredentials: true }
-      );
+      const response = await api.post("/logout", user._id, {
+        withCredentials: true,
+      });
 
       if (response.status === 200) {
         sessionStorage.removeItem("user");
@@ -27,7 +25,7 @@ const Navbar = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Error while logging out!!");
       console.error(error.message);
     }
   }

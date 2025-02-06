@@ -14,20 +14,20 @@ const client = redis.createClient({
   },
 }); // Creating a redis Client
 
-await client.connect();
-client.on("error", (err) => console.error("Redis error: ", err.message));
-const cacheKey = "allVideos";
+// await client.connect();
+// client.on("error", (err) => console.error("Redis error: ", err.message));
+// const cacheKey = "allVideos";
 
 const getAllVideos = async (req, res) => {
   try {
-    const cachedVideos = await client.get(cacheKey);
+    // const cachedVideos = await client.get(cacheKey);
 
-    if (cachedVideos) {
-      console.time("cache available.");
-      console.log("Cache Hit!");
-      console.timeEnd("cache available.");
-      if (cachedVideos) return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
-    }
+    // if (cachedVideos) {
+    //   console.time("cache available.");
+    //   console.log("Cache Hit!");
+    //   console.timeEnd("cache available.");
+    //   if (cachedVideos) return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
+    // }
 
     console.time("cache not available.");
 
@@ -35,7 +35,7 @@ const getAllVideos = async (req, res) => {
 
     const allVideos = await Video.find({});
 
-    client.setEx(cacheKey, 3600, JSON.stringify(allVideos));
+    // client.setEx(cacheKey, 3600, JSON.stringify(allVideos));
 
     res.status(200).json(allVideos);
     console.timeEnd("cache not available.");
@@ -102,4 +102,20 @@ const feedbackHandler = async (req, res) => {
   }
 };
 
-export { getAllVideos, editTitleAndDesc, reUploadVideo, feedbackHandler };
+const publishVideo = async (req, res) => {
+  const { title, description } = req.body;
+
+  if (!title || !description)
+    return res.status(401).json({ message: "Title and Description required." });
+
+  console.log(`Title: ${title}, Description: ${description}`);
+  console.log(req.file);
+};
+
+export {
+  getAllVideos,
+  editTitleAndDesc,
+  reUploadVideo,
+  feedbackHandler,
+  publishVideo,
+};

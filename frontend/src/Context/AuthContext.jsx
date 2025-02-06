@@ -19,51 +19,69 @@ const AuthProvider = ({ children }) => {
   };
 
   const errorHandler = async (error) => {
-    getUserFromSessionStorage();
+    // console.log("❌ Interceptor caught an error:", error);
 
-    if (user && error.response?.status === 401) {
-      console.log("🔄 Access token expired, fetching new access token.....");
-
-      try {
-        const newRequestResponse = await api.post(
-          "/refresh-token",
-          {},
-          { withCredentials: true }
-        );
-
-        if (newRequestResponse.status === 200) {
-          console.log("Refreshed Access token....");
-          const user = await api.get("/profile", { withCredentials: true });
-          setUser(user.data);
-          setUserLoggedIn(true);
-          return api(error.config);
-        }
-      } catch (error) {
-        console.error(
-          "Error refreshing access token, redirect to login page....",
-          error.message
-        );
-        setUserLoggedIn(false);
-      }
+    if (!error.response) {
+      // console.error("🚨 No response from server!");
+      return Promise.reject(error);
     }
+
+    // console.log("🛑 Error Status:", error.response.status);
+
+    const originalRequest = error.config;
+
+    if (sessionStorage.getItem("_retry")) {
+      // console.error("⛔ Already retried once. Logging out user...");
+      setUserLoggedIn(false);
+      sessionStorage.removeItem("_retry");
+      return Promise.reject(error);
+    }
+
+    sessionStorage.setItem("_retry", "true"); // Store retry flag in Session storage
+
+    try {
+      // console.log("🔄 Access token expired, fetching new access token.....");
+      const newRequestResponse = await api.post(
+        "/refresh-token",
+        {},
+        { withCredentials: true }
+      );
+
+      if (newRequestResponse.status === 200) {
+        // console.log("✅ Refreshed Access token....", newRequestResponse.data);
+
+        const user = await api.get("/profile", { withCredentials: true });
+        sessionStorage.setItem("user", JSON.stringify(user.data));
+
+        setUser(user.data);
+        setUserLoggedIn(true);
+
+        // console.log("Retrying request with new access token...");
+        sessionStorage.removeItem("_retry");
+
+        return api(originalRequest); // Retry failed request with new token
+      }
+    } catch (error) {
+      console.error("🚨 Refresh token failed. Logging out...", error.message);
+      setUserLoggedIn(false);
+    }
+
+    sessionStorage.removeItem("_retry"); // Reset retry flag on failure
     return Promise.reject(error);
   };
 
-  const checkAuthStatus = () => {
+  useEffect(() => {
     getUserFromSessionStorage();
-    api.interceptors.response.use(
+
+    const interceptor = api.interceptors.response.use(
       (response) => {
-        if (user) {
-          setUserLoggedIn(true);
-        }
+        if (user) setUserLoggedIn(true);
         return response;
       },
-      (error) => errorHandler(error)
+      async (error) => errorHandler(error)
     );
-  };
 
-  useEffect(() => {
-    checkAuthStatus();
+    return () => api.interceptors.response.eject(interceptor);
   }, []);
 
   return (

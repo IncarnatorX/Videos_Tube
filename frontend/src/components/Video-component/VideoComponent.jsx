@@ -11,7 +11,9 @@ const VideoComponent = () => {
       {videos.length > 1 ? (
         videos.map((video) => <VideoItem key={video._id} video={video} />)
       ) : (
-        <p>No videos available..</p>
+        <p className="w-full text-center text-2xl p-4">
+          No videos available...
+        </p>
       )}
     </div>
   );
