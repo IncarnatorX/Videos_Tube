@@ -1,12 +1,13 @@
 import RatingComponent from "../RatingComponent";
-import PropTypes from "prop-types";
-import "./FeedbackForm.css";
 import { toast } from "react-toastify";
 import { useContext } from "react";
 import { VideoContext } from "../../Context/Context";
+import "./FeedbackForm.css";
 
-const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
-  const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);
+const FeedbackForm = () => {
+  // IMPORTING FROM VIDEO CONTEXT
+  const { detailsUpdated, setDetailsUpdated, feedbackFormRef, currentVideoID } =
+    useContext(VideoContext);
 
   async function handleFeedbackFromSubmission(event) {
     const form = event.target;
@@ -105,11 +106,6 @@ const FeedbackForm = ({ feedbackFormRef, currentVideoID }) => {
       </button>
     </dialog>
   );
-};
-
-FeedbackForm.propTypes = {
-  feedbackFormRef: PropTypes.object,
-  currentVideoID: PropTypes.string,
 };
 
 export default FeedbackForm;

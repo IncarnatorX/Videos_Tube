@@ -26,7 +26,7 @@ const getAllVideos = async (req, res) => {
       console.time("cache available.");
       console.log("Cache Hit!");
       console.timeEnd("cache available.");
-      return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
+      if (cachedVideos) return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
     }
 
     console.time("cache not available.");

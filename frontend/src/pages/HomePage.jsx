@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar/Navbar";
-import VideoList from "../components/VideoList";
+import VideoList from "../components/Video-component/VideoList";
 
 const HomePage = () => {
   return (

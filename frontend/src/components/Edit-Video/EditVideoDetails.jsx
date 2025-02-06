@@ -2,13 +2,13 @@ import { toast } from "react-toastify";
 import { useContext, useRef } from "react";
 import { VideoContext } from "../../Context/Context";
 import "./EditVideoDetails.css";
-import PropTypes from "prop-types";
 
-const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
+const EditVideoDetails = () => {
   const titleRef = useRef(null);
   const descRef = useRef(null);
 
-  const { setDetailsUpdated, detailsUpdated } = useContext(VideoContext);
+  const { setDetailsUpdated, detailsUpdated, currentVideoID, editDialogRef } =
+    useContext(VideoContext);
 
   const uploadTitleAndDescSubmission = async (e) => {
     const formData = new FormData(e.target);
@@ -74,11 +74,6 @@ const EditVideoDetails = ({ currentVideoID, editDialogRef }) => {
       </button>
     </dialog>
   );
-};
-
-EditVideoDetails.propTypes = {
-  currentVideoID: PropTypes.string,
-  editDialogRef: PropTypes.object,
 };
 
 export default EditVideoDetails;

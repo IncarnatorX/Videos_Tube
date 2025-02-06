@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { VideoContext } from "./Context";
 import PropTypes from "prop-types";
 
 const VideoProvider = ({ children }) => {
   const [detailsUpdated, setDetailsUpdated] = useState(false);
   const [videos, setVideos] = useState([]);
+  const [currentVideoID, setCurrentVideoId] = useState("");
+
+  const editDialogRef = useRef(null);
+  const reuploadRef = useRef(null);
+  const feedbackFormRef = useRef(null);
 
   const fetchVideos = async () => {
     try {
@@ -20,14 +25,44 @@ const VideoProvider = ({ children }) => {
     fetchVideos();
   }, [detailsUpdated]);
 
+  // EDIT BUTTON DIALOG HANDLINGS
+  function HandleEditDialogOpening(id) {
+    if (editDialogRef.current) {
+      editDialogRef.current.showModal();
+      setCurrentVideoId(id);
+    }
+  }
+
+  // RE-UPLOAD DIALOG HANDLING
+  function handleReuploadDialogOpen(id) {
+    const { current } = reuploadRef;
+    current.showModal();
+    setCurrentVideoId(id);
+  }
+
+  // FEEDBACK FORM HANDLING
+  function handleFeedbackFormDialog(id) {
+    if (feedbackFormRef.current) {
+      feedbackFormRef.current.showModal();
+      setCurrentVideoId(id);
+    }
+  }
+
+  const contextValues = {
+    detailsUpdated,
+    setDetailsUpdated,
+    videos,
+    currentVideoID,
+    editDialogRef,
+    reuploadRef,
+    feedbackFormRef,
+    HandleEditDialogOpening,
+    handleReuploadDialogOpen,
+    handleFeedbackFormDialog,
+  };
+
   return (
-    <VideoContext.Provider
-      value={{
-        detailsUpdated,
-        setDetailsUpdated,
-        videos,
-      }}
-    >
+    <VideoContext.Provider value={contextValues}>
       {children}
     </VideoContext.Provider>
   );

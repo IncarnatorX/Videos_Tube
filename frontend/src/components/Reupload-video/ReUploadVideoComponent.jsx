@@ -3,16 +3,17 @@ import { toast } from "react-toastify";
 import { VideoContext } from "../../Context/Context";
 import { ThreeDot } from "react-loading-indicators";
 import "./ReUploadVideoComponent.css";
-import PropTypes from "prop-types";
 
-const ReUploadVideoComponent = ({ currentVideoID, reuploadRef }) => {
+const ReUploadVideoComponent = () => {
   const fileInputRef = useRef(null);
-  const { setDetailsUpdated, detailsUpdated } = useContext(VideoContext);
+
+  // IMPORTING FROM VIDEO CONTEXT
+  const { setDetailsUpdated, detailsUpdated, currentVideoID, reuploadRef } =
+    useContext(VideoContext);
 
   const [uploading, setUploading] = useState(false);
 
   // FUNCTION TO HANDLE FORM SUBMISSION
-
   const handleReUploadFormSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
@@ -81,11 +82,6 @@ const ReUploadVideoComponent = ({ currentVideoID, reuploadRef }) => {
       </button>
     </dialog>
   );
-};
-
-ReUploadVideoComponent.propTypes = {
-  currentVideoID: PropTypes.string,
-  reuploadRef: PropTypes.object,
 };
 
 export default ReUploadVideoComponent;
