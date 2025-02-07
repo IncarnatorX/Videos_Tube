@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import api from "../../utils/api.js";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
@@ -26,20 +27,17 @@ const AuthRegister = () => {
     event.target.reset();
 
     try {
-      const response = await fetch("http://localhost:8080/register", {
-        method: "POST",
+      const response = await api.post("/register", authFormRegisterObject, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(authFormRegisterObject),
       });
 
-      const data = await response.json();
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         navigate("/auth", { state: "login" });
-        toast.success(data.message);
+        toast.success(response.data.message);
       } else {
-        toast.error(data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error while submitting the form:", error.message);

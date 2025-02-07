@@ -73,7 +73,7 @@ const logInUserController = async (req, res) => {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: false,
     };
 
     res
@@ -105,8 +105,8 @@ const logoutUser = async (req, res) => {
 
     res
       .status(200)
-      .clearCookie("accessToken")
-      .clearCookie("refreshToken")
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
       .json({ message: "Logged out" });
   } catch (error) {
     console.error(
@@ -158,9 +158,13 @@ const generateNewAccessToken = async (req, res) => {
         "User refresh token doesn't match incoming refresh token."
       );
 
+    // GENERATING NEW TOKENS
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
+
+    // updating the new refresh token in database
+    user.refreshToken = refreshToken;
 
     const options = {
       httpOnly: true,

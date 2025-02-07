@@ -8,7 +8,7 @@ const VideoComponent = () => {
 
   return (
     <div className="video-list">
-      {videos.length > 1 ? (
+      {videos.length > 0 ? (
         videos.map((video) => <VideoItem key={video._id} video={video} />)
       ) : (
         <p className="w-full text-center text-2xl p-4">

@@ -45,7 +45,7 @@ form .input-field {
 }
 
 #edit-title {
-  border: 2px solid rgb(137, 57, 57);
+  border: 2px solid #893939;
   padding: 1rem;
   border-radius: 0.7rem;
   font-size: 1rem;
@@ -59,7 +59,7 @@ form .input-field {
   border-radius: 0.5rem;
   padding: 0.5rem;
   outline: none;
-  border: 2px solid rgb(137, 57, 57);
+  border: 2px solid #893939;
   outline: none;
   &:focus {
     border: 2px solid #673ab7;

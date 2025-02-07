@@ -19,8 +19,13 @@ videoRouter.route("/re-upload").post(upload.single("videoFile"), reUploadVideo);
 
 videoRouter.route("/feedback").post(feedbackHandler);
 
-videoRouter
-  .route("/upload")
-  .post(verifyJWT, upload.single("videoFile"), publishVideo);
+videoRouter.route("/publish").post(
+  verifyJWT,
+  upload.fields([
+    { name: "videoFile", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+  ]),
+  publishVideo
+);
 
 export default videoRouter;

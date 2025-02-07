@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 const verifyJWT = async (req, res, next) => {
   const incomingAccessToken = req.cookies.accessToken || req.body.accessToken;
+
   if (!incomingAccessToken)
     return res.status(401).json({ message: "No incoming access token found." });
 
@@ -18,6 +19,7 @@ const verifyJWT = async (req, res, next) => {
       return res.status(401).json({ message: "Unable to find a user.." });
 
     req.user = user;
+    console.log("Verify JWT Controller accessed successfully");
 
     next();
   } catch (error) {

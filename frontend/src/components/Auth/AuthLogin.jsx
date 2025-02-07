@@ -23,10 +23,12 @@ const AuthLogin = () => {
     event.target.reset();
 
     try {
-      const response = await api.post("/login", authFormLoginObject);
-
+      const response = await api.post("/login", authFormLoginObject, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const { message, user } = response.data;
-
       if (response.status === 200) {
         sessionStorage.setItem("user", JSON.stringify(user));
         toast.success(message);

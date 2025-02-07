@@ -1,7 +1,11 @@
 import { Video } from "../models/video_model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 import redis from "redis";
 import dotenv from "dotenv";
+import videoAndThumbnailDetails from "../utils/fetchVideoAndThumbnailDetails.js";
 
 dotenv.config();
 
@@ -29,18 +33,21 @@ const getAllVideos = async (req, res) => {
     //   if (cachedVideos) return res.status(200).json(JSON.parse(cachedVideos)); //sending cached videos
     // }
 
-    console.time("cache not available.");
+    // console.time("cache not available.");
 
-    console.log("Cache Miss");
+    // console.log("Cache Miss");
 
     const allVideos = await Video.find({});
 
     // client.setEx(cacheKey, 3600, JSON.stringify(allVideos));
 
     res.status(200).json(allVideos);
-    console.timeEnd("cache not available.");
+    // console.timeEnd("cache not available.");
   } catch (error) {
     console.error("Unable to fetch all videos: ", error.message);
+    res.status(401).json({
+      message: "Unable to fetch videos at this time. Please try again later.",
+    });
   }
 };
 
@@ -105,11 +112,43 @@ const feedbackHandler = async (req, res) => {
 const publishVideo = async (req, res) => {
   const { title, description } = req.body;
 
-  if (!title || !description)
-    return res.status(401).json({ message: "Title and Description required." });
+  try {
+    if (!title || !description)
+      return res
+        .status(401)
+        .json({ message: "Title and Description required." });
 
-  console.log(`Title: ${title}, Description: ${description}`);
-  console.log(req.file);
+    // console.log(`Title: ${title}, Description: ${description}`);
+    // console.log("Video File: ", req.files.videoFile[0]);
+    // console.log("Thumbnail: ", req.files.thumbnail[0]);
+    // console.log(req.user._id);
+
+    const { videoFile, thumbnail } = await videoAndThumbnailDetails(req);
+
+    const video = await Video.create({
+      videoFile: videoFile.url,
+      thumbnail: thumbnail.url,
+      title,
+      description,
+      videoPublicId: videoFile.public_id,
+      thumbnailPublicId: thumbnail.public_id,
+      owner: req.user._id,
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Video Uploaded successfully", video });
+  } catch (error) {
+    console.error(
+      "Error While uploading the video in publishVideo controller: ",
+      error.message
+    );
+    if (videoFile) await deleteFromCloudinary(videoFile.public_id, "video");
+    if (thumbnail) await deleteFromCloudinary(thumbnail.public_id, "thumbnail");
+    return res
+      .status(404)
+      .json({ message: "Error while uploading the video. Please try again." });
+  }
 };
 
 export {

@@ -19,14 +19,14 @@ const AuthProvider = ({ children }) => {
   };
 
   const errorHandler = async (error) => {
-    // console.log("❌ Interceptor caught an error:", error);
+    console.log("❌ Interceptor caught an error:", error);
 
     if (!error.response) {
       // console.error("🚨 No response from server!");
       return Promise.reject(error);
     }
 
-    // console.log("🛑 Error Status:", error.response.status);
+    console.log("🛑 Error Status:", error.response.status);
 
     const originalRequest = error.config;
 
@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
     sessionStorage.setItem("_retry", "true"); // Store retry flag in Session storage
 
     try {
-      // console.log("🔄 Access token expired, fetching new access token.....");
+      console.log("🔄 Access token expired, fetching new access token.....");
       const newRequestResponse = await api.post(
         "/refresh-token",
         {},
@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
       );
 
       if (newRequestResponse.status === 200) {
-        // console.log("✅ Refreshed Access token....", newRequestResponse.data);
+        console.log("✅ Refreshed Access token....", newRequestResponse.data);
 
         const user = await api.get("/profile", { withCredentials: true });
         sessionStorage.setItem("user", JSON.stringify(user.data));
@@ -63,6 +63,8 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("🚨 Refresh token failed. Logging out...", error.message);
+      sessionStorage.removeItem("user");
+      setUser("");
       setUserLoggedIn(false);
     }
 

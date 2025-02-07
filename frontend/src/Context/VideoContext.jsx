@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { VideoContext } from "./Context";
 import PropTypes from "prop-types";
+import api from "../utils/api";
 
 const VideoProvider = ({ children }) => {
   const [detailsUpdated, setDetailsUpdated] = useState(false);
@@ -12,18 +13,17 @@ const VideoProvider = ({ children }) => {
   const feedbackFormRef = useRef(null);
   const uploadVideoRef = useRef(null);
 
-  const fetchVideos = async () => {
+  const fetchAllVideos = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getAllVideos");
-      const data = await response.json();
-      setVideos(data);
+      const response = await api.get("/getAllVideos");
+      setVideos(response.data);
     } catch (error) {
       console.error("Error fetching videos:", error.message);
     }
   };
-
+  console.log(videos);
   useEffect(() => {
-    fetchVideos();
+    fetchAllVideos();
   }, [detailsUpdated]);
 
   // EDIT BUTTON DIALOG HANDLINGS
