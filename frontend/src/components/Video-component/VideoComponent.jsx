@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { VideoContext } from "../../Context/Context";
-import "./VideoComponent.css";
 import VideoItem from "./VideoItem";
+import "./VideoComponent.css";
 
 const VideoComponent = () => {
   const { videos } = useContext(VideoContext);

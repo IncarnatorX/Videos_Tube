@@ -21,7 +21,7 @@ const VideoProvider = ({ children }) => {
       console.error("Error fetching videos:", error.message);
     }
   };
-  console.log(videos);
+
   useEffect(() => {
     fetchAllVideos();
   }, [detailsUpdated]);

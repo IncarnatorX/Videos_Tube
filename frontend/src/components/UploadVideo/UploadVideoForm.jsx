@@ -2,21 +2,17 @@ import { useContext } from "react";
 import { VideoContext } from "../../Context/Context";
 import UploadFileButtons from "./UploadFileButtons";
 import { toast } from "react-toastify";
-// import axios from "axios";
 import api from "../../utils/api.js";
 import "./UploadVideoForm.css";
 
 const UploadVideoForm = () => {
-  const { uploadVideoRef } = useContext(VideoContext);
+  const { uploadVideoRef, detailsUpdated, setDetailsUpdated } =
+    useContext(VideoContext);
 
   async function handleVideoSubmit(event) {
     event.preventDefault();
-    // const videoObject = {};
     const formData = new FormData(event.target);
-    // for (const [name, value] of formData) {
-    //   videoObject[name] = value;
-    // }
-    // console.log(videoObject);
+
     event.target.reset();
 
     try {
@@ -24,12 +20,15 @@ const UploadVideoForm = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
+        uploadVideoRef.current.close();
         toast.success(response.data.message);
       } else {
         toast.error("Failed to upload video!! Please try again!");
       }
     } catch (error) {
       console.error("Error while uploading the video: ", error.message);
+    } finally {
+      setDetailsUpdated(!detailsUpdated);
     }
   }
 

@@ -132,7 +132,11 @@ const publishVideo = async (req, res) => {
       description,
       videoPublicId: videoFile.public_id,
       thumbnailPublicId: thumbnail.public_id,
-      owner: req.user._id,
+      owner: {
+        id: req.user._id,
+        fullname: req.user.fullname,
+        avatar: req.user.avatar,
+      },
     });
 
     return res

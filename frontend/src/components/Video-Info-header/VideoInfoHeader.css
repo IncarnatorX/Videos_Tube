@@ -1,6 +1,5 @@
 .video-info-header {
-  padding: 0.2rem 0.1rem;
-  box-shadow: 0 4px 12px #ccc;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,6 +19,8 @@
   cursor: pointer;
   border: none;
   background: #fff;
+  color: #000;
+  margin-left: 10px;
 }
 
 .back-btn > svg {
@@ -35,6 +36,6 @@
 }
 
 .back-btn:hover {
-  box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+  box-shadow: 3px 3px 3px #d1d1d1, -3px -3px 3px #ffffff;
   transform: translateY(-2px);
 }

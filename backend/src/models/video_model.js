@@ -1,4 +1,4 @@
-import mongoose, { Mongoose, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const videoSchema = new mongoose.Schema(
   {
@@ -38,8 +38,18 @@ const videoSchema = new mongoose.Schema(
       type: [],
     },
     owner: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      fullname: {
+        type: String,
+        required: true,
+      },
+      avatar: {
+        type: String,
+      },
     },
   },
   {

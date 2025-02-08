@@ -49,7 +49,7 @@ const FeedbackForm = () => {
     <dialog ref={feedbackFormRef} className="feedback-form-dialog">
       <form
         method="dialog"
-        className="feedback-form"
+        className="feedback-form "
         onSubmit={handleFeedbackFromSubmission}
       >
         <p className="form-title">Submit Your Feedback</p>
@@ -91,19 +91,22 @@ const FeedbackForm = () => {
           <p>Submit your Rating:</p>
           <RatingComponent />
         </div>
-        <input
-          type="submit"
-          value="Submit"
-          id="submit-btn"
-          className="btn submit-btn"
-        />
+        <div className="flex justify-center items-center">
+          <input
+            type="submit"
+            value="Submit"
+            id="submit-btn"
+            className="btn submit-btn"
+          />
+          <button
+            type="button"
+            className="btn close-feedback-form-btn"
+            onClick={() => feedbackFormRef.current.close()}
+          >
+            Close Form
+          </button>
+        </div>
       </form>
-      <button
-        className="btn close-feedback-form-btn"
-        onClick={() => feedbackFormRef.current.close()}
-      >
-        Close Form
-      </button>
     </dialog>
   );
 };

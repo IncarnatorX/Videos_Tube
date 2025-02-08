@@ -19,7 +19,6 @@ const verifyJWT = async (req, res, next) => {
       return res.status(401).json({ message: "Unable to find a user.." });
 
     req.user = user;
-    console.log("Verify JWT Controller accessed successfully");
 
     next();
   } catch (error) {

@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router";
-
-import PropTypes from "prop-types";
 import { useContext } from "react";
 import { VideoContext } from "../../Context/Context";
+import BackgroundLetterAvatars from "../Avatar/BackgroundLetterAvatars";
+import ImageAvatars from "../Avatar/Avatar";
+import PropTypes from "prop-types";
 
 const VideoItem = ({ video }) => {
   const navigate = useNavigate();
 
   // Importing form VideoContext
-
   const {
     HandleEditDialogOpening,
     handleReuploadDialogOpen,
@@ -27,11 +27,22 @@ const VideoItem = ({ video }) => {
 
   return (
     <div className="video-item">
-      <video src={video.videoFile} controls width={300} height={250}></video>
+      {/* <video src={video.videoFile} controls width={300} height={250}></video> */}
+      <img
+        src={video.thumbnail}
+        alt="Video Thumbnail"
+        className="thumbnail cursor-pointer"
+        onClick={() => navigate("/videoInfo", { state: video })}
+      />
       <section>
         <div className="video-info">
+          {video?.owner?.avatar ? (
+            <ImageAvatars avatarSrc={video?.owner?.avatar} />
+          ) : (
+            <BackgroundLetterAvatars fullname={video.owner.fullname} />
+          )}
           <h4 className="video-title">{video.title}</h4>
-          <p className="video-desc">{video.description}</p>
+          {/* <p className="video-desc">{video.description}</p> */}
         </div>
         <div className="video-btns">
           <button
