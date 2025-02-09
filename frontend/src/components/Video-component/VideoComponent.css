@@ -2,7 +2,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, 400px);
-  justify-content: center;
+  /* justify-content: center; */
   gap: 0.5rem;
   padding: 1rem;
 }
@@ -56,53 +56,6 @@
   -webkit-box-orient: vertical;
 }
 
-.btn {
-  width: fit-content;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  color: #fff;
-  border: none;
-  overflow: none;
-  cursor: pointer;
-  transition: all 0.4s ease-in;
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
-  }
-}
-
-.edit-button {
-  background-color: rgb(220, 67, 67);
-}
-
-.re-upload-button {
-  background-color: rgb(69, 169, 69);
-}
-
 .feedback-btn {
   background-color: #0077ed;
-}
-
-.video-btns {
-  display: flex;
-  column-gap: 0.5rem;
-  padding: 0.5rem;
-}
-
-.review-ratings {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  row-gap: 0.5rem;
-  color: #000;
-}
-
-.more-btn {
-  width: 100%;
-  text-align: right;
-  cursor: pointer;
-  padding: 0.5rem;
-  color: #666;
-  font-size: 0.85rem;
 }

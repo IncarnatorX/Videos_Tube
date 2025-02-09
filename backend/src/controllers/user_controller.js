@@ -88,7 +88,7 @@ const logInUserController = async (req, res) => {
       });
   } catch (error) {
     console.error("Login Controller errored out: ", error.message);
-    res.status(404).json({ message: "Login Unsuccessful" });
+    res.status(401).json({ message: "Login Unsuccessful" });
   }
 };
 

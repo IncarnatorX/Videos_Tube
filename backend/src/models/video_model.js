@@ -34,7 +34,7 @@ const videoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    feedback: {
+    comments: {
       type: [],
     },
     owner: {

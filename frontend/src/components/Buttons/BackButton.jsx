@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router";
-import "./VideoInfoHeader.css";
-import PropTypes from "prop-types";
+import "./BackButton.css";
 
-const VideoInfoHeader = ({ video }) => {
+const BackButton = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="video-info-header">
-      <button onClick={() => navigate("/")} className="back-btn">
+    <div className="w-full ">
+      <button
+        onClick={() => navigate(-1)}
+        className="back-btn flex justify-center items-center gap-2 self-start cursor-pointer"
+      >
         <svg
           height="16"
           width="16"
@@ -19,15 +21,8 @@ const VideoInfoHeader = ({ video }) => {
         </svg>
         <span className="text-black">Back</span>
       </button>
-
-      <h1 className="header-title text-white text-4xl">{video.title}</h1>
-      <div className="spacer" />
-    </header>
+    </div>
   );
 };
 
-VideoInfoHeader.propTypes = {
-  video: PropTypes.object,
-};
-
-export default VideoInfoHeader;
+export default BackButton;

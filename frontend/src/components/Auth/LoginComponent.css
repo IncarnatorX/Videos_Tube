@@ -1,0 +1,29 @@
+.auth-btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  outline: none;
+}
+
+.login-btn {
+  border: 1.5px solid rgb(0, 113, 227);
+  transition: all 250ms linear;
+  &:hover {
+    background-color: rgb(0, 113, 227);
+    color: #fff;
+  }
+}
+
+.register-btn {
+  border: 1.5px solid #ef5350;
+  transition: all 250ms linear;
+  &:hover {
+    background-color: #ef5350;
+    color: #fff;
+  }
+}

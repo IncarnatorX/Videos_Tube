@@ -27,7 +27,7 @@ const VideoProvider = ({ children }) => {
   }, [detailsUpdated]);
 
   // EDIT BUTTON DIALOG HANDLINGS
-  function HandleEditDialogOpening(id) {
+  function handleEditDialogOpening(id) {
     if (editDialogRef.current) {
       editDialogRef.current.showModal();
       setCurrentVideoId(id);
@@ -64,7 +64,7 @@ const VideoProvider = ({ children }) => {
     reuploadRef,
     feedbackFormRef,
     uploadVideoRef,
-    HandleEditDialogOpening,
+    handleEditDialogOpening,
     handleReuploadDialogOpen,
     handleFeedbackFormDialog,
     handleUploadVideoDialog,

@@ -30,7 +30,7 @@ function stringAvatar(name) {
   };
 }
 
-export default function BackgroundLetterAvatars({ fullname = "John Doe" }) {
+export default function BackgroundLetterAvatars({ fullname = "Avatar" }) {
   return <Avatar {...stringAvatar(fullname)} />;
 }
 

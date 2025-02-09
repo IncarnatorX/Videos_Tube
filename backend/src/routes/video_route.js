@@ -3,6 +3,7 @@ import {
   editTitleAndDesc,
   feedbackHandler,
   getAllVideos,
+  getUserVideos,
   publishVideo,
   reUploadVideo,
 } from "../controllers/video_controller.js";
@@ -27,5 +28,7 @@ videoRouter.route("/publish").post(
   ]),
   publishVideo
 );
+
+videoRouter.route("/getUserVideos").post(verifyJWT, getUserVideos);
 
 export default videoRouter;

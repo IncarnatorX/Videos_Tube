@@ -5,8 +5,7 @@ import AuthLogin from "../components/Auth/AuthLogin";
 import "../components/Auth/Auth.css";
 
 const AuthPage = () => {
-  const location = useLocation();
-  const state = location.state;
+  const { state } = useLocation();
 
   const styles = {
     minWidth: "100%",

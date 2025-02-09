@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 
 const AuthProvider = ({ children }) => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({});
 
   const getUserFromSessionStorage = () => {
+    console.log("getUserFromSessionStorage");
     let userData = sessionStorage.getItem("user");
     if (userData) {
       let parsedUserData = JSON.parse(userData);
@@ -39,35 +40,38 @@ const AuthProvider = ({ children }) => {
 
     sessionStorage.setItem("_retry", "true"); // Store retry flag in Session storage
 
-    try {
-      console.log("🔄 Access token expired, fetching new access token.....");
-      const newRequestResponse = await api.post(
-        "/refresh-token",
-        {},
-        { withCredentials: true }
-      );
+    if (error.response.status !== 401) return;
 
-      if (newRequestResponse.status === 200) {
-        console.log("✅ Refreshed Access token....", newRequestResponse.data);
+    if (error.response.status === 401) {
+      try {
+        console.log("🔄 Access token expired, fetching new access token.....");
+        const newRequestResponse = await api.post(
+          "/refresh-token",
+          {},
+          { withCredentials: true }
+        );
 
-        const user = await api.get("/profile", { withCredentials: true });
-        sessionStorage.setItem("user", JSON.stringify(user.data));
+        if (newRequestResponse.status === 200) {
+          console.log("✅ Refreshed Access token....", newRequestResponse.data);
 
-        setUser(user.data);
-        setUserLoggedIn(true);
+          const user = await api.get("/profile", { withCredentials: true });
+          sessionStorage.setItem("user", JSON.stringify(user.data));
 
-        // console.log("Retrying request with new access token...");
-        sessionStorage.removeItem("_retry");
+          setUser(user.data);
+          setUserLoggedIn(true);
 
-        return api(originalRequest); // Retry failed request with new token
+          // console.log("Retrying request with new access token...");
+          sessionStorage.removeItem("_retry");
+
+          return api(originalRequest); // Retry failed request with new token
+        }
+      } catch (error) {
+        console.error("🚨 Refresh token failed. Logging out...", error.message);
+        sessionStorage.removeItem("user");
+        setUser("");
+        setUserLoggedIn(false);
       }
-    } catch (error) {
-      console.error("🚨 Refresh token failed. Logging out...", error.message);
-      sessionStorage.removeItem("user");
-      setUser("");
-      setUserLoggedIn(false);
     }
-
     sessionStorage.removeItem("_retry"); // Reset retry flag on failure
     return Promise.reject(error);
   };

@@ -1,33 +1,13 @@
 import { useNavigate } from "react-router";
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
-import BackgroundLetterAvatars from "../Avatar/BackgroundLetterAvatars";
-import ImageAvatars from "../Avatar/Avatar";
+import AvatarComponent from "../Avatar/AvatarComponent";
+import getTimeDifference from "../../utils/getTimeDifference";
 import PropTypes from "prop-types";
 
 const VideoItem = ({ video }) => {
   const navigate = useNavigate();
 
-  // Importing form VideoContext
-  const {
-    HandleEditDialogOpening,
-    handleReuploadDialogOpen,
-    handleFeedbackFormDialog,
-  } = useContext(VideoContext);
-
-  function ratingDecimalFixer(video) {
-    const rating =
-      video.feedback.reduce((sum, r) => sum + Number(r.rating), 0) /
-      video.feedback.length;
-    if (isNaN(rating.toFixed(1))) {
-      return 0;
-    }
-    return rating.toFixed(1);
-  }
-
   return (
     <div className="video-item">
-      {/* <video src={video.videoFile} controls width={300} height={250}></video> */}
       <img
         src={video.thumbnail}
         alt="Video Thumbnail"
@@ -36,44 +16,14 @@ const VideoItem = ({ video }) => {
       />
       <section>
         <div className="video-info">
-          {video?.owner?.avatar ? (
-            <ImageAvatars avatarSrc={video?.owner?.avatar} />
-          ) : (
-            <BackgroundLetterAvatars fullname={video.owner.fullname} />
-          )}
-          <h4 className="video-title">{video.title}</h4>
-          {/* <p className="video-desc">{video.description}</p> */}
+          <AvatarComponent owner={video?.owner} />
+          <div>
+            <h4 className="video-title">{video.title}</h4>
+            <p className="text-gray-500 text-sm">
+              {video.views} views | {getTimeDifference(video.createdAt)}
+            </p>
+          </div>
         </div>
-        <div className="video-btns">
-          <button
-            className="edit-button btn"
-            onClick={() => HandleEditDialogOpening(video._id)}
-          >
-            Edit
-          </button>
-          <button
-            className="re-upload-button btn"
-            onClick={() => handleReuploadDialogOpen(video._id)}
-          >
-            Re-Upload
-          </button>
-          <button
-            className="btn feedback-btn"
-            onClick={() => handleFeedbackFormDialog(video._id)}
-          >
-            Submit Feedback
-          </button>
-        </div>
-      </section>
-      <section className="review-ratings">
-        <p>No. of Reviews: {video.feedback.length} </p>
-        <p>Average Rating: {ratingDecimalFixer(video)} stars</p>
-        <span
-          className="more-btn"
-          onClick={() => navigate("/videoInfo", { state: video })}
-        >
-          More....
-        </span>
       </section>
     </div>
   );
@@ -84,7 +34,6 @@ VideoItem.propTypes = {
   HandleEditDialogOpening: PropTypes.func,
   handleReuploadDialogOpen: PropTypes.func,
   handleFeedbackFormDialog: PropTypes.func,
-  ratingDecimalFixer: PropTypes.func,
 };
 
 export default VideoItem;

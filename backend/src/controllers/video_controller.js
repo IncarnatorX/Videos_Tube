@@ -6,6 +6,7 @@ import {
 import redis from "redis";
 import dotenv from "dotenv";
 import videoAndThumbnailDetails from "../utils/fetchVideoAndThumbnailDetails.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -95,7 +96,7 @@ const feedbackHandler = async (req, res) => {
     const { _id, ...feedback } = req.body;
     await client.del(cacheKey); // clearing the cache before any updates happen
     const updatedVideo = await Video.findByIdAndUpdate(_id, {
-      $push: { feedback },
+      $push: { comments: feedback },
     });
 
     if (!updatedVideo)
@@ -117,11 +118,6 @@ const publishVideo = async (req, res) => {
       return res
         .status(401)
         .json({ message: "Title and Description required." });
-
-    // console.log(`Title: ${title}, Description: ${description}`);
-    // console.log("Video File: ", req.files.videoFile[0]);
-    // console.log("Thumbnail: ", req.files.thumbnail[0]);
-    // console.log(req.user._id);
 
     const { videoFile, thumbnail } = await videoAndThumbnailDetails(req);
 
@@ -155,10 +151,37 @@ const publishVideo = async (req, res) => {
   }
 };
 
+const getUserVideos = async (req, res) => {
+  const { _id: userId } = req.user;
+
+  try {
+    if (!userId)
+      return res.status(404).json({ message: "No user id available." });
+
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return res.status(404).json({ message: "Invalid User Id.." });
+
+    const userVideos = await Video.find({ "owner.id": userId });
+
+    if (!userVideos)
+      return res.status(404).json({ message: "Unable to fetch user videos." });
+
+    return res
+      .status(200)
+      .json({ message: "Videos Fetched Successfully", payload: userVideos });
+  } catch (error) {
+    console.error("getUserVideos controller errored out: ", error.message);
+    return res.status(404).json({
+      message: "Something wen't wrong with fetching the user videos.",
+    });
+  }
+};
+
 export {
   getAllVideos,
   editTitleAndDesc,
   reUploadVideo,
   feedbackHandler,
   publishVideo,
+  getUserVideos,
 };

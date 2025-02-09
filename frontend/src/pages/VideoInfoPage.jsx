@@ -1,13 +1,13 @@
 import { useLocation } from "react-router";
 import VideoInfoComponent from "../components/Video-Info-Component/VideoInfoComponent";
-import VideoInfoHeader from "../components/Video-Info-header/VideoInfoHeader";
+import Navbar from "../components/Navbar/Navbar";
 
 const VideoInfoPage = () => {
   const { state: video } = useLocation();
 
   return (
     <>
-      <VideoInfoHeader video={video} />
+      <Navbar />
       <VideoInfoComponent video={video} />
     </>
   );
