@@ -1,9 +1,15 @@
+import { useContext } from "react";
+import { AuthContext } from "../../Context/Context";
 import AvatarComponent from "../Avatar/AvatarComponent";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import getTimeDifference from "../../utils/getTimeDifference";
 import "./VideoInfoComponent.css";
 import PropTypes from "prop-types";
 
 const VideoInfoComponent = ({ video }) => {
+  const { userLoggedIn } = useContext(AuthContext);
+
   return (
     <div className="video-details">
       <section className="video-section">
@@ -16,8 +22,15 @@ const VideoInfoComponent = ({ video }) => {
       </section>
 
       <section className="details-section">
-        {/* TITLE */}
-        <p className="text-4xl text-white">{video.title}</p>
+        <div className="flex items-center justify-between">
+          {/* TITLE */}
+          <p className="text-4xl text-white">{video.title}</p>
+          {/* LIKE AND DISLIKE BUTTON */}
+          <div className="flex gap-4 bg-gray-500 py-2 px-4 rounded-md">
+            <ThumbUpAltIcon className="text-white cursor-pointer" />
+            <ThumbDownAltIcon className="text-white cursor-pointer" />
+          </div>
+        </div>
 
         {/* OWNER */}
         <div className="flex gap-4 items-center">
@@ -58,23 +71,25 @@ const VideoInfoComponent = ({ video }) => {
         </div>
 
         {/* NEW COMMENT */}
-        <div className="">
-          <input
-            type="text"
-            name="comment"
-            id="comments"
-            placeholder="Add a comment..."
-            className="w-full p-2 border-2 border-x-0 border-t-0 border-b-white text-white outline-none focus:border-fuchsia-300"
-          />
-          <div className="flex py-6 justify-end gap-4">
-            <button className="border-none outline-none text-white px-6 py-2 bg-blue-400 rounded-xl cursor-pointer">
-              Comment
-            </button>
-            <button className="border-none outline-none text-white px-6 py-2 bg-red-700 rounded-xl cursor-pointer">
-              Cancel
-            </button>
+        {userLoggedIn && (
+          <div>
+            <input
+              type="text"
+              name="comment"
+              id="comments"
+              placeholder="Add a comment..."
+              className="w-full p-2 border-2 border-x-0 border-t-0 border-b-white text-white outline-none focus:border-fuchsia-300"
+            />
+            <div className="flex py-6 justify-end gap-4">
+              <button className="border-none outline-none text-white px-6 py-2 bg-blue-400 rounded-xl cursor-pointer">
+                Comment
+              </button>
+              <button className="border-none outline-none text-white px-6 py-2 bg-red-700 rounded-xl cursor-pointer">
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </div>
   );

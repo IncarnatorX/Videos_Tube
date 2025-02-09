@@ -1,23 +1,39 @@
 import PropTypes from "prop-types";
 import getCreatedAtFormatted from "../../utils/getCreatedAt";
+import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
+import { useContext } from "react";
+import { VideoContext } from "../../Context/Context";
 
 const MyAccountDetails = ({ user }) => {
-  console.log(user);
+  const { handleReuploadDialogOpen } = useContext(VideoContext);
+
+  function editAvatarButtonClick() {
+    return handleReuploadDialogOpen(user._id);
+  }
 
   return (
-    <div className="grid grid-cols-12 text-white p-6">
-      <div className="col-span-2 content-center">
-        <img src={user.avatar} className="rounded-[50%]" />
+    <>
+      <h2 className="text-center py-2 text-white text-2xl ">My Account</h2>
+      <div className="grid grid-cols-12 text-white p-6">
+        <div className="col-span-2 content-center">
+          <img src={user.avatar} className="rounded-[50%]" />
+          <EditAvatarButton editAvatarButtonClick={editAvatarButtonClick} />
+        </div>
+        <div className="col-span-10 flex flex-col gap-4">
+          <p className="text-4xl">
+            {user?.fullname[0].toUpperCase() + user?.fullname.slice(1)}
+          </p>
+          <p>Username: @{user.username}</p>
+          <p>
+            Email: {user.email}{" "}
+            <button className="bg-gray-500 cursor-pointer ml-2 px-2 outline-none rounded-lg text-sm">
+              Edit email
+            </button>
+          </p>
+          <p>Joined {getCreatedAtFormatted(user.createdAt)} </p>
+        </div>
       </div>
-      <div className="col-span-10 flex flex-col gap-4">
-        <p className="text-4xl">
-          {user?.fullname[0].toUpperCase() + user?.fullname.slice(1)}
-        </p>
-        <p>Username: @{user.username}</p>
-        <p>Email: {user.email}</p>
-        <p>Joined {getCreatedAtFormatted(user.createdAt)} </p>
-      </div>
-    </div>
+    </>
   );
 };
 

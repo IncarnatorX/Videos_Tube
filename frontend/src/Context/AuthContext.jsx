@@ -8,7 +8,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
   const getUserFromSessionStorage = () => {
-    console.log("getUserFromSessionStorage");
     let userData = sessionStorage.getItem("user");
     if (userData) {
       let parsedUserData = JSON.parse(userData);

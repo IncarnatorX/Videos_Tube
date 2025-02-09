@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import api from "../../utils/api";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/Context";
-import BackButton from "../Buttons/BackButton";
+import BackButton from "../Buttons/BackButton/BackButton.jsx";
 
 const AuthLogin = () => {
   const navigate = useNavigate();

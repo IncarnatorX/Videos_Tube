@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import api from "../../utils/api.js";
-import BackButton from "../Buttons/BackButton.jsx";
+import BackButton from "../Buttons/BackButton/BackButton.jsx";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
