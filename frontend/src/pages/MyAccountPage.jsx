@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useContext, useEffect, useRef, useState } from "react";
 import MyAccountDetails from "../components/MyAccount/MyAccountDetails";
 import Navbar from "../components/Navbar/Navbar";
 import MyAccountPublishVideos from "../components/MyAccount/MyAccountPublishVideos";
 import api from "../utils/api";
 import EditVideoDetails from "../components/Edit-Video/EditVideoDetails";
 import ReUploadVideoComponent from "../components/Reupload-video/ReUploadVideoComponent";
+import EditAvatarModel from "../components/EditAvatarModel/EditAvatarModel.jsx";
+import { AuthContext } from "../Context/Context.jsx";
 
 const MyAccountPage = () => {
-  const { state: user } = useLocation();
+  const { user } = useContext(AuthContext);
   const [userVideos, setUserVideos] = useState([]);
+
+  const editAvatarRef = useRef(null);
 
   async function fetchUserVideos() {
     try {
@@ -33,10 +36,11 @@ const MyAccountPage = () => {
   return (
     <div>
       <Navbar />
-      <MyAccountDetails user={user} />
+      <MyAccountDetails user={user} editAvatarRef={editAvatarRef} />
       <MyAccountPublishVideos userVideos={userVideos} />
       <EditVideoDetails />
       <ReUploadVideoComponent />
+      <EditAvatarModel id={user._id} editAvatarRef={editAvatarRef} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { User } from "../models/user_model.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import generateAccessAndRefreshToken from "../utils/generateTokens.js";
 import jwt from "jsonwebtoken";
 
@@ -198,6 +199,31 @@ const getProfileController = async (req, res) => {
   }
 };
 
+const editAvatar = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const avatarFilePath = req.file.path;
+    if (!avatarFilePath)
+      return res.status(404).json({ message: "No file provided!!" });
+
+    const avatarFile = await uploadOnCloudinary(avatarFilePath);
+
+    await User.findByIdAndUpdate(_id, {
+      $set: { avatar: avatarFile.url },
+    });
+
+    return res.status(200).json({ message: "Avatar uploaded successfully." });
+  } catch (error) {
+    console.error(
+      "Error while running edit avatar controller: ",
+      error.message
+    );
+    return res.status(404).json({
+      message: "Error occurred while updating the avatar. Please try again.",
+    });
+  }
+};
+
 export {
   registerUserController,
   logInUserController,
@@ -205,4 +231,5 @@ export {
   verifyToken,
   generateNewAccessToken,
   getProfileController,
+  editAvatar,
 };

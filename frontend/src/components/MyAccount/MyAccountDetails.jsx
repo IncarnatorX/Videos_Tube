@@ -1,14 +1,12 @@
 import PropTypes from "prop-types";
 import getCreatedAtFormatted from "../../utils/getCreatedAt";
 import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
 
-const MyAccountDetails = ({ user }) => {
-  const { handleReuploadDialogOpen } = useContext(VideoContext);
-
-  function editAvatarButtonClick() {
-    return handleReuploadDialogOpen(user._id);
+const MyAccountDetails = ({ user, editAvatarRef }) => {
+  function handleEditAvatarDialog() {
+    if (editAvatarRef.current) {
+      editAvatarRef.current.showModal();
+    }
   }
 
   return (
@@ -17,11 +15,11 @@ const MyAccountDetails = ({ user }) => {
       <div className="grid grid-cols-12 text-white p-6">
         <div className="col-span-2 content-center">
           <img src={user.avatar} className="rounded-[50%]" />
-          <EditAvatarButton editAvatarButtonClick={editAvatarButtonClick} />
+          <EditAvatarButton handleEditAvatarDialog={handleEditAvatarDialog} />
         </div>
         <div className="col-span-10 flex flex-col gap-4">
           <p className="text-4xl">
-            {user?.fullname[0].toUpperCase() + user?.fullname.slice(1)}
+            {user.fullname[0].toUpperCase() + user.fullname.slice(1)}
           </p>
           <p>Username: @{user.username}</p>
           <p>
@@ -39,6 +37,7 @@ const MyAccountDetails = ({ user }) => {
 
 MyAccountDetails.propTypes = {
   user: PropTypes.object,
+  editAvatarRef: PropTypes.object,
 };
 
 export default MyAccountDetails;

@@ -6,7 +6,9 @@ import {
   logoutUser,
   registerUserController,
   verifyToken,
+  editAvatar,
 } from "../controllers/user_controller.js";
+import upload from "../middlewares/multer_middleware.js";
 import verifyJWT from "../middlewares/auth_middleware.js";
 
 const userRouter = Router();
@@ -18,5 +20,9 @@ userRouter.route("/refresh-token").post(generateNewAccessToken);
 userRouter.route("/verify-token").get(verifyJWT, verifyToken);
 userRouter.route("/logout").post(verifyJWT, logoutUser);
 userRouter.route("/profile").get(verifyJWT, getProfileController);
+
+userRouter
+  .route("/avatar")
+  .post(verifyJWT, upload.single("avatar"), editAvatar);
 
 export default userRouter;

@@ -5,14 +5,17 @@ import PropTypes from "prop-types";
 
 const AuthProvider = ({ children }) => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(() => {
+    let userData = sessionStorage.getItem("user");
+    return userData ? JSON.parse(userData).user : null;
+  });
 
   const getUserFromSessionStorage = () => {
     let userData = sessionStorage.getItem("user");
     if (userData) {
       let parsedUserData = JSON.parse(userData);
+      setUser(parsedUserData.user);
       setUserLoggedIn(true);
-      setUser(parsedUserData);
     } else {
       setUserLoggedIn(false);
     }
@@ -91,7 +94,12 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ userLoggedIn, setUserLoggedIn, user, setUser }}
+      value={{
+        userLoggedIn,
+        setUserLoggedIn,
+        user,
+        setUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

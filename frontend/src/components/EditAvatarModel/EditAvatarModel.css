@@ -1,0 +1,13 @@
+#avatar-input::file-selector-button {
+  padding: 0.5rem;
+  color: #fff;
+  background-color: #0077ed;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+#avatar-input::file-selector-button:hover {
+  background-color: rebeccapurple;
+  transition: background 250ms linear;
+}

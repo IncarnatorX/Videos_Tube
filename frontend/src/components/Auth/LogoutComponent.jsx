@@ -42,7 +42,7 @@ const LogoutComponent = () => {
   }
 
   function handleUserAccount() {
-    navigate("/account", { state: user });
+    navigate("/account");
   }
 
   return (
