@@ -1,19 +1,23 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { VideoContext } from "../../Context/Context";
 import UploadFileButtons from "./UploadFileButtons";
 import { toast } from "react-toastify";
 import api from "../../utils/api.js";
 import "./UploadVideoForm.css";
+import { ThreeDot } from "react-loading-indicators";
 
 const UploadVideoForm = () => {
   const { uploadVideoRef, detailsUpdated, setDetailsUpdated } =
     useContext(VideoContext);
 
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+
   async function handleVideoSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
 
-    event.target.reset();
+    setUploadingVideo(true);
+
+    const formData = new FormData(event.target);
 
     try {
       const response = await api.post("/publish", formData, {
@@ -28,7 +32,9 @@ const UploadVideoForm = () => {
     } catch (error) {
       console.error("Error while uploading the video: ", error.message);
     } finally {
+      event.target.reset();
       setDetailsUpdated(!detailsUpdated);
+      setUploadingVideo(false);
     }
   }
 
@@ -54,7 +60,16 @@ const UploadVideoForm = () => {
           required
         ></textarea>
         <UploadFileButtons />
-        <input type="submit" value="Submit" id="video-submit" />
+        {uploadingVideo ? (
+          <ThreeDot
+            color="#1920ea"
+            size="small"
+            text="Uploading"
+            textColor="#1920ea"
+          />
+        ) : (
+          <input type="submit" value="Submit" id="video-submit" />
+        )}
       </form>
     </dialog>
   );

@@ -36,7 +36,7 @@ const MyAccountPage = () => {
   return (
     <div>
       <Navbar />
-      <MyAccountDetails user={user} editAvatarRef={editAvatarRef} />
+      <MyAccountDetails editAvatarRef={editAvatarRef} />
       <MyAccountPublishVideos userVideos={userVideos} />
       <EditVideoDetails />
       <ReUploadVideoComponent />

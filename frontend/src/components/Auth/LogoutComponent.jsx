@@ -10,7 +10,6 @@ import AvatarComponent from "../Avatar/AvatarComponent";
 const LogoutComponent = () => {
   const { user, setUser, setUserLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

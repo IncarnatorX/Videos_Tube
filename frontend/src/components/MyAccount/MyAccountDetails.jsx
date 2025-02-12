@@ -1,19 +1,22 @@
 import PropTypes from "prop-types";
 import getCreatedAtFormatted from "../../utils/getCreatedAt";
 import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
+import { useContext } from "react";
+import { AuthContext } from "../../Context/Context";
 
-const MyAccountDetails = ({ user, editAvatarRef }) => {
+const MyAccountDetails = ({ editAvatarRef }) => {
+  const { user } = useContext(AuthContext);
+
   function handleEditAvatarDialog() {
     if (editAvatarRef.current) {
       editAvatarRef.current.showModal();
     }
   }
-
   return (
     <>
       <h2 className="text-center py-2 text-white text-2xl ">My Account</h2>
       <div className="grid grid-cols-12 text-white p-6">
-        <div className="col-span-2 content-center">
+        <div className="col-span-2 flex flex-col justify-center items-center">
           <img src={user.avatar} className="rounded-[50%]" />
           <EditAvatarButton handleEditAvatarDialog={handleEditAvatarDialog} />
         </div>
@@ -36,7 +39,6 @@ const MyAccountDetails = ({ user, editAvatarRef }) => {
 };
 
 MyAccountDetails.propTypes = {
-  user: PropTypes.object,
   editAvatarRef: PropTypes.object,
 };
 
