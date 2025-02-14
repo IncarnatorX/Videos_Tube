@@ -7,6 +7,7 @@ import {
   registerUserController,
   verifyToken,
   editAvatar,
+  verifyPassword,
 } from "../controllers/user_controller.js";
 import upload from "../middlewares/multer_middleware.js";
 import verifyJWT from "../middlewares/auth_middleware.js";
@@ -24,5 +25,7 @@ userRouter.route("/profile").get(verifyJWT, getProfileController);
 userRouter
   .route("/avatar")
   .post(verifyJWT, upload.single("avatar"), editAvatar);
+
+userRouter.route("/verify-password").post(verifyJWT, verifyPassword);
 
 export default userRouter;

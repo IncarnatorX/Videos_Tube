@@ -1,5 +1,4 @@
 import { useLocation } from "react-router";
-import ToastComponent from "../components/ToastContainer";
 import AuthRegister from "../components/Auth/AuthRegister";
 import AuthLogin from "../components/Auth/AuthLogin";
 import "../components/Auth/Auth.css";
@@ -19,7 +18,6 @@ const AuthPage = () => {
     <div style={styles}>
       {state === "register" && <AuthRegister />}
       {state === "login" && <AuthLogin />}
-      <ToastComponent />
     </div>
   );
 };

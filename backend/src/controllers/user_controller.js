@@ -224,6 +224,33 @@ const editAvatar = async (req, res) => {
   }
 };
 
+const verifyPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (!password)
+      return res.status(404).json({ message: "No password provided!" });
+
+    const user = await User.findById(req.user._id);
+
+    if (!user)
+      return res.status(404).json({ message: "Unable to fetch the user." });
+
+    const isPasswordValid = await user.isPasswordCorrect(password);
+
+    if (!isPasswordValid)
+      return res.status(404).json({ message: "Password doesn't match." });
+
+    return res.status(200).json({ message: "Password is correct." });
+  } catch (error) {
+    console.error("verify password controller errored out: ".error.message);
+    return res.status(404).json({
+      message:
+        "Something wen't wrong while verifying your password. Please try again.",
+    });
+  }
+};
+
 export {
   registerUserController,
   logInUserController,
@@ -232,4 +259,5 @@ export {
   generateNewAccessToken,
   getProfileController,
   editAvatar,
+  verifyPassword,
 };

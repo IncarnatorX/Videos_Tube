@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
-import api from "../utils/api";
 import { AuthContext } from "./Context";
+import api from "../utils/api";
 import PropTypes from "prop-types";
 
 const AuthProvider = ({ children }) => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [user, setUser] = useState(() => {
     let userData = sessionStorage.getItem("user");
-    return userData ? JSON.parse(userData).user : null;
+    return userData ? JSON.parse(userData) : null;
   });
 
+  // GET USER FROM SESSION STORAGE
   const getUserFromSessionStorage = () => {
     let userData = sessionStorage.getItem("user");
     if (userData) {
       let parsedUserData = JSON.parse(userData);
-      setUser(parsedUserData.user);
+      setUser(parsedUserData);
       setUserLoggedIn(true);
     } else {
+      setUser(null);
       setUserLoggedIn(false);
     }
   };
 
+  // ERROR HANDLER
   const errorHandler = async (error) => {
     console.log("❌ Interceptor caught an error:", error);
 
@@ -70,13 +73,15 @@ const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error("🚨 Refresh token failed. Logging out...", error.message);
         sessionStorage.removeItem("user");
-        setUser("");
+        setUser(null);
         setUserLoggedIn(false);
       }
     }
     sessionStorage.removeItem("_retry"); // Reset retry flag on failure
     return Promise.reject(error);
   };
+
+  // USE EFFECT
 
   useEffect(() => {
     getUserFromSessionStorage();

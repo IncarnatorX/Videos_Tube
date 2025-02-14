@@ -27,7 +27,7 @@ const LogoutComponent = () => {
 
       if (response.status === 200) {
         sessionStorage.removeItem("user");
-        setUser({});
+        setUser(null);
         setUserLoggedIn(false);
         toast.success(response.data.message);
         navigate("/");
