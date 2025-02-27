@@ -3,24 +3,27 @@ import {
   deleteFromCloudinary,
   uploadOnCloudinary,
 } from "../utils/cloudinary.js";
-import redis from "redis";
+// import redis from "redis";
 import dotenv from "dotenv";
 import videoAndThumbnailDetails from "../utils/fetchVideoAndThumbnailDetails.js";
 import mongoose from "mongoose";
 
 dotenv.config();
 
-const client = redis.createClient({
-  username: "default",
-  password: process.env.REDIS_PASSWORD,
-  socket: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-  },
-}); // Creating a redis Client
+// Creating a redis Client
+// const client = redis.createClient({
+//   username: "default",
+//   password: process.env.REDIS_PASSWORD,
+//   socket: {
+//     host: process.env.REDIS_HOST,
+//     port: process.env.REDIS_PORT,
+//   },
+// });
 
 // await client.connect();
+
 // client.on("error", (err) => console.error("Redis error: ", err.message));
+
 // const cacheKey = "allVideos";
 
 const getAllVideos = async (req, res) => {
@@ -55,7 +58,7 @@ const getAllVideos = async (req, res) => {
 const editTitleAndDesc = async (req, res) => {
   try {
     const { title, description, _id } = req.body;
-    await client.del(cacheKey); // clearing the cache before any updates happen
+    // await client.del(cacheKey); // clearing the cache before any updates happen
     await Video.findByIdAndUpdate(_id, {
       $set: { title, description },
     });
@@ -72,7 +75,7 @@ const reUploadVideo = async (req, res) => {
     const { _id } = req.body;
 
     const videoFileDetails = await uploadOnCloudinary(path);
-    await client.del(cacheKey); // clearing the cache before any updates happen
+    // await client.del(cacheKey); // clearing the cache before any updates happen
     const updatedVideo = await Video.findByIdAndUpdate(
       _id,
       {
@@ -94,7 +97,7 @@ const reUploadVideo = async (req, res) => {
 const feedbackHandler = async (req, res) => {
   try {
     const { _id, ...feedback } = req.body;
-    await client.del(cacheKey); // clearing the cache before any updates happen
+    // await client.del(cacheKey); // clearing the cache before any updates happen
     const updatedVideo = await Video.findByIdAndUpdate(_id, {
       $push: { comments: feedback },
     });

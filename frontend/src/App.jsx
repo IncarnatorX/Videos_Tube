@@ -10,6 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorNotFound from "./components/Error/ErrorNotFound";
 import ConfirmPasswordComponent from "./components/Confirm-Password/ConfirmPasswordComponent";
 import "./App.css";
+import ResetPasswordComponent from "./components/Reset-Password/ResetPasswordComponent";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/account" element={<MyAccountPage />} />
                 <Route path="/cnf-pwd" element={<ConfirmPasswordComponent />} />
+                <Route path="/reset-pwd" element={<ResetPasswordComponent />} />
                 <Route path="*" element={<ErrorNotFound />} />
               </Routes>
             </AuthProvider>

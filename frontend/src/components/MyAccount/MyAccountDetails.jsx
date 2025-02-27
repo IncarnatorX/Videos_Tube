@@ -1,11 +1,14 @@
-import PropTypes from "prop-types";
-import getCreatedAtFormatted from "../../utils/getCreatedAt";
-import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/Context";
+import { useNavigate } from "react-router";
+import getCreatedAtFormatted from "../../utils/getCreatedAt";
+import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
+import PropTypes from "prop-types";
 
 const MyAccountDetails = ({ editAvatarRef }) => {
   const { user } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   function handleEditAvatarDialog() {
     if (editAvatarRef.current) {
@@ -32,6 +35,12 @@ const MyAccountDetails = ({ editAvatarRef }) => {
             </button>
           </p>
           <p>Joined {getCreatedAtFormatted(user.createdAt)} </p>
+          <button
+            className="bg-green-400 rounded-md outline-none border-none text-white cursor-pointer px-2 py-1 w-fit"
+            onClick={() => navigate("/cnf-pwd")}
+          >
+            Reset Password
+          </button>
         </div>
       </div>
     </>

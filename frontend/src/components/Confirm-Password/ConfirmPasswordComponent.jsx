@@ -21,6 +21,7 @@ const ConfirmPasswordComponent = () => {
       if (response.status === 200) {
         const { message } = response.data;
         toast.success(message);
+        navigate("/reset-pwd");
       }
     } catch (error) {
       console.error("Password couldn't be verified: ", error.message);
@@ -30,37 +31,34 @@ const ConfirmPasswordComponent = () => {
 
   return (
     <div className="flex items-center justify-center h-dvh">
-      <div className="text-white sm:w-[60%] h-[70%] bg-black rounded-md flex flex-col sm:flex-row items-center p-4">
-        <section className="left sm:w-[35%] h-full text-4xl sm:border-r-2 flex justify-center items-center">
-          <p className="w-full text-center">Hi {user.fullname}</p>
-        </section>
-        <section className="right w-[65%] p-3 flex flex-col gap-7 ml-3">
-          <h1 className="text-4xl/14">Enter Password to Continue</h1>
-          <form onSubmit={handleConfirmPassword}>
+      <section className="text-white sm:w-[65%] sm:h-[60%] bg-black rounded-md p-6 flex flex-col gap-7 w-full">
+        <h1 className="text-4xl/14 p-4">
+          Hey {user.fullname},<br /> Enter Password to Continue
+        </h1>
+        <form onSubmit={handleConfirmPassword} className="p-4">
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter Password"
+            className="outline-none border-2 border-blue-600 p-4 rounded-md w-full"
+          />
+          <section className="flex items-center gap-4 self-end mr-6">
+            <button
+              type="button"
+              className="bg-red-600 p-2 px-4 rounded-4xl cursor-pointer"
+              onClick={() => navigate("/account")}
+            >
+              Cancel
+            </button>
             <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter Password"
-              className="outline-none border-2 border-blue-600 p-4 rounded-md w-full"
+              type="submit"
+              value="Next"
+              className="bg-blue-600 py-2 px-4 rounded-4xl cursor-pointer"
             />
-            <section className="flex items-center gap-4 self-end mr-6">
-              <button
-                type="button"
-                className="bg-red-600 p-2 px-4 rounded-4xl cursor-pointer"
-                onClick={() => navigate("/account")}
-              >
-                Cancel
-              </button>
-              <input
-                type="submit"
-                value="Next"
-                className="bg-blue-600 py-2 px-4 rounded-4xl cursor-pointer"
-              />
-            </section>
-          </form>
-        </section>
-      </div>
+          </section>
+        </form>
+      </section>
     </div>
   );
 };
