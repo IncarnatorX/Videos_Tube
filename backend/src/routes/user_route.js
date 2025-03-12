@@ -8,6 +8,7 @@ import {
   verifyToken,
   editAvatar,
   verifyPassword,
+  resetPassword,
 } from "../controllers/user_controller.js";
 import upload from "../middlewares/multer_middleware.js";
 import verifyJWT from "../middlewares/auth_middleware.js";
@@ -27,5 +28,7 @@ userRouter
   .post(verifyJWT, upload.single("avatar"), editAvatar);
 
 userRouter.route("/verify-password").post(verifyJWT, verifyPassword);
+
+userRouter.route("/reset-pwd").post(verifyJWT, resetPassword);
 
 export default userRouter;

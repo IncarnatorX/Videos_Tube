@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { User } from "../models/user_model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import generateAccessAndRefreshToken from "../utils/generateTokens.js";
@@ -224,6 +225,7 @@ const editAvatar = async (req, res) => {
   }
 };
 
+// VERIFY PASSWORD
 const verifyPassword = async (req, res) => {
   try {
     const { password } = req.body;
@@ -251,6 +253,43 @@ const verifyPassword = async (req, res) => {
   }
 };
 
+// RESET PASSWORD
+const resetPassword = async (req, res) => {
+  try {
+    const { _id: userId } = req.user;
+
+    const { password } = req.body;
+
+    if (!userId)
+      return res
+        .status(404)
+        .json({ message: "No id available in the request!!" });
+
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return res.status(404).json({ message: "Invalid User Id.." });
+
+    if (!password)
+      return res
+        .status(404)
+        .json({ message: "No new password found in the request" });
+
+    const user = await User.findById(userId);
+
+    if (!user)
+      return res.status(404).json({ message: "No user found with this id" });
+
+    user.password = password;
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successful." });
+  } catch (error) {
+    console.error("Error in reset password controller: ", error.message);
+    return res.status(404).json({
+      message: "Something wen't wrong while updating your password!!",
+    });
+  }
+};
+
 export {
   registerUserController,
   logInUserController,
@@ -260,4 +299,5 @@ export {
   getProfileController,
   editAvatar,
   verifyPassword,
+  resetPassword,
 };
