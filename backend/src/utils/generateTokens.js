@@ -9,9 +9,9 @@ const generateAccessAndRefreshToken = async (userID) => {
     const accessToken = currentUser.generateAccessToken();
     const refreshToken = currentUser.generateRefreshToken();
 
-    currentUser.refreshToken = refreshToken;
-
-    await currentUser.save();
+    await User.findByIdAndUpdate(userID, {
+      $push: { refreshTokens: refreshToken },
+    });
 
     return { accessToken, refreshToken };
   } catch (error) {

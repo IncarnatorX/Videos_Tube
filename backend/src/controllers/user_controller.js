@@ -76,7 +76,7 @@ const logInUserController = async (req, res) => {
     );
 
     const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshToken -email -_id -createdAt -updatedAt"
+      "-password -refreshToken -email -createdAt -updatedAt"
     );
 
     if (!loggedInUser)
@@ -95,8 +95,10 @@ const logInUserController = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
+    const incomingRefreshToken = req.cookies.refreshToken;
+
     await User.findByIdAndUpdate(req.user._id, {
-      $set: { refreshToken: null },
+      $pull: { refreshTokens: incomingRefreshToken },
     });
 
     res
@@ -152,7 +154,11 @@ const generateNewAccessToken = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findById(decodedToken?._id);
+    // FINDS THE USER WITH THE ID AND USER'S CORRESPONDING REFRESH TOKEN
+    const user = await User.findOne({
+      _id: decodedToken?._id,
+      refreshTokens: { $elemMatch: { $eq: incomingRefreshToken } },
+    });
 
     if (!user) {
       return res
@@ -160,20 +166,15 @@ const generateNewAccessToken = async (req, res) => {
         .json({ message: "No user found - Invalid refresh token provided." });
     }
 
-    // CHECKING IF THE INCOMING REFRESH TOKEN IS MATCHING THE USER'S REFRESH TOKEN STORED IN DB
-    if (incomingRefreshToken !== user.refreshToken)
-      return res.status(404).json({
-        message:
-          "User refresh token doesn't match incoming refresh token. Access Denied",
-      });
-
     // GENERATING NEW TOKENS
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
 
     // updating the new refresh token in database
-    user.refreshToken = refreshToken;
+    await User.findByIdAndUpdate(user._id, {
+      $pull: { refreshTokens: incomingRefreshToken },
+    });
 
     return res
       .status(200)
