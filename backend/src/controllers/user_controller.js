@@ -3,13 +3,22 @@ import { User } from "../models/user_model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import generateAccessAndRefreshToken from "../utils/generateTokens.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const options = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "Strict",
+};
 
 const registerUserController = async (req, res) => {
   const { fullname, email, password, username } = req.body;
 
   // VALIDATING IF ALL THE FIELDS ARE SUPPLIED
-  const allFieldsValidation = [fullname, email, password, username].every(
-    (field) => field.trim() === ""
+  const allFieldsValidation = [fullname, email, password, username].some(
+    (field) => !field?.trim()
   );
 
   if (allFieldsValidation) {
@@ -67,27 +76,17 @@ const logInUserController = async (req, res) => {
     );
 
     const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshToken"
+      "-password -refreshToken -email -_id -createdAt -updatedAt"
     );
 
     if (!loggedInUser)
       return res.status(404).json({ message: "User not found!" });
 
-    const options = {
-      httpOnly: true,
-      secure: false,
-    };
-
-    res
-      .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json({
-        message: "Login Successful.",
-        user: loggedInUser,
-        accessToken,
-        refreshToken,
-      });
+    res.status(200).cookie("refreshToken", refreshToken, options).json({
+      message: "Login Successful.",
+      user: loggedInUser,
+      accessToken,
+    });
   } catch (error) {
     console.error("Login Controller errored out: ", error.message);
     res.status(401).json({ message: "Login Unsuccessful" });
@@ -100,14 +99,8 @@ const logoutUser = async (req, res) => {
       $set: { refreshToken: null },
     });
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
     res
       .status(200)
-      .clearCookie("accessToken", options)
       .clearCookie("refreshToken", options)
       .json({ message: "Logged out" });
   } catch (error) {
@@ -120,7 +113,14 @@ const logoutUser = async (req, res) => {
 };
 
 const verifyToken = async (req, res) => {
-  const incomingAccessToken = req.cookies.accessToken || req.body.accessToken;
+  const incomingAccessToken =
+    req.cookies.accessToken ||
+    req.body.accessToken ||
+    (req.headers["authorization"] &&
+    req.headers["authorization"].startsWith("Bearer ")
+      ? req.headers["authorization"].split(" ")[1]
+      : null);
+
   if (!incomingAccessToken)
     return res
       .status(401)
@@ -140,10 +140,11 @@ const verifyToken = async (req, res) => {
 };
 
 const generateNewAccessToken = async (req, res) => {
-  const incomingRefreshToken =
-    req.cookies.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken = req.cookies.refreshToken;
 
-  if (!incomingRefreshToken) throw new Error("No refresh token found.");
+  if (!incomingRefreshToken) {
+    return res.status(403).json({ message: "No refresh token found." });
+  }
 
   try {
     const decodedToken = jwt.verify(
@@ -153,12 +154,18 @@ const generateNewAccessToken = async (req, res) => {
 
     const user = await User.findById(decodedToken?._id);
 
-    if (!user) throw new Error("No user found - Invalid refresh token");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "No user found - Invalid refresh token provided." });
+    }
 
+    // CHECKING IF THE INCOMING REFRESH TOKEN IS MATCHING THE USER'S REFRESH TOKEN STORED IN DB
     if (incomingRefreshToken !== user.refreshToken)
-      throw new Error(
-        "User refresh token doesn't match incoming refresh token."
-      );
+      return res.status(404).json({
+        message:
+          "User refresh token doesn't match incoming refresh token. Access Denied",
+      });
 
     // GENERATING NEW TOKENS
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -168,16 +175,10 @@ const generateNewAccessToken = async (req, res) => {
     // updating the new refresh token in database
     user.refreshToken = refreshToken;
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ message: "New tokens generated" });
+      .json({ message: "New tokens generated", accessToken });
   } catch (error) {
     console.error("Error generating new access");
     res.status(404).json({

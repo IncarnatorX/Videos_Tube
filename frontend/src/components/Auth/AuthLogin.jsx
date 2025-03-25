@@ -8,7 +8,7 @@ import BackButton from "../Buttons/BackButton/BackButton.jsx";
 const AuthLogin = () => {
   const navigate = useNavigate();
 
-  const { setUserLoggedIn, setUser } = useContext(AuthContext);
+  const { setUserLoggedIn, setUser, setAccessToken } = useContext(AuthContext);
 
   const handleAuthFormLogin = async (event) => {
     event.preventDefault();
@@ -29,9 +29,10 @@ const AuthLogin = () => {
           "Content-Type": "application/json",
         },
       });
-      const { message, user } = response.data;
       if (response.status === 200) {
-        sessionStorage.setItem("user", JSON.stringify(user));
+        const { message, user, accessToken } = response.data;
+        setAccessToken(accessToken);
+        localStorage.setItem("user", JSON.stringify(user));
         toast.success(message);
         navigate("/");
         setUser(user);

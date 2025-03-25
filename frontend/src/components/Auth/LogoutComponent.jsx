@@ -10,6 +10,7 @@ import AvatarComponent from "../Avatar/AvatarComponent";
 const LogoutComponent = () => {
   const { user, setUser, setUserLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,20 +22,19 @@ const LogoutComponent = () => {
 
   async function handleUserLogout() {
     try {
-      const response = await api.post("/logout", user._id, {
+      const response = await api.post("/logout", {
         withCredentials: true,
       });
 
       if (response.status === 200) {
-        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
         setUser(null);
         setUserLoggedIn(false);
         toast.success(response.data.message);
         navigate("/");
       }
     } catch (error) {
-      toast.error("Error while logging out!!");
-      console.error(error.message);
+      console.error("Error while logging out:", error);
     } finally {
       handleClose();
     }

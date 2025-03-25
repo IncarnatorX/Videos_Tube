@@ -13,9 +13,9 @@ const EditAvatarModel = ({ id, editAvatarRef }) => {
   const [userUpdated, setUserUpdated] = useState(false);
 
   async function getUpdatedUser() {
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
     const updatedUser = await api.get("/profile", { withCredentials: true });
-    sessionStorage.setItem("user", JSON.stringify(updatedUser.data));
+    localStorage.setItem("user", JSON.stringify(updatedUser.data));
     setUser(updatedUser);
     setUserLoggedIn(true);
   }
