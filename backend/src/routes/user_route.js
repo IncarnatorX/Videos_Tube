@@ -8,6 +8,7 @@ import {
   verifyToken,
   editAvatar,
   verifyPassword,
+  changePassword,
   resetPassword,
 } from "../controllers/user_controller.js";
 import upload from "../middlewares/multer_middleware.js";
@@ -25,8 +26,12 @@ const refreshTokenRateLimiter = rateLimit({
 
 userRouter.route("/register").post(registerUserController);
 userRouter.route("/login").post(logInUserController);
-userRouter.route("/refresh-token").post(generateNewAccessToken); // add the refresh token rate limiter
+userRouter
+  .route("/refresh-token")
+  .post(refreshTokenRateLimiter, generateNewAccessToken);
+userRouter.route("/reset-pwd").post(resetPassword);
 
+// PROTECTED ROUTES
 userRouter.route("/verify-token").get(verifyJWT, verifyToken);
 userRouter.route("/logout").post(verifyJWT, logoutUser);
 userRouter.route("/profile").get(verifyJWT, getProfileController);
@@ -37,6 +42,6 @@ userRouter
 
 userRouter.route("/verify-password").post(verifyJWT, verifyPassword);
 
-userRouter.route("/reset-pwd").post(verifyJWT, resetPassword);
+userRouter.route("/change-pwd").post(verifyJWT, changePassword);
 
 export default userRouter;

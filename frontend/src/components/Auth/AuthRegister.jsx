@@ -10,13 +10,9 @@ const AuthRegister = () => {
   const handleAuthFormRegister = async (event) => {
     event.preventDefault();
 
-    const authFormRegisterObject = {};
-
-    const formData = new FormData(event.target);
-
-    for (const [name, value] of formData) {
-      authFormRegisterObject[name] = value;
-    }
+    const authFormRegisterObject = Object.fromEntries(
+      new FormData(event.target)
+    );
 
     if (
       authFormRegisterObject["password"] !==
@@ -41,7 +37,8 @@ const AuthRegister = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error while submitting the form:", error.message);
+      console.error("Error while submitting the form:", error);
+      toast.error(error.response.data.message);
     }
   };
 

@@ -50,8 +50,6 @@ const AuthProvider = ({ children }) => {
           originalRequest.headers["authorization"]
         );
 
-        console.log("ORIGINAL REQUEST: ", originalRequest);
-
         const user = await api.get("/profile", {
           withCredentials: true,
           headers: {
@@ -59,10 +57,8 @@ const AuthProvider = ({ children }) => {
             "Content-Type": "application/json",
           },
         });
-        console.log("USER AFTER REFRESHING TOKENS:", user);
 
         if (is403) {
-          console.log("INSIDE THE IS403 BLOCK!!");
           localStorage.removeItem("user");
           setUser(null);
           setUserLoggedIn(false);
@@ -70,20 +66,12 @@ const AuthProvider = ({ children }) => {
           localStorage.removeItem("_retry");
           return api(originalRequest);
         }
-        console.log("OUTSIDE THE IS403 BLOCK!!");
+
         localStorage.setItem("user", JSON.stringify(user.data));
-        console.log(
-          "AFTER REFRESHING, IS USER IN LS: ",
-          localStorage.getItem("user")
-        );
         setUser(user.data);
         setUserLoggedIn(true);
-        // console.log("Retrying request with new access token...");
         localStorage.removeItem("_retry");
-        console.log(
-          "ORIGINAL REQUEST AFTER REFRESHING TOKENS: ",
-          originalRequest
-        );
+        console.log("Retrying request with new access token...");
         return api(originalRequest); // Retry failed request with new token
       }
     } catch (error) {
@@ -148,7 +136,7 @@ const AuthProvider = ({ children }) => {
     // RESPONSE INTERCEPTOR
     const responseInterceptor = api.interceptors.response.use(
       (response) => response,
-      async (error) => errorHandler(error)
+      (error) => errorHandler(error)
     );
 
     return () => {

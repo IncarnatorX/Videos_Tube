@@ -13,13 +13,7 @@ const AuthLogin = () => {
   const handleAuthFormLogin = async (event) => {
     event.preventDefault();
 
-    const authFormLoginObject = {};
-
-    const formData = new FormData(event.target);
-
-    for (const [name, value] of formData) {
-      authFormLoginObject[name] = value;
-    }
+    const authFormLoginObject = Object.fromEntries(new FormData(event.target));
 
     event.target.reset();
 
@@ -34,9 +28,9 @@ const AuthLogin = () => {
         setAccessToken(accessToken);
         localStorage.setItem("user", JSON.stringify(user));
         toast.success(message);
-        navigate("/");
         setUser(user);
         setUserLoggedIn(true);
+        navigate("/");
       }
     } catch (error) {
       toast.error(
@@ -76,9 +70,14 @@ const AuthLogin = () => {
           className="auth-input"
         />
       </div>
-
+      <p
+        onClick={() => navigate("/verify-email", { viewTransition: true })}
+        className="text-blue-600 font-semibold cursor-pointer self-start ml-23 pt-2 hover:underline"
+      >
+        Forgot password?
+      </p>
       <button type="submit" className="submit">
-        Login{" "}
+        Login
       </button>
     </form>
   );

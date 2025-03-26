@@ -22,7 +22,7 @@ const registerUserController = async (req, res) => {
   );
 
   if (allFieldsValidation) {
-    res.status(400).json({ message: "All Fields are required." });
+    return res.status(400).json({ message: "All Fields are required." });
   }
 
   // VALIDATING IF THE USER EXISTS
@@ -31,7 +31,7 @@ const registerUserController = async (req, res) => {
   });
 
   if (userExistsValidation)
-    res.status(400).json({ message: "User Already exists." });
+    return res.status(400).json({ message: "User Already exists." });
 
   try {
     const user = await User.create({
@@ -42,7 +42,7 @@ const registerUserController = async (req, res) => {
     });
 
     if (!user)
-      res
+      return res
         .status(404)
         .json({ message: "Something wen't wrong while registering the user." });
 
@@ -50,9 +50,10 @@ const registerUserController = async (req, res) => {
   } catch (error) {
     console.error("Error creating user in user controller: ", error.message);
 
-    res
-      .status(404)
-      .json({ message: "Error while registering the user. Please try again." });
+    return res.status(500).json({
+      message:
+        "Something wen't wrong. Error while registering the user. Please try again.",
+    });
   }
 };
 
@@ -76,20 +77,22 @@ const logInUserController = async (req, res) => {
     );
 
     const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshToken -email -createdAt -updatedAt"
+      "-password -refreshTokens -email"
     );
 
     if (!loggedInUser)
       return res.status(404).json({ message: "User not found!" });
 
-    res.status(200).cookie("refreshToken", refreshToken, options).json({
+    return res.status(200).cookie("refreshToken", refreshToken, options).json({
       message: "Login Successful.",
       user: loggedInUser,
       accessToken,
     });
   } catch (error) {
     console.error("Login Controller errored out: ", error.message);
-    res.status(401).json({ message: "Login Unsuccessful" });
+    return res
+      .status(500)
+      .json({ message: "Something wen't wrong while trying to log you in." });
   }
 };
 
@@ -101,7 +104,7 @@ const logoutUser = async (req, res) => {
       $pull: { refreshTokens: incomingRefreshToken },
     });
 
-    res
+    return res
       .status(200)
       .clearCookie("refreshToken", options)
       .json({ message: "Logged out" });
@@ -110,7 +113,9 @@ const logoutUser = async (req, res) => {
       "Unable to logout user from logoutUser controller: ",
       error.message
     );
-    res.status(404).json({ message: "Error occurred while logging out user." });
+    return res
+      .status(500)
+      .json({ message: "Error occurred while logging out user." });
   }
 };
 
@@ -137,7 +142,9 @@ const verifyToken = async (req, res) => {
     return res.status(200).json({ isAuthenticated: true, user: decodedUser });
   } catch (error) {
     console.error("Errored out in verifyToken controller: ", error.message);
-    res.status(401).json({ message: "Access token expired or not found." });
+    return res
+      .status(500)
+      .json({ message: "Something wen't wrong while trying to Authorize." });
   }
 };
 
@@ -182,7 +189,7 @@ const generateNewAccessToken = async (req, res) => {
       .json({ message: "New tokens generated", accessToken });
   } catch (error) {
     console.error("Error generating new access");
-    res.status(404).json({
+    return res.status(500).json({
       message:
         "Something wen't wrong while generating new access & refresh tokens.",
     });
@@ -197,7 +204,7 @@ const getProfileController = async (req, res) => {
   } catch (error) {
     console.error("Errored in getProfileController: ", error.message);
     return res
-      .status(404)
+      .status(500)
       .json({ message: "Something wen't wrong. Please login again" });
   }
 };
@@ -221,7 +228,7 @@ const editAvatar = async (req, res) => {
       "Error while running edit avatar controller: ",
       error.message
     );
-    return res.status(404).json({
+    return res.status(500).json({
       message: "Error occurred while updating the avatar. Please try again.",
     });
   }
@@ -248,15 +255,15 @@ const verifyPassword = async (req, res) => {
     return res.status(200).json({ message: "Password is correct." });
   } catch (error) {
     console.error("verify password controller errored out: ".error.message);
-    return res.status(404).json({
+    return res.status(500).json({
       message:
         "Something wen't wrong while verifying your password. Please try again.",
     });
   }
 };
 
-// RESET PASSWORD
-const resetPassword = async (req, res) => {
+// CHANGE PASSWORD -> User logged in
+const changePassword = async (req, res) => {
   try {
     const { _id: userId } = req.user;
 
@@ -280,13 +287,60 @@ const resetPassword = async (req, res) => {
     if (!user)
       return res.status(404).json({ message: "No user found with this id" });
 
+    const isPasswordMatch = await user.isPasswordCorrect(password);
+
+    if (isPasswordMatch) {
+      return res
+        .status(404)
+        .json({ message: "Old Password and new password cannot be same." });
+    }
+
     user.password = password;
+    user.refreshTokens = [];
     await user.save();
 
-    return res.status(200).json({ message: "Password reset successful." });
+    const logoutOpts = { httpOnly: true, secure: true, sameSite: "None" };
+
+    res.clearCookie("refreshToken", logoutOpts);
+    return res
+      .status(200)
+      .json({ message: "Password changed successful. Please log in again." });
   } catch (error) {
     console.error("Error in reset password controller: ", error.message);
-    return res.status(404).json({
+    return res.status(500).json({
+      message: "Something wen't wrong while updating your password!!",
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email) {
+      return res.status(404).json({ message: "No email is the request." });
+    }
+
+    if (!password)
+      return res
+        .status(404)
+        .json({ message: "No new password found in the request" });
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(404).json({ message: "No user found with this id" });
+
+    user.password = password;
+    user.refreshTokens = [];
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Password reset successful. Please log in again." });
+  } catch (error) {
+    console.error("Error in resetPassword component: ", error.message);
+    return res.status(500).json({
       message: "Something wen't wrong while updating your password!!",
     });
   }
@@ -301,5 +355,6 @@ export {
   getProfileController,
   editAvatar,
   verifyPassword,
+  changePassword,
   resetPassword,
 };

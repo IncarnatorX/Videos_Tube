@@ -37,9 +37,9 @@ const MyAccountDetails = ({ editAvatarRef }) => {
           <p>Joined {getCreatedAtFormatted(user.createdAt)} </p>
           <button
             className="bg-green-400 rounded-md outline-none border-none text-white cursor-pointer px-2 py-1 w-fit"
-            onClick={() => navigate("/cnf-pwd")}
+            onClick={() => navigate("/cnf-pwd", { viewTransition: true })}
           >
-            Reset Password
+            Change Password
           </button>
         </div>
       </div>
