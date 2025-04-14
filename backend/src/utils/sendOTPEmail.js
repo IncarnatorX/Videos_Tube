@@ -46,7 +46,7 @@ const sendEmail = async (email, res) => {
       to: email,
       subject: "Your OTP for resetting the password",
       //   text: `Hello, \n\nHere is your OTP: ${otp}. \n\n Thank you.`,
-      html: `<p style="font-size: 14px">Hello, <br/><br/> Here is your OTP: ${otp}. <br/><br/> The OTP will expired in 10 minutes.<br/><br/> Thank you.</p>`,
+      html: `<p style="font-size: 14px">Hello, <br/><br/> Here is your OTP: ${otp}. <br/><br/> The OTP will expire in 10 minutes.<br/><br/> Thank you.</p>`,
     });
 
     if (!info.messageId) {

@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
   };
 
   // REFRESH TOKEN FUNCTION
-  async function refreshTokens(originalRequest, is403 = false) {
+  async function refreshTokens(originalRequest) {
     try {
       console.log("🔄 Access token expired, fetching new access token.....");
       const newRequestResponse = await api.post(
@@ -34,7 +34,6 @@ const AuthProvider = ({ children }) => {
         {},
         { withCredentials: true }
       );
-
       if (newRequestResponse.status === 200) {
         console.log("✅ Refreshed Access token....", newRequestResponse.data);
 
@@ -45,37 +44,26 @@ const AuthProvider = ({ children }) => {
           "authorization"
         ] = `Bearer ${newRequestResponse.data.accessToken}`;
 
-        console.log(
-          "BEFORE HITTING /profile ROUTE. THE HEADER IS:",
-          originalRequest.headers["authorization"]
-        );
-
-        const user = await api.get("/profile", {
+        const refreshedUser = await api.get("/profile", {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${newRequestResponse.data.accessToken}`,
             "Content-Type": "application/json",
           },
         });
-
-        if (is403) {
-          localStorage.removeItem("user");
-          setUser(null);
-          setUserLoggedIn(false);
-          toast.success("User logged out successfully.");
-          localStorage.removeItem("_retry");
-          return api(originalRequest);
-        }
-
-        localStorage.setItem("user", JSON.stringify(user.data));
-        setUser(user.data);
+        const { user } = refreshedUser.data;
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
         setUserLoggedIn(true);
         localStorage.removeItem("_retry");
         console.log("Retrying request with new access token...");
-        return api(originalRequest); // Retry failed request with new token
+        const retryResponse = await api(originalRequest);
+        return retryResponse; // Ensure we return this!
       }
     } catch (error) {
-      console.error("🚨 Refresh token failed. Logging out...", error.message);
+      console.error("🚨 Refresh token failed. Logging out...");
+      toast.error(error.response.data);
+      console.error(error);
       localStorage.removeItem("user");
       setUser(null);
       setUserLoggedIn(false);
@@ -87,7 +75,6 @@ const AuthProvider = ({ children }) => {
     console.log("❌ Interceptor caught an error:", error);
 
     if (!error.response) {
-      // console.error("🚨 No response from server!");
       return Promise.reject(error);
     }
 
@@ -96,26 +83,26 @@ const AuthProvider = ({ children }) => {
     const originalRequest = error.config;
 
     if (localStorage.getItem("_retry")) {
-      // console.error("⛔ Already retried once. Logging out user...");
       setUserLoggedIn(false);
       localStorage.removeItem("_retry");
       return Promise.reject(error);
     }
 
-    localStorage.setItem("_retry", "true"); // Store retry flag in Session storage
-
     // ACCESS TOKEN NOT PRESENT. BUT USER IS PERSISTED IN LS
     if (error.response.status === 403) {
-      refreshTokens(originalRequest, true);
+      localStorage.setItem("_retry", "true"); // Store retry flag in Session storage
+      return await refreshTokens(originalRequest, true);
     }
 
     // ACCESS TOKEN EXPIRED AND USER IS PERSISTED IN LS
     if (error.response.status === 401) {
-      refreshTokens(originalRequest);
+      localStorage.setItem("_retry", "true"); // Store retry flag in Session storage
+      return await refreshTokens(originalRequest);
     }
 
+    console.log("JUST BEFORE NOT 401 ERROR CHECK!!");
     if (error.response.status !== 401) return Promise.reject(error);
-
+    console.log("AFTER ALL IF CONDITIONS FAIL");
     localStorage.removeItem("_retry"); // Reset retry flag on failure
     return Promise.reject(error);
   };

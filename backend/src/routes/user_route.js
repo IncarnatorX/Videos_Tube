@@ -13,22 +13,15 @@ import {
 } from "../controllers/user_controller.js";
 import upload from "../middlewares/multer_middleware.js";
 import verifyJWT from "../middlewares/auth_middleware.js";
-
-import { rateLimit } from "express-rate-limit";
+import { refreshTokenRateLimiter } from "../middlewares/rate_limiters.js";
 
 const userRouter = Router();
-
-const refreshTokenRateLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 5,
-  message: "Too many requests. Please try again.",
-});
 
 userRouter.route("/register").post(registerUserController);
 userRouter.route("/login").post(logInUserController);
 userRouter
   .route("/refresh-token")
-  .post(refreshTokenRateLimiter, generateNewAccessToken);
+  .post(refreshTokenRateLimiter, generateNewAccessToken); // TODO: RE-ADD THE refreshTokenRateLimiter
 userRouter.route("/reset-pwd").post(resetPassword);
 
 // PROTECTED ROUTES

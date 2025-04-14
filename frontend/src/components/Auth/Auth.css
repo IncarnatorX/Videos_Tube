@@ -32,23 +32,22 @@
   width: 100%;
   font-size: 1rem;
   color: #4a5568;
-  outline: none;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
+  outline: none;
 }
 
 .auth-input:focus {
   background-color: #fff;
-  box-shadow: 0 0 0 2px #cbd5e0;
 }
 
 .auth-input:valid {
-  border: 1px solid green;
+  border: 2px solid green;
 }
 
 .auth-input:invalid {
-  border: 1px solid rgba(14, 14, 14, 0.205);
+  border: 2px solid rgba(14, 14, 14, 0.205);
 }
 
 .submit {

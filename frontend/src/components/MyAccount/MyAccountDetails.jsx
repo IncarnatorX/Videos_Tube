@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 const MyAccountDetails = ({ editAvatarRef }) => {
   const { user } = useContext(AuthContext);
-
+  console.log(user);
   const navigate = useNavigate();
 
   function handleEditAvatarDialog() {

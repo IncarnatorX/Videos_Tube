@@ -8,7 +8,6 @@ import "./Navbar.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const { userLoggedIn } = useContext(AuthContext);
-
   return (
     <nav className="homepage-navbar">
       <img

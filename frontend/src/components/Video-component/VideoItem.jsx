@@ -2,9 +2,18 @@ import { useNavigate } from "react-router";
 import AvatarComponent from "../Avatar/AvatarComponent";
 import getTimeDifference from "../../utils/getTimeDifference";
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { VideoContext } from "../../Context/Context";
 
 const VideoItem = ({ video }) => {
   const navigate = useNavigate();
+  const { setCurrentVideo } = useContext(VideoContext);
+
+  function handleVideoClick(video) {
+    setCurrentVideo(video);
+    localStorage.setItem("video", JSON.stringify(video));
+    navigate("/videoInfo");
+  }
 
   return (
     <div className="video-item">
@@ -12,7 +21,7 @@ const VideoItem = ({ video }) => {
         src={video.thumbnail}
         alt="Video Thumbnail"
         className="thumbnail cursor-pointer"
-        onClick={() => navigate("/videoInfo", { state: video })}
+        onClick={() => handleVideoClick(video)}
       />
       <section>
         <div className="video-info">
@@ -31,9 +40,6 @@ const VideoItem = ({ video }) => {
 
 VideoItem.propTypes = {
   video: PropTypes.object,
-  HandleEditDialogOpening: PropTypes.func,
-  handleReuploadDialogOpen: PropTypes.func,
-  handleFeedbackFormDialog: PropTypes.func,
 };
 
 export default VideoItem;

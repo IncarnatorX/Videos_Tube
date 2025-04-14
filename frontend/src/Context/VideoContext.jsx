@@ -7,10 +7,12 @@ const VideoProvider = ({ children }) => {
   const [detailsUpdated, setDetailsUpdated] = useState(false);
   const [videos, setVideos] = useState([]);
   const [currentVideoID, setCurrentVideoId] = useState("");
-
+  const [currentVideo, setCurrentVideo] = useState(() => {
+    let video = localStorage.getItem("video");
+    return video ? JSON.parse(video) : "";
+  });
   const editDialogRef = useRef(null);
   const reuploadRef = useRef(null);
-  const feedbackFormRef = useRef(null);
   const uploadVideoRef = useRef(null);
 
   const fetchAllVideos = async () => {
@@ -41,14 +43,6 @@ const VideoProvider = ({ children }) => {
     setCurrentVideoId(id);
   }
 
-  // FEEDBACK FORM HANDLING
-  function handleFeedbackFormDialog(id) {
-    if (feedbackFormRef.current) {
-      feedbackFormRef.current.showModal();
-      setCurrentVideoId(id);
-    }
-  }
-
   function handleUploadVideoDialog() {
     if (uploadVideoRef.current) {
       uploadVideoRef.current.showModal();
@@ -62,12 +56,12 @@ const VideoProvider = ({ children }) => {
     currentVideoID,
     editDialogRef,
     reuploadRef,
-    feedbackFormRef,
     uploadVideoRef,
     handleEditDialogOpening,
     handleReuploadDialogOpen,
-    handleFeedbackFormDialog,
     handleUploadVideoDialog,
+    currentVideo,
+    setCurrentVideo,
   };
 
   return (

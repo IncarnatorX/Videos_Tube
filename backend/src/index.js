@@ -6,6 +6,7 @@ import videoRouter from "./routes/video_route.js";
 import userRouter from "./routes/user_route.js";
 import cookieParser from "cookie-parser";
 import otpRouter from "./routes/otp_route.js";
+import likesDislikesRoutes from "./routes/likes_dislikes_route.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(videoRouter);
 app.use(userRouter);
 app.use(otpRouter);
+app.use(likesDislikesRoutes);
 
 connectDB().then(() =>
   app.listen(PORT, () => console.log(`Listening at PORT: ${PORT}.`))

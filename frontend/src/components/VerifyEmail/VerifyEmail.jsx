@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
+import { useState } from "react";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   async function handleVerifyEmail(event) {
     event.preventDefault();
+    setLoading(true);
     const verifyEmailObject = Object.fromEntries(new FormData(event.target));
 
     try {
@@ -20,6 +23,7 @@ const VerifyEmail = () => {
           viewTransition: true,
           state: verifyEmailObject.email,
         });
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error in handleVerifyEmail:", error.message);
@@ -54,8 +58,9 @@ const VerifyEmail = () => {
             </button>
             <input
               type="submit"
-              value="Submit"
-              className="bg-blue-600 py-2 px-4 rounded-4xl cursor-pointer"
+              disabled={loading}
+              value={loading ? "Sending OTP..." : "Send OTP"}
+              className="bg-blue-600 py-2 px-4 rounded-4xl cursor-pointer disabled:bg-gray-400 disabled:text-gray-200 disabled:cursor-not-allowed"
             />
           </section>
         </form>

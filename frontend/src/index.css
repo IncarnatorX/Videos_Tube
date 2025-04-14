@@ -18,3 +18,28 @@
   -webkit-appearance: none;
   margin: 0;
 }
+
+@theme {
+  --animate-thumbs-up: thumbs-up 500ms ease-in-out;
+  --animate-thumbs-down: thumbs-down 500ms ease-in-out;
+
+  @keyframes thumbs-up {
+    0% {
+      rotate: -20deg;
+      scale: 1.1;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes thumbs-down {
+    0% {
+      rotate: -20deg;
+      scale: 1.1;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+}

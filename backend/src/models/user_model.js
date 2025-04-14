@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
+    },
+    likedVideos: {
+      type: [Schema.Types.ObjectId],
+      ref: "Video",
+      default: [],
     },
   },
   { timestamps: true }

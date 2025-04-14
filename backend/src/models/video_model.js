@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const videoSchema = new mongoose.Schema(
+const videoSchema = new Schema(
   {
     videoFile: {
       type: String, //cloudinary url
@@ -19,6 +19,14 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
     views: {
+      type: Number,
+      default: 0,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
       type: Number,
       default: 0,
     },

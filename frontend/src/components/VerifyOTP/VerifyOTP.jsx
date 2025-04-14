@@ -2,20 +2,16 @@ import { Link, useLocation, useNavigate } from "react-router";
 import Input from "./Input";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
+import { useState } from "react";
 
 const VerifyOTP = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    // const enteredOTP = Object.fromEntries(new FormData(event.target));
-
-    // console.log(enteredOTP);
-
-    // console.log(Object.values(enteredOTP).join(""));
-
+    setLoading(true);
     const enteredOTP = Object.values(
       Object.fromEntries(new FormData(event.target))
     ).join("");
@@ -37,6 +33,8 @@ const VerifyOTP = () => {
     } catch (error) {
       console.error("Error in VerifyOTP component: ", error.message);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
 
     event.target.reset();
@@ -60,9 +58,10 @@ const VerifyOTP = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 px-4 py-2 rounded-md cursor-pointer text-white hover:bg-blue-600 transition-all text-sm"
+          disabled={loading}
+          className="bg-blue-500 px-4 py-2 rounded-md cursor-pointer text-white hover:bg-blue-600 transition-all text-sm disabled:bg-gray-400 disabled:text-gray-200 disabled:cursor-not-allowed"
         >
-          Verify OTP
+          {loading ? "Verifying OTP..." : "Verify OTP"}
         </button>
         <Link to={"/"} className="hover:underline hover:text-blue-500">
           Go Home

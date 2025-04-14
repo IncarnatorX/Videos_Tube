@@ -13,7 +13,7 @@ const MyAccountPublishVideos = ({ userVideos }) => {
       <div>
         {userVideos.map((video) => {
           return (
-            <div key={video._id} className="flex p-4  gap-4">
+            <div key={video._id} className="flex p-4 gap-4">
               <div>
                 <img
                   src={video.thumbnail}

@@ -1,14 +1,15 @@
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../../Context/Context";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
-import { useContext } from "react";
-import { AuthContext } from "../../Context/Context";
 import BackButton from "../Buttons/BackButton/BackButton.jsx";
 
 const AuthLogin = () => {
   const navigate = useNavigate();
 
   const { setUserLoggedIn, setUser, setAccessToken } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleAuthFormLogin = async (event) => {
     event.preventDefault();
@@ -45,6 +46,7 @@ const AuthLogin = () => {
       <BackButton />
       <span className="auth-title">Login</span>
 
+      {/* LOGIN */}
       <div className="auth-div">
         <label htmlFor="auth-email" className="label">
           Email
@@ -58,18 +60,30 @@ const AuthLogin = () => {
           className="auth-input"
         />
       </div>
+      {/* PASSWORD */}
       <div className="auth-div">
         <label htmlFor="auth-password" className="label">
           Password
         </label>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           id="auth-password"
           name="password"
           required
           className="auth-input"
         />
       </div>
+      {/* SHOW PASSWORD */}
+      <p className="flex gap-2 items-center mt-3">
+        <input
+          type="checkbox"
+          name="show-password"
+          id="show-password"
+          className="w-4 h-4 cursor-pointer"
+          onClick={() => setShowPassword(!showPassword)}
+        />
+        <span className="text-base">Show Password</span>
+      </p>
       <p
         onClick={() => navigate("/verify-email", { viewTransition: true })}
         className="text-blue-600 font-semibold cursor-pointer self-start ml-23 pt-2 hover:underline"

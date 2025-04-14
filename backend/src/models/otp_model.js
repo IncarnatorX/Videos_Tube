@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const otpModelSchema = new mongoose.Schema(
@@ -23,6 +23,8 @@ const otpModelSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+otpModelSchema.index({ createdAt: 1 }, { expireAfterSeconds: 900 });
 
 otpModelSchema.pre("save", async function (next) {
   if (!this.isModified("otp")) return next();

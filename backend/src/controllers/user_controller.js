@@ -198,9 +198,11 @@ const generateNewAccessToken = async (req, res) => {
 
 const getProfileController = async (req, res) => {
   try {
-    if (!req.user) throw new Error({ message: "No user found..." });
+    const user = req.user;
 
-    return res.status(200).json({ user: req.user });
+    if (!user) throw new Error({ message: "No user found..." });
+
+    return res.status(200).json({ user });
   } catch (error) {
     console.error("Errored in getProfileController: ", error.message);
     return res
