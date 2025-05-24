@@ -4,7 +4,7 @@ import "./EditAvatarModel.css";
 import api from "../../utils/api";
 import PropTypes from "prop-types";
 import { AuthContext } from "../../Context/Context";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const EditAvatarModel = ({ id, editAvatarRef }) => {
   const { setUserLoggedIn, setUser } = useContext(AuthContext);

@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import { VideoContext } from "../../Context/Context";
 import UploadFileButtons from "./UploadFileButtons";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import api from "../../utils/api.js";
 import "./UploadVideoForm.css";
 import { ThreeDot } from "react-loading-indicators";

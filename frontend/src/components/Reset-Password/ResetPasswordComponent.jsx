@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/Context";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import api from "../../utils/api";
 
 const ResetPasswordComponent = () => {

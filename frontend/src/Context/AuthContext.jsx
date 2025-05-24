@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AuthContext } from "./Context";
 import api from "../utils/api";
 import PropTypes from "prop-types";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const AuthProvider = ({ children }) => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);

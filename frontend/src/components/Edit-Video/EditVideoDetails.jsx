@@ -1,4 +1,5 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import { useContext, useRef } from "react";
 import { VideoContext } from "../../Context/Context";
 import "./EditVideoDetails.css";

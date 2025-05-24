@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import api from "../../utils/api";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const ConfirmPasswordComponent = () => {
   const { user } = useContext(AuthContext);

@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import api from "../../utils/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";

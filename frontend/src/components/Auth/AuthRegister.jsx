@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import api from "../../utils/api.js";
 import BackButton from "../Buttons/BackButton/BackButton.jsx";
 

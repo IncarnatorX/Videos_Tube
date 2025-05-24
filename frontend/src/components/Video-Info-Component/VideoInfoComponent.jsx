@@ -4,7 +4,8 @@ import AvatarComponent from "../Avatar/AvatarComponent";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import getTimeDifference from "../../utils/getTimeDifference";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import api from "../../utils/api.js";
 import PropTypes from "prop-types";
 import "./VideoInfoComponent.css";
