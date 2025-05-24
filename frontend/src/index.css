@@ -8,9 +8,9 @@
   box-sizing: border-box;
   font-family: Roboto;
   position: relative;
-  &::-webkit-scrollbar {
+  /* &::-webkit-scrollbar {
     display: none;
-  }
+  } */
 }
 
 .hide-arrow[type="number"]::-webkit-inner-spin-button,

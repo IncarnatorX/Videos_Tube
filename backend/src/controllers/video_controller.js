@@ -94,20 +94,32 @@ const reUploadVideo = async (req, res) => {
   }
 };
 
-const feedbackHandler = async (req, res) => {
+const commentsHandler = async (req, res) => {
   try {
-    const { _id, ...feedback } = req.body;
+    const {comment, videoId, userId, fullname} = req.body;
+    if(!videoId){
+     return res.status(404).json({message: "Video id not found"});
+    }
+
+    if(!userId){
+      return res.status(404).json({message: "User id not found"});
+    }
+
+    if(!comment){
+      return res.status(404).json({message: "Comment not found"});
+    }
+
     // await client.del(cacheKey); // clearing the cache before any updates happen
-    const updatedVideo = await Video.findByIdAndUpdate(_id, {
-      $push: { comments: feedback },
-    });
+    const updatedVideo = await Video.findByIdAndUpdate(videoId, {
+      $push: { comments: {comment, videoId, userId, fullname} },
+    }, {new : true});
 
     if (!updatedVideo)
       res
         .status(404)
         .json({ message: "Error fetching and updating the video." });
 
-    res.status(200).json({ message: "Feedback Received" });
+    res.status(200).json({ message: "Comment posted successfully.", updatedVideo });
   } catch (error) {
     console.error(error.message);
   }
@@ -175,7 +187,7 @@ const getUserVideos = async (req, res) => {
   } catch (error) {
     console.error("getUserVideos controller errored out: ", error.message);
     return res.status(404).json({
-      message: "Something wen't wrong with fetching the user videos.",
+      message: "Something went wrong with fetching the user videos.",
     });
   }
 };
@@ -184,7 +196,7 @@ export {
   getAllVideos,
   editTitleAndDesc,
   reUploadVideo,
-  feedbackHandler,
+  commentsHandler,
   publishVideo,
   getUserVideos,
 };

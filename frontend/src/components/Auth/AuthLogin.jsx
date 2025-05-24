@@ -37,63 +37,76 @@ const AuthLogin = () => {
       toast.error(
         `Login Error: ${error.response.data.message || error.message}`
       );
-      navigate("/auth", { state: "login" });
+      navigate("/login");
     }
   };
 
   return (
-    <form className="form" onSubmit={handleAuthFormLogin}>
-      <BackButton />
-      <span className="auth-title">Login</span>
+    <div className="min-h-screen content-center">
+      <form className="form" onSubmit={handleAuthFormLogin}>
+        <div className="w-full grid grid-cols-3">
+          <BackButton />
+          <span className="auth-title">Login</span>
+        </div>
 
-      {/* LOGIN */}
-      <div className="auth-div">
-        <label htmlFor="auth-email" className="label">
-          Email
-        </label>
+        {/* LOGIN */}
+        <div className="auth-div">
+          <label htmlFor="auth-email" className="label">
+            Email
+          </label>
 
-        <input
-          type="email"
-          id="auth-email"
-          name="email"
-          required
-          className="auth-input"
-        />
-      </div>
-      {/* PASSWORD */}
-      <div className="auth-div">
-        <label htmlFor="auth-password" className="label">
-          Password
-        </label>
-        <input
-          type={showPassword ? "text" : "password"}
-          id="auth-password"
-          name="password"
-          required
-          className="auth-input"
-        />
-      </div>
-      {/* SHOW PASSWORD */}
-      <p className="flex gap-2 items-center mt-3">
-        <input
-          type="checkbox"
-          name="show-password"
-          id="show-password"
-          className="w-4 h-4 cursor-pointer"
-          onClick={() => setShowPassword(!showPassword)}
-        />
-        <span className="text-base">Show Password</span>
-      </p>
-      <p
-        onClick={() => navigate("/verify-email", { viewTransition: true })}
-        className="text-blue-600 font-semibold cursor-pointer self-start ml-23 pt-2 hover:underline"
-      >
-        Forgot password?
-      </p>
-      <button type="submit" className="submit">
-        Login
-      </button>
-    </form>
+          <input
+            type="email"
+            id="auth-email"
+            name="email"
+            required
+            className="auth-input"
+          />
+        </div>
+        {/* PASSWORD */}
+        <div className="auth-div">
+          <label htmlFor="auth-password" className="label">
+            Password
+          </label>
+          <input
+            type={showPassword ? "text" : "password"}
+            id="auth-password"
+            name="password"
+            required
+            className="auth-input"
+          />
+        </div>
+        <section className="flex items-center justify-between w-[70%]">
+          {/* SHOW PASSWORD */}
+          <p className="flex gap-2 items-center">
+            <input
+              type="checkbox"
+              name="show-password"
+              id="show-password"
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+            <span className="text-base">Show Password</span>
+          </p>
+          {/* FORGOT PASSWORD */}
+          <p
+            onClick={() => navigate("/verify-email", { viewTransition: true })}
+            className="text-blue-600 font-semibold cursor-pointer text-center pt-2 hover:underline"
+          >
+            Forgot password?
+          </p>
+        </section>
+        <button type="submit" className="submit">
+          Login
+        </button>
+        <span
+          className="cursor-pointer hover:underline"
+          onClick={() => navigate("/register")}
+        >
+          Don&apos;t have Account! Register here
+        </span>
+      </form>
+    </div>
   );
 };
 

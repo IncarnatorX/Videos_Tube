@@ -5,10 +5,10 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import getTimeDifference from "../../utils/getTimeDifference";
 import toast from "react-hot-toast";
-
 import api from "../../utils/api.js";
 import PropTypes from "prop-types";
 import "./VideoInfoComponent.css";
+import CommentsComponent from "../Comments/CommentsComponent.jsx";
 
 const VideoInfoComponent = () => {
   const { userLoggedIn, setUser, user } = useContext(AuthContext);
@@ -75,6 +75,60 @@ const VideoInfoComponent = () => {
     await likeDislikeAPICall(action);
   }
 
+  // ADD COMMENT
+  async function handleAddComment(e) {
+    e.preventDefault();
+    const { comment } = Object.fromEntries(new FormData(e.currentTarget));
+
+    if (!comment.trim()) {
+      toast("Comment cannot be empty", {
+        icon: "⚠️",
+        className: "bg-amber-200",
+        duration: 2000,
+      });
+      e.target.reset();
+      return;
+    }
+    const commentData = {
+      comment,
+      videoId: video._id,
+      userId: user._id,
+      fullname: user.fullname,
+    };
+
+    try {
+      const response = await api.post("/comment", commentData);
+
+      if (response.status === 200) {
+        const { message, updatedVideo } = response.data;
+        toast.success(message);
+        setCurrentVideo(updatedVideo);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error while submitting comment: ", error);
+        toast.error(error.message);
+      }
+    } finally {
+      e.target.reset();
+    }
+  }
+
+  function handleVideoWatchTime(event) {
+    // TODO: Add a guard clause to return on true if an API call is made
+
+    const video = event.currentTarget;
+    const currentTime = video.currentTime;
+    const duration = video.duration;
+
+    const watchedPercentage = (currentTime / duration) * 100;
+
+    if (watchedPercentage >= 50) {
+      // TODO: Implement a state that sets to true to prevent multiple API calls. Ex: setWatched or setViewsUpdated
+      console.log("Watched 50% video");
+    }
+  }
+
   return (
     <div className="video-details">
       <section className="video-section">
@@ -82,7 +136,8 @@ const VideoInfoComponent = () => {
           src={video?.videoFile}
           controls
           height={650}
-          // onPlay={(e) => console.log("Video is playing", e.type)}
+          // onPlay={(e) => console.log("Video is playing", e)}
+          onTimeUpdate={handleVideoWatchTime}
         ></video>
       </section>
 
@@ -125,16 +180,21 @@ const VideoInfoComponent = () => {
           <p>{video?.description}</p>
         </div>
 
+        {/* NEW COMMENT */}
+        {userLoggedIn && (
+          <CommentsComponent handleAddComment={handleAddComment} />
+        )}
+
         {/* COMMENTS */}
         <div className="comments text-white mb-9">
           <strong>Comments:</strong>
-          {video?.comments.length > 1 ? (
+          {video?.comments.length > 0 ? (
             video?.comments.map((comment) => {
               return (
                 <div key={crypto.randomUUID()} className="comment-div">
                   <p className="comment">
                     <span>
-                      {comment.feedback} --- By {comment.fullname}
+                      {comment.comment} --- By {comment.fullname}
                     </span>
                   </p>
                 </div>
@@ -144,27 +204,6 @@ const VideoInfoComponent = () => {
             <div>No comments</div>
           )}
         </div>
-
-        {/* NEW COMMENT */}
-        {userLoggedIn && (
-          <div>
-            <input
-              type="text"
-              name="comment"
-              id="comments"
-              placeholder="Add a comment..."
-              className="w-full p-2 border-2 border-x-0 border-t-0 border-b-white text-white outline-none focus:border-fuchsia-300"
-            />
-            <div className="flex py-6 justify-end gap-4">
-              <button className="border-none outline-none text-white px-6 py-2 bg-blue-400 rounded-xl cursor-pointer">
-                Comment
-              </button>
-              <button className="border-none outline-none text-white px-6 py-2 bg-red-700 rounded-xl cursor-pointer">
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
       </section>
     </div>
   );

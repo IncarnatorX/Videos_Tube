@@ -5,7 +5,7 @@ const BackButton = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full ">
+    <div className="w-fit">
       <button
         onClick={() => navigate(-1)}
         className="back-btn flex justify-center items-center gap-2 self-start cursor-pointer"

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   editTitleAndDesc,
-  feedbackHandler,
+    commentsHandler,
   getAllVideos,
   getUserVideos,
   publishVideo,
@@ -18,7 +18,7 @@ videoRouter.route("/edit").post(editTitleAndDesc);
 
 videoRouter.route("/re-upload").post(upload.single("videoFile"), reUploadVideo);
 
-videoRouter.route("/feedback").post(feedbackHandler);
+videoRouter.route("/comment").post(commentsHandler);
 
 videoRouter.route("/publish").post(
   verifyJWT,

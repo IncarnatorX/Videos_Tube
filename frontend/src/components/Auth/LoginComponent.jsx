@@ -6,15 +6,12 @@ const LoginComponent = () => {
 
   return (
     <div>
-      <button
-        className="auth-btn login-btn"
-        onClick={() => navigate("/auth", { state: "login" })}
-      >
+      <button className="auth-btn login-btn" onClick={() => navigate("/login")}>
         Login
       </button>
       <button
         className="auth-btn register-btn"
-        onClick={() => navigate("/auth", { state: "register" })}
+        onClick={() => navigate("/register")}
       >
         Register
       </button>

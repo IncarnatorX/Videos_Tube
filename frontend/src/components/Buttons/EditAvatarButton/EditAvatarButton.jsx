@@ -7,7 +7,7 @@ const EditAvatarButton = ({ handleEditAvatarDialog }) => {
       onClick={() => handleEditAvatarDialog()}
       className="flex items-center justify-center gap-2 bg-red-500 py-2 px-4 rounded-md cursor-pointer mb-2 w-fit"
     >
-      <EditIcon />
+      <EditIcon className="hidden lg:inline" />
       Edit Avatar
     </button>
   );
