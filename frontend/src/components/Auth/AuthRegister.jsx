@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import api from "../../utils/api.js";
 import BackButton from "../Buttons/BackButton/BackButton.jsx";
-import "./Auth.css";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const AuthRegister = () => {
       });
 
       if (response.status >= 200 && response.status < 300) {
-        navigate("/auth", { state: "login" });
+        navigate("/");
         toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
@@ -45,13 +44,18 @@ const AuthRegister = () => {
 
   return (
     <div className="min-h-screen content-center">
-      <form className="form" onSubmit={handleAuthFormRegister}>
+      <form
+        className="w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
+        onSubmit={handleAuthFormRegister}
+      >
         <div className="w-full grid grid-cols-3">
           <BackButton />
-          <span className="auth-title">Register</span>
+          <span className="text-center text-2xl text-gray-800 content-center">
+            Register
+          </span>
         </div>
-        <div className="auth-div">
-          <label htmlFor="auth-fullname" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-fullname" className="text-black mb-1">
             Fullname
           </label>
           <input
@@ -59,11 +63,11 @@ const AuthRegister = () => {
             id="auth-fullname"
             name="fullname"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
-        <div className="auth-div">
-          <label htmlFor="auth-username" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-username" className="text-black mb-1">
             Username
           </label>
           <input
@@ -71,12 +75,12 @@ const AuthRegister = () => {
             id="auth-username"
             name="username"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
 
-        <div className="auth-div">
-          <label htmlFor="auth-email" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-email" className="text-black mb-1">
             Email
           </label>
 
@@ -85,11 +89,11 @@ const AuthRegister = () => {
             id="auth-email"
             name="email"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
-        <div className="auth-div">
-          <label htmlFor="auth-password" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-password" className="text-black mb-1">
             Password
           </label>
           <input
@@ -97,12 +101,12 @@ const AuthRegister = () => {
             id="auth-password"
             name="password"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
 
-        <div className="auth-div">
-          <label htmlFor="auth-cnf-password" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-cnf-password" className="text-black mb-1">
             Confirm Password
           </label>
           <input
@@ -110,11 +114,14 @@ const AuthRegister = () => {
             id="auth-cnf-password"
             name="cnf-password"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
 
-        <button type="submit" className="submit">
+        <button
+          type="submit"
+          className="w-fit bg-[var(--dark-background)] border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all"
+        >
           Register{" "}
         </button>
 

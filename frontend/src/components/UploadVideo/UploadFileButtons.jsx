@@ -1,5 +1,3 @@
-import "./UploadFileButtons.css";
-
 function UploadFileButtons() {
   return (
     <div className="flex gap-4">
@@ -8,7 +6,7 @@ function UploadFileButtons() {
         <input
           type="file"
           id="upload-video"
-          className="upload-btns"
+          className="p-4 cursor-pointer outline-none rounded-lg file:p-2 file:text-white file:bg-blue-600 file:border-0 file:rounded-lg file:cursor-pointer hover:file:bg-purple-600 transition-colors ease-in-out duration-200"
           name="videoFile"
           accept="video/mp4"
           required
@@ -20,7 +18,7 @@ function UploadFileButtons() {
         <input
           type="file"
           id="upload-thumbnail"
-          className="upload-btns"
+          className="p-4 cursor-pointer outline-none rounded-lg file:p-2 file:text-white file:bg-blue-600 file:border-0 file:rounded-lg file:cursor-pointer hover:file:bg-purple-600 transition-colors ease-in-out duration-200"
           name="thumbnail"
           accept="image/png, image/jpeg"
           required

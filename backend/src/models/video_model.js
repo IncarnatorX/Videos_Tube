@@ -22,6 +22,15 @@ const videoSchema = new Schema(
       type: Number,
       default: 0,
     },
+    viewsHistory: [
+        {
+            id: {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+            fullname: String,
+        }
+    ],
     likes: {
       type: Number,
       default: 0,

@@ -2,6 +2,7 @@ import { User } from "../models/user_model.js";
 import jwt from "jsonwebtoken";
 
 const verifyJWT = async (req, res, next) => {
+
   const incomingAccessToken =
     req.cookies.accessToken ||
     req.body.accessToken ||
@@ -10,8 +11,9 @@ const verifyJWT = async (req, res, next) => {
       ? req.headers["authorization"].split(" ")[1]
       : null);
 
-  if (!incomingAccessToken)
-    return res.status(403).json({ message: "No incoming access token found." });
+  if (!incomingAccessToken || incomingAccessToken === "null"){
+    return res.status(401).json({ message: "No incoming access token found." });
+  }
 
   try {
     const decodedToken = jwt.verify(
@@ -29,7 +31,7 @@ const verifyJWT = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Auth Middleware failure: ", error.message);
+    console.error("Auth Middleware failure: ", error);
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({ message: "Token Expired!" });

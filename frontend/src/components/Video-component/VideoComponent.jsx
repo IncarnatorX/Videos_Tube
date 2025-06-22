@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { VideoContext } from "../../Context/Context";
 import VideoItem from "./VideoItem";
-import "./VideoComponent.css";
 
 const VideoComponent = () => {
   const { videos } = useContext(VideoContext);
 
+  // grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))]
+
   return (
-    <div className="video-list">
+    <div className="w-full gap-2 md:gap-4 p-4 flex flex-wrap">
       {videos.length > 0 ? (
         videos.map((video) => <VideoItem key={video._id} video={video} />)
       ) : (

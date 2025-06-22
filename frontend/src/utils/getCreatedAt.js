@@ -18,7 +18,7 @@ function getCreatedAtFormatted(createdAt) {
   const year = mongoDate.getFullYear();
   const month = mongoDate.getMonth();
   const date = mongoDate.getDate();
-  const formattedDate = `${date} ${months[month]} ${year}.`;
+  const formattedDate = `${date} ${months[month]} ${year}`;
 
   return formattedDate;
 }

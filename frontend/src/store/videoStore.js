@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import api from "../utils/api";
 
 const videoStore = (set) => ({
   detailsUpdated: false,
@@ -8,11 +9,21 @@ const videoStore = (set) => ({
     const video = localStorage.getItem("video");
     return video ? JSON.parse(video) : {};
   })(),
-  setVideos: (videos) => set({ videos }),
+
   setDetailsUpdated: () =>
     set((state) => ({ detailsUpdated: !state.detailsUpdated })),
+  setVideos: (videos) => set({ videos }),
   setCurrentVideo: (video) => set(() => ({ currentVideo: video })),
   setCurrentVideoID: (id) => set(() => ({ currentVideoID: id })),
+
+  fetchAllVideos: async () => {
+    try {
+      const response = await api.get("/getAllVideos");
+      set(() => ({ videos: response.data }));
+    } catch (error) {
+      console.error("Error fetching videos:", error.message);
+    }
+  },
 });
 
 export const useVideoStore = create(videoStore);

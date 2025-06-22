@@ -43,15 +43,20 @@ const AuthLogin = () => {
 
   return (
     <div className="min-h-screen content-center">
-      <form className="form" onSubmit={handleAuthFormLogin}>
+      <form
+        className="w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
+        onSubmit={handleAuthFormLogin}
+      >
         <div className="w-full grid grid-cols-3">
           <BackButton />
-          <span className="auth-title">Login</span>
+          <span className="text-center text-2xl text-gray-800 content-center">
+            Login
+          </span>
         </div>
 
         {/* LOGIN */}
-        <div className="auth-div">
-          <label htmlFor="auth-email" className="label">
+        <div className="flex flex-col w-[70%]">
+          <label htmlFor="auth-email" className="text-black mb-1">
             Email
           </label>
 
@@ -60,11 +65,11 @@ const AuthLogin = () => {
             id="auth-email"
             name="email"
             required
-            className="auth-input"
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
         {/* PASSWORD */}
-        <div className="auth-div">
+        <div className="flex flex-col w-[70%]">
           <label htmlFor="auth-password" className="label">
             Password
           </label>
@@ -73,10 +78,11 @@ const AuthLogin = () => {
             id="auth-password"
             name="password"
             required
-            className="auth-input"
+            minLength={8}
+            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
           />
         </div>
-        <section className="flex items-center justify-between w-[70%]">
+        <section className="flex items-center justify-between w-[70%] py-4">
           {/* SHOW PASSWORD */}
           <p className="flex gap-2 items-center">
             <input
@@ -91,12 +97,15 @@ const AuthLogin = () => {
           {/* FORGOT PASSWORD */}
           <p
             onClick={() => navigate("/verify-email", { viewTransition: true })}
-            className="text-blue-600 font-semibold cursor-pointer text-center pt-2 hover:underline"
+            className="text-blue-600 font-semibold cursor-pointer text-center hover:underline"
           >
             Forgot password?
           </p>
         </section>
-        <button type="submit" className="submit">
+        <button
+          type="submit"
+          className="w-fit bg-[var(--dark-background)] border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all"
+        >
           Login
         </button>
         <span

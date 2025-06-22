@@ -2,6 +2,15 @@
 
 @import "tailwindcss" important;
 
+@layer base {
+  :root {
+    --border-color: #893939;
+    --border-focus-color: #673ab7;
+
+    --dark-background: #1a202c;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,6 +26,54 @@
 .hide-arrow[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.navbar-title {
+  font-weight: 900;
+  color: transparent;
+  background: linear-gradient(90deg, red, orange, yellow, green, blue, purple);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-size: 2rem;
+  &::selection {
+    color: transparent;
+    background: linear-gradient(
+      90deg,
+      red,
+      orange,
+      yellow,
+      green,
+      blue,
+      purple
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+}
+
+.dialog {
+  opacity: 1;
+  scale: 1;
+  border-radius: 0.5rem;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.35, 0.58);
+  padding: 1rem;
+  border: none;
+  margin: auto;
+  @starting-style {
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog[open]::backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
 }
 
 @theme {

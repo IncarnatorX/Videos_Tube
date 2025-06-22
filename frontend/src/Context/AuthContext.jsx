@@ -12,6 +12,8 @@ const AuthProvider = ({ children }) => {
   });
   const [accessToken, setAccessToken] = useState(null);
 
+  console.log("Access token", accessToken);
+
   // GET USER FROM SESSION STORAGE
   const getUserFromLocalStorage = () => {
     let userData = localStorage.getItem("user");
@@ -114,6 +116,7 @@ const AuthProvider = ({ children }) => {
     // REQUEST INTERCEPTOR
     const requestInterceptor = api.interceptors.request.use(
       (config) => {
+        console.log("REQUEST", config);
         if (accessToken) config.headers.authorization = `Bearer ${accessToken}`;
         return config;
       },
@@ -122,7 +125,10 @@ const AuthProvider = ({ children }) => {
 
     // RESPONSE INTERCEPTOR
     const responseInterceptor = api.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log("ALL OK", response);
+        return response;
+      },
       (error) => errorHandler(error)
     );
 

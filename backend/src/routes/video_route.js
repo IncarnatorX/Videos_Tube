@@ -1,24 +1,27 @@
 import { Router } from "express";
 import {
-  editTitleAndDesc,
-    commentsHandler,
-  getAllVideos,
-  getUserVideos,
-  publishVideo,
-  reUploadVideo,
+    editTitleAndDesc, commentsHandler,
+    getAllVideos,
+    getUserVideos,
+    publishVideo,
+    reUploadVideo,
+    updateVideoViews,
 } from "../controllers/video_controller.js";
 import upload from "../middlewares/multer_middleware.js";
 import verifyJWT from "../middlewares/auth_middleware.js";
+import videoViewsMiddleware from "../middlewares/video_views_middleware.js";
 
 const videoRouter = Router();
 
 videoRouter.route("/getAllVideos").get(getAllVideos);
 
+videoRouter.route("/update-video-views").post(videoViewsMiddleware, updateVideoViews)
+
 videoRouter.route("/edit").post(editTitleAndDesc);
 
 videoRouter.route("/re-upload").post(upload.single("videoFile"), reUploadVideo);
 
-videoRouter.route("/comment").post(commentsHandler);
+videoRouter.route("/comment").post(verifyJWT,commentsHandler);
 
 videoRouter.route("/publish").post(
   verifyJWT,
@@ -29,6 +32,6 @@ videoRouter.route("/publish").post(
   publishVideo
 );
 
-videoRouter.route("/getUserVideos").post(verifyJWT, getUserVideos);
+videoRouter.route("/get-user-videos").post(verifyJWT, getUserVideos);
 
 export default videoRouter;

@@ -1,21 +1,18 @@
-import Fab from "@mui/material/Fab";
-import UploadIcon from "@mui/icons-material/Upload";
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
+import PropTypes from "prop-types";
 
-const UploadVideoIcon = () => {
-  const { handleUploadVideoDialog } = useContext(VideoContext);
-
-  const fabStyle = {
-    position: "absolute",
-    top: 550,
-    right: 16,
-  };
+const UploadVideoIcon = ({ handleUploadVideoDialog }) => {
   return (
-    <Fab color="primary" sx={fabStyle} onClick={handleUploadVideoDialog}>
-      <UploadIcon />
-    </Fab>
+    <div
+      className="bg-blue-600 rounded-[50%] p-3 cursor-pointer fixed right-4 bottom-4 flex items-center justify-center"
+      onClick={handleUploadVideoDialog}
+    >
+      <img src="/icons/upload-icon.svg" alt="Upload icon" />
+    </div>
   );
+};
+
+UploadVideoIcon.propTypes = {
+  handleUploadVideoDialog: PropTypes.func.isRequired,
 };
 
 export default UploadVideoIcon;

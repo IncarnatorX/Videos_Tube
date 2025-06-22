@@ -2,14 +2,14 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-
 import api from "../../utils/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AvatarComponent from "../Avatar/AvatarComponent";
 
 const LogoutComponent = () => {
-  const { user, setUser, setUserLoggedIn } = useContext(AuthContext);
+  const { user, setUser, setUserLoggedIn, setAccessToken } =
+    useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -32,6 +32,7 @@ const LogoutComponent = () => {
         localStorage.removeItem("user");
         setUser(null);
         setUserLoggedIn(false);
+        setAccessToken(null);
         toast.success(response.data.message);
         navigate("/");
       }

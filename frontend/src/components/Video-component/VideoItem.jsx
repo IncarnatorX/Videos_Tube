@@ -1,9 +1,9 @@
+import { useContext } from "react";
+import { VideoContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import AvatarComponent from "../Avatar/AvatarComponent";
 import getTimeDifference from "../../utils/getTimeDifference";
 import PropTypes from "prop-types";
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
 
 const VideoItem = ({ video }) => {
   const navigate = useNavigate();
@@ -16,20 +16,21 @@ const VideoItem = ({ video }) => {
   }
 
   return (
-    <div className="video-item">
+    <div className="sm:w-[450px] md:w-[320px] xl:w-[400px] flex flex-col gap-4 p-3 rounded-lg bg-[#232323] hover:shadow-lg transition-all">
       <img
-        src={video.thumbnail}
-        alt="Video Thumbnail"
-        className="thumbnail cursor-pointer"
+        src={video?.thumbnail}
+        alt={video?.title}
+        className="w-full h-52 object-cover rounded-lg cursor-pointer"
         onClick={() => handleVideoClick(video)}
       />
       <section>
-        <div className="video-info">
+        <div className="flex items-center gap-8">
           <AvatarComponent owner={video?.owner} />
           <div>
-            <h4 className="video-title">{video.title}</h4>
-            <p className="text-gray-500 text-sm">
-              {video.views} views | {getTimeDifference(video.createdAt)}
+            <h4 className="m-0 text-lg font-bold text-white">{video?.title}</h4>
+            <p className="text-white text-md">{video?.owner?.fullname}</p>
+            <p className="text-white text-sm">
+              {video?.views} views | {getTimeDifference(video?.createdAt)}
             </p>
           </div>
         </div>

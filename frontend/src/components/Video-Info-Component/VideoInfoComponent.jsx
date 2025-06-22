@@ -1,14 +1,15 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext, VideoContext } from "../../Context/Context";
 import AvatarComponent from "../Avatar/AvatarComponent";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import CommentsComponent from "../Comments/CommentsComponent.jsx";
+import ThumbsUpIcon from "../../assets/icons/ThumbsUpIcon.jsx";
+import ThumbsDownIcon from "../../assets/icons/ThumbsDownIcon.jsx";
+// import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+// import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import getTimeDifference from "../../utils/getTimeDifference";
 import toast from "react-hot-toast";
 import api from "../../utils/api.js";
 import PropTypes from "prop-types";
-import "./VideoInfoComponent.css";
-import CommentsComponent from "../Comments/CommentsComponent.jsx";
 
 const VideoInfoComponent = () => {
   const { userLoggedIn, setUser, user } = useContext(AuthContext);
@@ -21,6 +22,8 @@ const VideoInfoComponent = () => {
 
   const thumbsUpRef = useRef(null);
   const thumbsDownRef = useRef(null);
+
+  const [isViewsUpdated, setIsViewsUpdated] = useState(false);
 
   const hasLiked =
     user?.likedVideos?.length > 0 && user?.likedVideos?.includes(video._id);
@@ -55,6 +58,7 @@ const VideoInfoComponent = () => {
       return;
     }
     const { current } = thumbsUpRef;
+    console.log(current);
     current.classList.add("animate-thumbs-up");
     setTimeout(() => {
       current.classList.remove("animate-thumbs-up");
@@ -114,49 +118,79 @@ const VideoInfoComponent = () => {
     }
   }
 
-  function handleVideoWatchTime(event) {
-    // TODO: Add a guard clause to return on true if an API call is made
+  async function handleVideoWatchTime(event) {
+    const videoElement = event.currentTarget;
 
-    const video = event.currentTarget;
-    const currentTime = video.currentTime;
-    const duration = video.duration;
+    if (!videoElement || isViewsUpdated) return; // if already viewed then return to prevent API calls
+
+    const currentTime = videoElement.currentTime;
+    const duration = videoElement.duration;
 
     const watchedPercentage = (currentTime / duration) * 100;
 
     if (watchedPercentage >= 50) {
-      // TODO: Implement a state that sets to true to prevent multiple API calls. Ex: setWatched or setViewsUpdated
-      console.log("Watched 50% video");
+      try {
+        const payload = {
+          videoId: video._id,
+          videoTitle: video.title,
+          userId: user._id,
+          fullname: user.fullname,
+          username: user.username,
+        };
+        const response = await api.post("/update-video-views", payload);
+
+        if (response.status === 200) {
+          const { message, updatedUser, updatedVideo } = response.data;
+          setCurrentVideo(updatedVideo);
+          setUser(updatedUser);
+          toast.success(message);
+        }
+      } catch (error) {
+        console.error("Error occurred:", error.message);
+      } finally {
+        setIsViewsUpdated(true); // This will update that the view is submitted
+      }
     }
   }
 
   return (
-    <div className="video-details">
-      <section className="video-section">
+    <div className="w-full min-h-[80vh] flex flex-col items-start flex-wrap mx-auto gap-y-4">
+      <section className="w-full flex grow items-center justify-center">
         <video
           src={video?.videoFile}
           controls
           height={650}
           // onPlay={(e) => console.log("Video is playing", e)}
           onTimeUpdate={handleVideoWatchTime}
+          className="rounded w-[60%] block my-0 mx-auto"
         ></video>
       </section>
 
-      <section className="details-section">
+      <section className="w-full pt-0 px-4 pb-2 flex flex-col gap-y-4 rounded-md flex-[1_1_35%]">
         <div className="flex items-center justify-between">
           {/* TITLE */}
           <p className="text-4xl text-white">{video?.title}</p>
           {/* LIKE AND DISLIKE BUTTON */}
           <div className="flex gap-4 bg-transparent py-2 px-4 rounded-md">
-            <ThumbUpAltIcon
+            {/* <ThumbUpAltIcon
               className="cursor-pointer"
               htmlColor={hasLiked ? "green" : "white"}
               ref={thumbsUpRef}
               onClick={() => handleThumbsUp("like")}
+            /> */}
+            <ThumbsUpIcon
+              fillColor={hasLiked ? "green" : "white"}
+              thumbsUpRef={thumbsUpRef}
+              handleThumbsUp={handleThumbsUp}
             />
-            <ThumbDownAltIcon
+            {/* <ThumbDownAltIcon
               className="text-white cursor-pointer"
               ref={thumbsDownRef}
               onClick={() => handleThumbsDown("dislike")}
+            /> */}
+            <ThumbsDownIcon
+              thumbsDownRef={thumbsDownRef}
+              handleThumbsDown={handleThumbsDown}
             />
           </div>
         </div>
@@ -186,15 +220,15 @@ const VideoInfoComponent = () => {
         )}
 
         {/* COMMENTS */}
-        <div className="comments text-white mb-9">
+        <div className="flex flex-col gap-y-4 text-white mb-9">
           <strong>Comments:</strong>
           {video?.comments.length > 0 ? (
             video?.comments.map((comment) => {
               return (
-                <div key={crypto.randomUUID()} className="comment-div">
-                  <p className="comment">
+                <div key={crypto.randomUUID()} className="flex items-center">
+                  <p className="flex items-center justify-center gap-4">
                     <span>
-                      {comment.comment} --- By {comment.fullname}
+                      {comment?.comment} --- By {comment?.fullname}
                     </span>
                   </p>
                 </div>

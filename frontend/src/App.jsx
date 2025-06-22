@@ -3,15 +3,14 @@ import ToastComponent from "./components/ToastContainer";
 import AuthProvider from "./Context/AuthContext";
 import VideoProvider from "./Context/VideoContext";
 import { ErrorBoundary } from "react-error-boundary";
-import ErrorNotFound from "./components/Error/ErrorNotFound";
+import PageNotFound from "./components/Page-Not-Found/PageNotFound";
 import AllRoutes from "./components/Routes/AllRoutes";
-import "./App.css";
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
-        <ErrorBoundary fallback={<ErrorNotFound />}>
+        <ErrorBoundary fallback={<PageNotFound />}>
           <VideoProvider>
             <AuthProvider>
               <AllRoutes />

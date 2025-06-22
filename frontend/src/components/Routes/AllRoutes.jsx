@@ -7,24 +7,67 @@ import ChangePasswordComponent from "../Change-Password/ChangePasswordComponent"
 import VerifyEmail from "../VerifyEmail/VerifyEmail";
 import VerifyOTP from "../VerifyOTP/VerifyOTP";
 import ResetPasswordComponent from "../Reset-Password/ResetPasswordComponent";
-import ErrorNotFound from "../Error/ErrorNotFound";
+import PageNotFound from "../Page-Not-Found/PageNotFound";
 import AuthLogin from "../Auth/AuthLogin";
 import AuthRegister from "../Auth/AuthRegister";
+import PrivateRoute from "./PrivateRoute";
 
 const AllRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/videoInfo" element={<VideoInfoPage />} />
       <Route path="/login" element={<AuthLogin />} />
       <Route path="/register" element={<AuthRegister />} />
-      <Route path="/account" element={<MyAccountPage />} />
-      <Route path="/cnf-pwd" element={<ConfirmPasswordComponent />} />
-      <Route path="/change-pwd" element={<ChangePasswordComponent />} />
-      <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/verify-otp" element={<VerifyOTP />} />
-      <Route path="/reset-pwd" element={<ResetPasswordComponent />} />
-      <Route path="*" element={<ErrorNotFound />} />
+      <Route path="/videoInfo" element={<VideoInfoPage />} />
+      <Route
+        path="/account"
+        element={
+          <PrivateRoute>
+            <MyAccountPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/cnf-pwd"
+        element={
+          <PrivateRoute>
+            <ConfirmPasswordComponent />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/change-pwd"
+        element={
+          <PrivateRoute>
+            <ChangePasswordComponent />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/verify-email"
+        element={
+          <PrivateRoute>
+            <VerifyEmail />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/verify-otp"
+        element={
+          <PrivateRoute>
+            <VerifyOTP />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/reset-pwd"
+        element={
+          <PrivateRoute>
+            <ResetPasswordComponent />
+          </PrivateRoute>
+        }
+      />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

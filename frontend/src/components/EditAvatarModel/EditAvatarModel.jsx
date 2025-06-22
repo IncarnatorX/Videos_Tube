@@ -45,7 +45,7 @@ const EditAvatarModel = ({ id, editAvatarRef }) => {
   }
 
   return (
-    <dialog ref={editAvatarRef} className="m-auto p-5 rounded-2xl">
+    <dialog ref={editAvatarRef} className="m-auto p-5 rounded-2xl fixed">
       <form
         method="dialog"
         encType="multipart/form-data"

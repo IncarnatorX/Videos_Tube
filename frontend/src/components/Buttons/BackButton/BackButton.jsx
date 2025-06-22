@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router";
-import "./BackButton.css";
 
 const BackButton = () => {
   const navigate = useNavigate();
@@ -8,11 +7,12 @@ const BackButton = () => {
     <div className="w-fit">
       <button
         onClick={() => navigate(-1)}
-        className="back-btn flex justify-center items-center gap-2 self-start cursor-pointer"
+        className="group flex justify-center items-center h-12 w-24 bg-[#eeeeee4b] rounded-sm tracking-wide transition-all duration-200 ease-in-out border-0 text-black ml-2.5 gap-2 self-start cursor-pointer hover:shadow-[3px_3px_5px_#292828,_-3px_-3px_3px_#a75353] hover:-translate-x-0.5"
       >
         <svg
           height="16"
           width="16"
+          className="mx-1.5 text-xl transform transition-all duration-200 ease-in-out group-hover:text-xl group-hover:-translate-x-1.5"
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"
           viewBox="0 0 1024 1024"

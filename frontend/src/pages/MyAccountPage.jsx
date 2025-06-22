@@ -6,41 +6,70 @@ import api from "../utils/api";
 import EditVideoDetails from "../components/Edit-Video/EditVideoDetails";
 import ReUploadVideoComponent from "../components/Reupload-video/ReUploadVideoComponent";
 import EditAvatarModel from "../components/EditAvatarModel/EditAvatarModel.jsx";
-import { AuthContext } from "../Context/Context.jsx";
+import { AuthContext, VideoContext } from "../Context/Context.jsx";
 
 const MyAccountPage = () => {
-  const { user } = useContext(AuthContext);
+  const { user, accessToken } = useContext(AuthContext);
+  const { setCurrentVideoId } = useContext(VideoContext);
   const [userVideos, setUserVideos] = useState([]);
 
   const editAvatarRef = useRef(null);
+  const editDialogRef = useRef(null);
+  const reuploadRef = useRef(null);
 
-  async function fetchUserVideos() {
-    try {
-      const response = await api.post("/getUserVideos", user._id, {
-        withCredentials: true,
-      });
+  console.log("ACCESS TOKEN", accessToken);
 
-      if (response.status === 200) {
-        const { payload } = response.data;
-        setUserVideos(payload);
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await api.post(
+          "/get-user-videos",
+          { id: user._id },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const { payload } = response.data;
+          setUserVideos(payload);
+        }
+      } catch (error) {
+        console.error(error);
+        console.error("Unable to fetch requests: ", error.message);
       }
-    } catch (error) {
-      console.error("Unable to fetch requests: ", error.message);
+    })();
+  }, [user._id]);
+
+  // EDIT BUTTON DIALOG HANDLINGS
+  function handleEditDialogOpening(id) {
+    if (editDialogRef.current) {
+      editDialogRef.current.showModal();
+      setCurrentVideoId(id);
     }
   }
 
-  useEffect(() => {
-    fetchUserVideos();
-  }, []);
+  // RE-UPLOAD DIALOG HANDLING
+  function handleReuploadDialogOpen(id) {
+    const { current } = reuploadRef;
+    current.showModal();
+    setCurrentVideoId(id);
+  }
 
   return (
     <div>
       <Navbar />
       <MyAccountDetails editAvatarRef={editAvatarRef} />
-      <MyAccountPublishVideos userVideos={userVideos} />
-      <EditVideoDetails />
-      <ReUploadVideoComponent />
-      <EditAvatarModel id={user._id} editAvatarRef={editAvatarRef} />
+      <MyAccountPublishVideos
+        userVideos={userVideos}
+        handleEditDialogOpening={handleEditDialogOpening}
+        handleReuploadDialogOpen={handleReuploadDialogOpen}
+      />
+      <EditVideoDetails editDialogRef={editDialogRef} />
+      <ReUploadVideoComponent reuploadRef={reuploadRef} />
+      <EditAvatarModel id={user?._id} editAvatarRef={editAvatarRef} />
     </div>
   );
 };

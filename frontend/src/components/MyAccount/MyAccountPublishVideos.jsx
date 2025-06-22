@@ -1,12 +1,11 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
 import "./MyAccountPublishVideos.css";
 
-const MyAccountPublishVideos = ({ userVideos }) => {
-  const { handleEditDialogOpening, handleReuploadDialogOpen } =
-    useContext(VideoContext);
-
+const MyAccountPublishVideos = ({
+  userVideos,
+  handleEditDialogOpening,
+  handleReuploadDialogOpen,
+}) => {
   return (
     <div className="text-white">
       <h3 className="my-4 text-center text-2xl">Published Videos</h3>
@@ -51,4 +50,6 @@ export default MyAccountPublishVideos;
 
 MyAccountPublishVideos.propTypes = {
   userVideos: PropTypes.array,
+  handleEditDialogOpening: PropTypes.func,
+  handleReuploadDialogOpen: PropTypes.func,
 };

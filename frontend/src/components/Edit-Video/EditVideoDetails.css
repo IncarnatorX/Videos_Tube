@@ -46,6 +46,7 @@ form .input-field {
 
 #edit-title {
   border: 2px solid #893939;
+  width: 100%;
   padding: 1rem;
   border-radius: 0.7rem;
   font-size: 1rem;

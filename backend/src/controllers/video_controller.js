@@ -7,6 +7,7 @@ import {
 import dotenv from "dotenv";
 import videoAndThumbnailDetails from "../utils/fetchVideoAndThumbnailDetails.js";
 import mongoose from "mongoose";
+import {User} from "../models/user_model.js";
 
 dotenv.config();
 
@@ -147,6 +148,7 @@ const publishVideo = async (req, res) => {
         id: req.user._id,
         fullname: req.user.fullname,
         avatar: req.user.avatar,
+        username: req.user.username,
       },
     });
 
@@ -167,7 +169,7 @@ const publishVideo = async (req, res) => {
 };
 
 const getUserVideos = async (req, res) => {
-  const { _id: userId } = req.user;
+  const { id: userId } = req.user;
 
   try {
     if (!userId)
@@ -192,6 +194,40 @@ const getUserVideos = async (req, res) => {
   }
 };
 
+const updateVideoViews = async (req, res) => {
+  try{
+    const {videoId, userId, fullname, videoTitle} = req.body;
+
+    if(!videoId || !userId || !fullname ||!videoTitle){
+      return res.status(404).json({message: "Incompatible/Incomplete payload details." });
+    }
+
+    const updatedVideo = await Video.findByIdAndUpdate(videoId, {
+      $inc: {views: 1},
+      $push: {viewsHistory: {id: userId, fullname}},
+    }, {new: true})
+
+    if(!updatedVideo){
+      return res.status(404).json({message: "Unable to update the video information." });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      $push: {watchHistory: {id: videoId, videoTitle}},
+    })
+
+    if(!updatedUser){
+      return res.status(404).json({message: "Unable to update the user information." });
+    }
+
+    return res.status(200).json({message: "Views updated successfully", updatedVideo, updatedUser})
+  }catch (error){
+    console.error("updateVideoViews controller errored out: ",error.message);
+    return res.status(404).json({
+      message: "Something went wrong while updating the views for the video.",
+    })
+  }
+}
+
 export {
   getAllVideos,
   editTitleAndDesc,
@@ -199,4 +235,5 @@ export {
   commentsHandler,
   publishVideo,
   getUserVideos,
+  updateVideoViews
 };

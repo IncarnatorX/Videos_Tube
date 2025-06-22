@@ -1,35 +1,29 @@
 import toast from "react-hot-toast";
-
 import { useContext, useRef } from "react";
 import { VideoContext } from "../../Context/Context";
-import "./EditVideoDetails.css";
+import PropTypes from "prop-types";
+import api from "../../utils/api";
+// import "./EditVideoDetails.css";
 
-const EditVideoDetails = () => {
+const EditVideoDetails = ({ editDialogRef }) => {
   const titleRef = useRef(null);
   const descRef = useRef(null);
 
-  const { setDetailsUpdated, detailsUpdated, currentVideoID, editDialogRef } =
+  const { setDetailsUpdated, detailsUpdated, currentVideoID } =
     useContext(VideoContext);
 
   const uploadTitleAndDescSubmission = async (e) => {
-    const formData = new FormData(e.target);
-    const editedDetails = {};
-    for (const [name, value] of formData) {
-      editedDetails[name] = value;
-    }
-    editedDetails._id = currentVideoID;
+    const editedDetailsFormData = new FormData(e.currentTarget);
+    editedDetailsFormData.append("_id", currentVideoID);
+    const editedDetailsPayload = Object.fromEntries(editedDetailsFormData);
 
     try {
-      const response = await fetch("http://localhost:8080/edit", {
-        method: "POST",
+      const response = await api.post("/edit", editedDetailsPayload, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(editedDetails),
       });
-
-      const data = await response.json();
-      toast.success(data.message);
+      toast.success(response.data.message);
       titleRef.current.value = "";
       descRef.current.value = "";
       setDetailsUpdated(!detailsUpdated);
@@ -39,15 +33,21 @@ const EditVideoDetails = () => {
   };
 
   return (
-    <dialog ref={editDialogRef} className="edit-dialog">
-      <form method="dialog" onSubmit={uploadTitleAndDescSubmission}>
+    <dialog ref={editDialogRef} className="dialog fixed">
+      <h2 className="font-bold text-2xl">Re-upload video</h2>
+      <form
+        method="dialog"
+        onSubmit={uploadTitleAndDescSubmission}
+        className="flex flex-col gap-y-4 items-center justify-center w-full h-full"
+      >
         <input
           type="text"
           id="edit-title"
           name="title"
           size={30}
           ref={titleRef}
-          placeholder="Enter Title"
+          placeholder="Enter new title"
+          className="w-full p-4 rounded-lg text-base outline-0 border-2 border-[#893939] focus:border-[#673ab7]"
           required
         />
 
@@ -59,22 +59,33 @@ const EditVideoDetails = () => {
           ref={descRef}
           cols={35}
           rows={5}
-          placeholder="Enter Description"
+          placeholder="Enter new description"
+          className="w-full p-2 rounded-lg outline-0 border-2 border-[var(--border-color)] focus:border-[var(--border-focus-color)]"
           required
         ></textarea>
 
-        <button className="btn save-btn" type="submit">
+        <button
+          type="submit"
+          className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-blue-600 hover:bg-blue-700 transition-all"
+        >
           Save Changes
         </button>
+        <button
+          className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-red-600 hover:bg-red-700 transition-all"
+          onClick={() => editDialogRef.current.close()}
+          type="button"
+        >
+          Close Form
+        </button>
       </form>
-      <button
-        className="btn close-btn"
-        onClick={() => editDialogRef.current.close()}
-      >
-        Close Form
-      </button>
     </dialog>
   );
+};
+
+EditVideoDetails.propTypes = {
+  editDialogRef: PropTypes.shape({
+    current: PropTypes.any,
+  }),
 };
 
 export default EditVideoDetails;

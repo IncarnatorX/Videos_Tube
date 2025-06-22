@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect /*useRef*/ } from "react";
 import { VideoContext } from "./Context";
 import PropTypes from "prop-types";
 import api from "../utils/api";
@@ -11,9 +11,9 @@ const VideoProvider = ({ children }) => {
     let video = localStorage.getItem("video");
     return video ? JSON.parse(video) : "";
   });
-  const editDialogRef = useRef(null);
-  const reuploadRef = useRef(null);
-  const uploadVideoRef = useRef(null);
+  // const editDialogRef = useRef(null);
+  // const reuploadRef = useRef(null);
+  // const uploadVideoRef = useRef(null);
 
   const fetchAllVideos = async () => {
     try {
@@ -28,38 +28,22 @@ const VideoProvider = ({ children }) => {
     fetchAllVideos();
   }, [detailsUpdated]);
 
-  // EDIT BUTTON DIALOG HANDLINGS
-  function handleEditDialogOpening(id) {
-    if (editDialogRef.current) {
-      editDialogRef.current.showModal();
-      setCurrentVideoId(id);
-    }
-  }
-
-  // RE-UPLOAD DIALOG HANDLING
-  function handleReuploadDialogOpen(id) {
-    const { current } = reuploadRef;
-    current.showModal();
-    setCurrentVideoId(id);
-  }
-
-  function handleUploadVideoDialog() {
-    if (uploadVideoRef.current) {
-      uploadVideoRef.current.showModal();
-    }
-  }
+  // function handleUploadVideoDialog() {
+  //   if (uploadVideoRef.current) {
+  //     uploadVideoRef.current.showModal();
+  //   }
+  // }
 
   const contextValues = {
     detailsUpdated,
     setDetailsUpdated,
     videos,
     currentVideoID,
-    editDialogRef,
-    reuploadRef,
-    uploadVideoRef,
-    handleEditDialogOpening,
-    handleReuploadDialogOpen,
-    handleUploadVideoDialog,
+    setCurrentVideoId,
+    // editDialogRef,
+    // reuploadRef,
+    // uploadVideoRef,
+    // handleUploadVideoDialog,
     currentVideo,
     setCurrentVideo,
   };
