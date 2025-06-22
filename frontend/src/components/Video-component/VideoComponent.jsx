@@ -1,9 +1,13 @@
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
+import { useEffect } from "react";
 import VideoItem from "./VideoItem";
+import { useVideoStore } from "../../store/videoStore";
 
 const VideoComponent = () => {
-  const { videos } = useContext(VideoContext);
+  const { videos, fetchAllVideos } = useVideoStore((store) => store);
+
+  useEffect(() => {
+    fetchAllVideos();
+  }, [fetchAllVideos]);
 
   // grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))]
 

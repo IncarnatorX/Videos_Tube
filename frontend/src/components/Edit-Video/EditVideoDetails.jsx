@@ -1,21 +1,31 @@
-import toast from "react-hot-toast";
-import { useContext, useRef } from "react";
-import { VideoContext } from "../../Context/Context";
-import PropTypes from "prop-types";
+import { useRef } from "react";
+import { useVideoStore } from "../../store/videoStore";
 import api from "../../utils/api";
-// import "./EditVideoDetails.css";
+import toast from "react-hot-toast";
+import PropTypes from "prop-types";
 
 const EditVideoDetails = ({ editDialogRef }) => {
   const titleRef = useRef(null);
   const descRef = useRef(null);
 
-  const { setDetailsUpdated, detailsUpdated, currentVideoID } =
-    useContext(VideoContext);
+  // const { setDetailsUpdated, detailsUpdated, currentVideoID } =
+  //   useContext(VideoContext);
+
+  const { setDetailsUpdated, detailsUpdated, currentVideoID } = useVideoStore(
+    (store) => store
+  );
 
   const uploadTitleAndDescSubmission = async (e) => {
     const editedDetailsFormData = new FormData(e.currentTarget);
     editedDetailsFormData.append("_id", currentVideoID);
     const editedDetailsPayload = Object.fromEntries(editedDetailsFormData);
+
+    const { title, description } = editedDetailsPayload;
+
+    if (title === "" && description === "") {
+      toast.error("Nothing to edit");
+      return;
+    }
 
     try {
       const response = await api.post("/edit", editedDetailsPayload, {
@@ -48,7 +58,6 @@ const EditVideoDetails = ({ editDialogRef }) => {
           ref={titleRef}
           placeholder="Enter new title"
           className="w-full p-4 rounded-lg text-base outline-0 border-2 border-[#893939] focus:border-[#673ab7]"
-          required
         />
 
         <textarea
@@ -61,7 +70,6 @@ const EditVideoDetails = ({ editDialogRef }) => {
           rows={5}
           placeholder="Enter new description"
           className="w-full p-2 rounded-lg outline-0 border-2 border-[var(--border-color)] focus:border-[var(--border-focus-color)]"
-          required
         ></textarea>
 
         <button

@@ -1,14 +1,15 @@
-import { useContext, useState } from "react";
-import { VideoContext } from "../../Context/Context";
+import { useState } from "react";
+import { useVideoStore } from "../../store/videoStore.js";
 import UploadFileButtons from "./UploadFileButtons";
-import toast from "react-hot-toast";
 import api from "../../utils/api.js";
+import toast from "react-hot-toast";
 import { ThreeDot } from "react-loading-indicators";
-// import "./UploadVideoForm.css";
 import PropTypes from "prop-types";
 
 const UploadVideoForm = ({ uploadVideoRef }) => {
-  const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);
+  // const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);
+
+  const { detailsUpdated, setDetailsUpdated } = useVideoStore((store) => store);
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
 

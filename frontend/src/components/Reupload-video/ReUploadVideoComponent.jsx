@@ -1,10 +1,10 @@
-import { useContext, useRef, useState } from "react";
-import { AuthContext, VideoContext } from "../../Context/Context";
+import { useRef, useState } from "react";
 import { ThreeDot } from "react-loading-indicators";
 import api from "../../utils/api";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
+import { useVideoStore } from "../../store/videoStore";
 
 const ReUploadVideoComponent = ({ reuploadRef }) => {
   const fileInputRef = useRef(null);
@@ -12,10 +12,14 @@ const ReUploadVideoComponent = ({ reuploadRef }) => {
   const [file, setFile] = useState(null);
 
   // IMPORTING FROM VIDEO CONTEXT
-  const { setDetailsUpdated, detailsUpdated, currentVideoID } =
-    useContext(VideoContext);
+  // const { setDetailsUpdated, detailsUpdated, currentVideoID } =
+  //   useContext(VideoContext);
 
-  const { accessToken } = useContext(AuthContext);
+  const { setDetailsUpdated, detailsUpdated, currentVideoID } = useVideoStore(
+    (store) => store
+  );
+
+  // const { accessToken } = useContext(AuthContext);
 
   const [uploading, setUploading] = useState(false);
 

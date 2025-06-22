@@ -6,11 +6,12 @@ import api from "../utils/api";
 import EditVideoDetails from "../components/Edit-Video/EditVideoDetails";
 import ReUploadVideoComponent from "../components/Reupload-video/ReUploadVideoComponent";
 import EditAvatarModel from "../components/EditAvatarModel/EditAvatarModel.jsx";
-import { AuthContext, VideoContext } from "../Context/Context.jsx";
+import { AuthContext } from "../Context/Context.jsx";
+import { useVideoStore } from "../store/videoStore.js";
 
 const MyAccountPage = () => {
   const { user, accessToken } = useContext(AuthContext);
-  const { setCurrentVideoId } = useContext(VideoContext);
+  const { setCurrentVideoID } = useVideoStore((store) => store);
   const [userVideos, setUserVideos] = useState([]);
 
   const editAvatarRef = useRef(null);
@@ -47,7 +48,7 @@ const MyAccountPage = () => {
   function handleEditDialogOpening(id) {
     if (editDialogRef.current) {
       editDialogRef.current.showModal();
-      setCurrentVideoId(id);
+      setCurrentVideoID(id);
     }
   }
 
@@ -55,7 +56,7 @@ const MyAccountPage = () => {
   function handleReuploadDialogOpen(id) {
     const { current } = reuploadRef;
     current.showModal();
-    setCurrentVideoId(id);
+    setCurrentVideoID(id);
   }
 
   return (

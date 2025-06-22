@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { AuthContext, VideoContext } from "../../Context/Context";
+import { AuthContext } from "../../Context/Context";
 import AvatarComponent from "../Avatar/AvatarComponent";
 import CommentsComponent from "../Comments/CommentsComponent.jsx";
 import ThumbsUpIcon from "../../assets/icons/ThumbsUpIcon.jsx";
@@ -10,15 +10,17 @@ import getTimeDifference from "../../utils/getTimeDifference";
 import toast from "react-hot-toast";
 import api from "../../utils/api.js";
 import PropTypes from "prop-types";
+import { useVideoStore } from "../../store/videoStore.js";
 
 const VideoInfoComponent = () => {
   const { userLoggedIn, setUser, user } = useContext(AuthContext);
+
   const {
     detailsUpdated,
     setDetailsUpdated,
     currentVideo: video,
     setCurrentVideo,
-  } = useContext(VideoContext);
+  } = useVideoStore((store) => store);
 
   const thumbsUpRef = useRef(null);
   const thumbsDownRef = useRef(null);
@@ -199,8 +201,10 @@ const VideoInfoComponent = () => {
         <div className="flex gap-4 items-center">
           <AvatarComponent owner={video?.owner} />
           <p className="text-2xl text-white">
-            {video?.owner?.fullname[0].toUpperCase() +
-              video?.owner?.fullname.slice(1)}
+            {video?.owner?.username
+              ? `@${video?.owner?.username}`
+              : video?.owner?.fullname[0].toUpperCase() +
+                video?.owner?.fullname.slice(1)}
           </p>
         </div>
 

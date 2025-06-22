@@ -1,13 +1,13 @@
-import { useContext } from "react";
-import { VideoContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import AvatarComponent from "../Avatar/AvatarComponent";
 import getTimeDifference from "../../utils/getTimeDifference";
 import PropTypes from "prop-types";
+import { useVideoStore } from "../../store/videoStore";
 
 const VideoItem = ({ video }) => {
   const navigate = useNavigate();
-  const { setCurrentVideo } = useContext(VideoContext);
+
+  const setCurrentVideo = useVideoStore((store) => store.setCurrentVideo);
 
   function handleVideoClick(video) {
     setCurrentVideo(video);
