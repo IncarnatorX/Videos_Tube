@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./Context";
-import api from "../utils/api";
+import api, { handleTokenAndErrorHandlerObject } from "../utils/api";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
@@ -113,30 +113,8 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     getUserFromLocalStorage();
 
-    // REQUEST INTERCEPTOR
-    const requestInterceptor = api.interceptors.request.use(
-      (config) => {
-        console.log("REQUEST", config);
-        if (accessToken) config.headers.authorization = `Bearer ${accessToken}`;
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    // RESPONSE INTERCEPTOR
-    const responseInterceptor = api.interceptors.response.use(
-      (response) => {
-        console.log("ALL OK", response);
-        return response;
-      },
-      (error) => errorHandler(error)
-    );
-
-    return () => {
-      api.interceptors.request.eject(requestInterceptor);
-      api.interceptors.response.eject(responseInterceptor);
-    };
-  }, [accessToken]);
+    handleTokenAndErrorHandlerObject(accessToken, errorHandler);
+  }, []);
 
   return (
     <AuthContext.Provider

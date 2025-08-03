@@ -2,7 +2,7 @@ import { rateLimit } from "express-rate-limit";
 
 const refreshTokenRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5, // Limit each IP/email to limit refresh the refresh tokens to 5
+  max: 10, // Limit each IP/email to limit refresh the refresh tokens to 5
   message: "Too many requests. Please try again.",
 });
 

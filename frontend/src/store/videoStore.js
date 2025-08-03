@@ -4,6 +4,7 @@ import api from "../utils/api";
 const videoStore = (set) => ({
   detailsUpdated: false,
   videos: [],
+  userVideos: [],
   currentVideoID: "",
   currentVideo: (() => {
     const video = localStorage.getItem("video");
@@ -15,6 +16,7 @@ const videoStore = (set) => ({
   setVideos: (videos) => set({ videos }),
   setCurrentVideo: (video) => set(() => ({ currentVideo: video })),
   setCurrentVideoID: (id) => set(() => ({ currentVideoID: id })),
+  setUserVideos: (video) => set(() => ({ userVideos: video })),
 
   fetchAllVideos: async () => {
     try {

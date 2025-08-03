@@ -23,15 +23,7 @@ const MyAccountPage = () => {
   useEffect(() => {
     (async function () {
       try {
-        const response = await api.post(
-          "/get-user-videos",
-          { id: user._id },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await api.get("/get-user-videos");
 
         if (response.status === 200) {
           const { payload } = response.data;

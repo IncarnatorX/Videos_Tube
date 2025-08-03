@@ -16,7 +16,7 @@ const VideoItem = ({ video }) => {
   }
 
   return (
-    <div className="sm:w-[450px] md:w-[320px] xl:w-[400px] flex flex-col gap-4 p-3 rounded-lg bg-[#232323] hover:shadow-lg transition-all">
+    <div className="w-full md:w-[22rem] lg:w-[25rem] flex flex-col gap-4 p-3 rounded-lg bg-[#232323] hover:shadow-lg transition-all">
       <img
         src={video?.thumbnail}
         alt={video?.title}

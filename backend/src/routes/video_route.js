@@ -32,6 +32,6 @@ videoRouter.route("/publish").post(
   publishVideo
 );
 
-videoRouter.route("/get-user-videos").post(verifyJWT, getUserVideos);
+videoRouter.route("/get-user-videos").get(verifyJWT, getUserVideos);
 
 export default videoRouter;
