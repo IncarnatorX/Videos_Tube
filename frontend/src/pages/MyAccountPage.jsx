@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyAccountDetails from "../components/MyAccount/MyAccountDetails";
 import Navbar from "../components/Navbar/Navbar";
 import MyAccountPublishVideos from "../components/MyAccount/MyAccountPublishVideos";
@@ -6,11 +6,15 @@ import api from "../utils/api";
 import EditVideoDetails from "../components/Edit-Video/EditVideoDetails";
 import ReUploadVideoComponent from "../components/Reupload-video/ReUploadVideoComponent";
 import EditAvatarModel from "../components/EditAvatarModel/EditAvatarModel.jsx";
-import { AuthContext } from "../Context/Context.jsx";
+// import { AuthContext } from "../Context/Context.jsx";
 import { useVideoStore } from "../store/videoStore.js";
+import { useAuthStore } from "../store/authStore.js";
 
 const MyAccountPage = () => {
-  const { user, accessToken } = useContext(AuthContext);
+  // const { user, accessToken } = useContext(AuthContext);
+
+  const { user, accessToken } = useAuthStore((store) => store);
+
   const { setCurrentVideoID } = useVideoStore((store) => store);
   const [userVideos, setUserVideos] = useState([]);
 

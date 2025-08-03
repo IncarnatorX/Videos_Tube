@@ -1,5 +1,5 @@
-import { useContext, useRef, useState } from "react";
-import { AuthContext } from "../../Context/Context";
+import { useRef, useState } from "react";
+// import { AuthContext } from "../../Context/Context";
 import AvatarComponent from "../Avatar/AvatarComponent";
 import CommentsComponent from "../Comments/CommentsComponent.jsx";
 import ThumbsUpIcon from "../../assets/icons/ThumbsUpIcon.jsx";
@@ -11,9 +11,12 @@ import toast from "react-hot-toast";
 import api from "../../utils/api.js";
 import PropTypes from "prop-types";
 import { useVideoStore } from "../../store/videoStore.js";
+import { useAuthStore } from "../../store/authStore.js";
 
 const VideoInfoComponent = () => {
-  const { userLoggedIn, setUser, user } = useContext(AuthContext);
+  // const { userLoggedIn, setUser, user } = useContext(AuthContext);
+
+  const { userLoggedIn, setUser, user } = useAuthStore((store) => store);
 
   const {
     detailsUpdated,

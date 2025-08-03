@@ -11,6 +11,16 @@ const authStore = (set) => ({
   setUserLoggedIn: (value) => set(() => ({ userLoggedIn: value })),
   setUser: (userData) => set(() => ({ user: userData })),
   setAccessToken: (token) => set(() => ({ accessToken: token })),
+
+  getUserFromLocalStorage: () => {
+    let userData = localStorage.getItem("user");
+    if (userData) {
+      let parsedUserData = JSON.parse(userData);
+      set({ user: parsedUserData, userLoggedIn: true });
+    } else {
+      set({ user: null, userLoggedIn: false });
+    }
+  },
 });
 
 export const useAuthStore = create(authStore);

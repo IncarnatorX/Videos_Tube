@@ -1,13 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { ThreeDot } from "react-loading-indicators";
-import "./EditAvatarModel.css";
 import api from "../../utils/api";
-import PropTypes from "prop-types";
-import { AuthContext } from "../../Context/Context";
+// import { AuthContext } from "../../Context/Context";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/authStore";
+import PropTypes from "prop-types";
+import "./EditAvatarModel.css";
 
 const EditAvatarModel = ({ id, editAvatarRef }) => {
-  const { setUserLoggedIn, setUser } = useContext(AuthContext);
+  // const { setUserLoggedIn, setUser } = useContext(AuthContext);
+  const { setUserLoggedIn, setUser } = useAuthStore((store) => store);
 
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [userUpdated, setUserUpdated] = useState(false);

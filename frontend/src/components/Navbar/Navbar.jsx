@@ -1,12 +1,15 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import { useNavigate } from "react-router";
-import { AuthContext } from "../../Context/Context";
+// import { AuthContext } from "../../Context/Context";
 import LogoutComponent from "../Auth/LogoutComponent";
 import LoginRegisterButtons from "../Auth/LoginRegisterButtons";
+import { useAuthStore } from "../../store/authStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { userLoggedIn } = useContext(AuthContext);
+  // const { userLoggedIn } = useContext(AuthContext);
+
+  const { userLoggedIn } = useAuthStore((store) => store);
   return (
     <nav className="flex items-center justify-between p-2">
       <img

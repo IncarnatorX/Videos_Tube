@@ -1,14 +1,18 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { AuthContext } from "../../Context/Context";
+// import { AuthContext } from "../../Context/Context";
 import toast from "react-hot-toast";
 import api from "../../utils/api";
 import BackButton from "../Buttons/BackButton/BackButton.jsx";
+import { useAuthStore } from "../../store/authStore.js";
 
 const AuthLogin = () => {
   const navigate = useNavigate();
 
-  const { setUserLoggedIn, setUser, setAccessToken } = useContext(AuthContext);
+  // const { setUserLoggedIn, setUser, setAccessToken } = useContext(AuthContext);
+  const { setUserLoggedIn, setUser, setAccessToken } = useAuthStore(
+    (store) => store
+  );
   const [showPassword, setShowPassword] = useState(false);
 
   const handleAuthFormLogin = async (event) => {
@@ -44,7 +48,7 @@ const AuthLogin = () => {
   return (
     <div className="min-h-screen content-center">
       <form
-        className="w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
+        className="w-[80%] lg:w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
         onSubmit={handleAuthFormLogin}
       >
         <div className="w-full grid grid-cols-3">

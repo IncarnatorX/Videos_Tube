@@ -1,11 +1,13 @@
-import { useContext } from "react";
-import { AuthContext } from "../../Context/Context";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/authStore";
 
 const ConfirmPasswordComponent = () => {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const { user } = useAuthStore((store) => store);
   const navigate = useNavigate();
 
   async function handleConfirmPassword(event) {

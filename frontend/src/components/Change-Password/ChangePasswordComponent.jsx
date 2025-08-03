@@ -2,13 +2,16 @@ import { useNavigate } from "react-router";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
-import { useContext } from "react";
-import { AuthContext } from "../../Context/Context";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Context/Context";
+import { useAuthStore } from "../../store/authStore";
 
 const ChangePasswordComponent = () => {
   const navigate = useNavigate();
 
-  const { setUser, setUserLoggedIn } = useContext(AuthContext);
+  // const { setUser, setUserLoggedIn } = useContext(AuthContext);
+
+  const { setUser, setUserLoggedIn } = useAuthStore((store) => store);
 
   async function handleChangePassword(e) {
     e.preventDefault();

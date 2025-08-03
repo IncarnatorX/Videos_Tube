@@ -1,12 +1,14 @@
-import { useContext } from "react";
-import { AuthContext } from "../../Context/Context";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import getCreatedAtFormatted from "../../utils/getCreatedAt";
 import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
 import PropTypes from "prop-types";
+import { useAuthStore } from "../../store/authStore";
 
 const MyAccountDetails = ({ editAvatarRef }) => {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const { user } = useAuthStore((store) => store);
   console.log(user);
   const navigate = useNavigate();
 

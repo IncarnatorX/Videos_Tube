@@ -1,14 +1,17 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { AuthContext } from "../../Context/Context";
+// import { AuthContext } from "../../Context/Context";
 import toast from "react-hot-toast";
 
 import api from "../../utils/api";
+import { useAuthStore } from "../../store/authStore";
 
 const ResetPasswordComponent = () => {
   const { state: email } = useLocation();
   const navigate = useNavigate();
-  const { setUser, setUserLoggedIn } = useContext(AuthContext);
+  // const { setUser, setUserLoggedIn } = useContext(AuthContext);
+
+  const { setUser, setUserLoggedIn } = useAuthStore((store) => store);
 
   async function handleResetPasswordSubmit(event) {
     event.preventDefault();

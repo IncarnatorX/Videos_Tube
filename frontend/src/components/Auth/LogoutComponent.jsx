@@ -1,15 +1,20 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/Context";
+import { useState } from "react";
+// import { AuthContext } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import api from "../../utils/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AvatarComponent from "../Avatar/AvatarComponent";
+import { useAuthStore } from "../../store/authStore";
 
 const LogoutComponent = () => {
-  const { user, setUser, setUserLoggedIn, setAccessToken } =
-    useContext(AuthContext);
+  // const { user, setUser, setUserLoggedIn, setAccessToken } =
+  //   useContext(AuthContext);
+
+  const { user, setUser, setUserLoggedIn, setAccessToken } = useAuthStore(
+    (store) => store
+  );
 
   const navigate = useNavigate();
 

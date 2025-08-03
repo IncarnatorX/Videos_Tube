@@ -19,8 +19,6 @@ const ReUploadVideoComponent = ({ reuploadRef }) => {
     (store) => store
   );
 
-  // const { accessToken } = useContext(AuthContext);
-
   const [uploading, setUploading] = useState(false);
 
   // FUNCTION TO HANDLE FORM SUBMISSION
