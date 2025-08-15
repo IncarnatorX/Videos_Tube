@@ -200,14 +200,14 @@ const getProfileController = async (req, res) => {
   try {
     const user = req.user;
 
-    if (!user) throw new Error({ message: "No user found..." });
+    if (!user) return res.status(400).json({ message: "No user found..." });
 
     return res.status(200).json({ user });
   } catch (error) {
     console.error("Errored in getProfileController: ", error.message);
     return res
       .status(500)
-      .json({ message: "Something wen't wrong. Please login again" });
+      .json({ message: "Something went wrong. Please login again" });
   }
 };
 
