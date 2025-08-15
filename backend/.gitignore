@@ -42,6 +42,7 @@ build/Release
 node_modules/
 jspm_packages/
 public/
+.idea/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -136,5 +137,3 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Other
-.idea
