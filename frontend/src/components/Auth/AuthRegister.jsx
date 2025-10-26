@@ -2,26 +2,48 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import api from "../../utils/api.js";
 import BackButton from "../Buttons/BackButton/BackButton.jsx";
+import { Controller, useForm } from "react-hook-form";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
 
-  // FUNCTION TO HANDLE FORM SUBMISSION
-  const handleAuthFormRegister = async (event) => {
-    event.preventDefault();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    setError,
+    reset,
+  } = useForm({
+    defaultValues: {
+      fullname: "",
+      username: "",
+      email: "",
+      password: "",
+      "cnf-password": "",
+    },
+  });
 
-    const authFormRegisterObject = Object.fromEntries(
-      new FormData(event.target)
-    );
-
+  async function handleAuthFormRegister(authFormRegisterObject) {
     if (
       authFormRegisterObject["password"] !==
       authFormRegisterObject["cnf-password"]
     ) {
-      toast.error("Passwords do not match");
+      // toast.error("Passwords do not match");
+      setError("password", {
+        message: "Passwords do not match.",
+      });
+      setError("cnf-password", {
+        message: "Passwords do not match.",
+      });
       return;
+    } else {
+      setError("password", {
+        message: "",
+      });
+      setError("cnf-password", {
+        message: "",
+      });
     }
-    event.target.reset();
 
     try {
       const response = await api.post("/register", authFormRegisterObject, {
@@ -40,13 +62,14 @@ const AuthRegister = () => {
       console.error("Error while submitting the form:", error);
       toast.error(error.response.data.message);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen content-center">
       <form
-        className="w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
-        onSubmit={handleAuthFormRegister}
+        className="w-[80%] lg:w-[50%] bg-white p-5 shadow flex flex-col rounded-md items-center gap-y-2 mx-auto"
+        // onSubmit={handleAuthFormRegister}
+        onSubmit={handleSubmit(handleAuthFormRegister)}
       >
         <div className="w-full grid grid-cols-3">
           <BackButton />
@@ -58,24 +81,50 @@ const AuthRegister = () => {
           <label htmlFor="auth-fullname" className="text-black mb-1">
             Fullname
           </label>
-          <input
-            type="text"
-            id="auth-fullname"
+          <Controller
+            control={control}
+            rules={{ required: "Fullname is required" }}
             name="fullname"
-            required
-            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
+            render={({ field }) => (
+              <>
+                <input
+                  {...field}
+                  type="text"
+                  id="auth-fullname"
+                  className="w-full text-base p-2.5 text-black border-2 border-gray-700 rounded-sm transition-all outline-0"
+                />
+                {errors?.fullname && (
+                  <p className="text-sm text-red-500 font-bold">
+                    {errors?.fullname?.message}
+                  </p>
+                )}
+              </>
+            )}
           />
         </div>
         <div className="flex flex-col w-[70%]">
           <label htmlFor="auth-username" className="text-black mb-1">
             Username
           </label>
-          <input
-            type="text"
-            id="auth-username"
+          <Controller
+            control={control}
             name="username"
-            required
-            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
+            rules={{ required: "Username is required" }}
+            render={({ field }) => (
+              <>
+                <input
+                  {...field}
+                  type="text"
+                  id="auth-username"
+                  className="w-full text-base p-2.5 text-black border-2 border-gray-700 rounded-sm transition-all outline-0"
+                />
+                {errors?.username && (
+                  <p className="text-sm text-red-500 font-bold">
+                    {errors?.username?.message}
+                  </p>
+                )}
+              </>
+            )}
           />
         </div>
 
@@ -84,24 +133,50 @@ const AuthRegister = () => {
             Email
           </label>
 
-          <input
-            type="email"
-            id="auth-email"
+          <Controller
+            control={control}
             name="email"
-            required
-            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
+            rules={{ required: "Email is required" }}
+            render={({ field }) => (
+              <>
+                <input
+                  {...field}
+                  type="email"
+                  id="auth-email"
+                  className="w-full text-base p-2.5 text-black border-2 border-gray-700 rounded-sm transition-all outline-0"
+                />
+                {errors?.email && (
+                  <p className="text-sm text-red-500 font-bold">
+                    {errors?.email?.message}
+                  </p>
+                )}
+              </>
+            )}
           />
         </div>
         <div className="flex flex-col w-[70%]">
           <label htmlFor="auth-password" className="text-black mb-1">
             Password
           </label>
-          <input
-            type="password"
-            id="auth-password"
+          <Controller
+            control={control}
             name="password"
-            required
-            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
+            rules={{ required: "Password is required" }}
+            render={({ field }) => (
+              <>
+                <input
+                  {...field}
+                  type="password"
+                  id="auth-password"
+                  className="w-full text-base p-2.5 text-black border-2 border-gray-700 rounded-sm transition-all outline-0"
+                />
+                {errors?.password && (
+                  <p className="text-sm text-red-500 font-bold">
+                    {errors?.password?.message}
+                  </p>
+                )}
+              </>
+            )}
           />
         </div>
 
@@ -109,18 +184,33 @@ const AuthRegister = () => {
           <label htmlFor="auth-cnf-password" className="text-black mb-1">
             Confirm Password
           </label>
-          <input
-            type="password"
-            id="auth-cnf-password"
+
+          <Controller
+            control={control}
             name="cnf-password"
-            required
-            className="w-full text-base p-2.5 text-black border-2 border-gray-400 rounded-sm transition-all outline-0 focus:border-gray-700 valid:border-green-600"
+            rules={{ required: "Password is required" }}
+            render={({ field }) => (
+              <>
+                <input
+                  {...field}
+                  type="password"
+                  id="auth-cnf-password"
+                  className="w-full text-base p-2.5 text-black border-2 border-gray-700 rounded-sm transition-all outline-0"
+                />
+                {errors?.["cnf-password"] && (
+                  <p className="text-sm text-red-500 font-bold">
+                    {errors?.["cnf-password"]?.message}
+                  </p>
+                )}
+              </>
+            )}
           />
         </div>
 
         <button
           type="submit"
-          className="w-fit bg-[var(--dark-background)] border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all"
+          disabled={!isValid}
+          className="w-fit bg-[var(--dark-background)] border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all disabled:cursor-not-allowed disabled:bg-gray-500"
         >
           Register{" "}
         </button>
