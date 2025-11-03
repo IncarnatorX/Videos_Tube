@@ -7,8 +7,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-const { accessToken } = useAuthStore.getState();
-
 // const tokenAndErrorHandlerObject = {
 //   accessToken: null,
 //   errorHandler: null,
@@ -21,8 +19,12 @@ const { accessToken } = useAuthStore.getState();
 
 api.interceptors.request.use(
   (config) => {
+    const state = useAuthStore.getState();
+    const accessToken = state.accessToken;
+    if (accessToken) {
+      config.headers.authorization = `Bearer ${accessToken}`;
+    }
     console.log("REQUEST INTERCEPTOR", config);
-    if (accessToken) config.headers.authorization = `Bearer ${accessToken}`;
     return config;
   },
   // (error) => Promise.reject(error)
@@ -32,7 +34,7 @@ api.interceptors.request.use(
 // RESPONSE INTERCEPTOR
 api.interceptors.response.use(
   (response) => {
-    console.log("RESPONSE INTERCEPTOR", response);
+    // console.log("RESPONSE INTERCEPTOR", response);
     return response;
   },
   (error) => errorHandler(error)

@@ -18,7 +18,7 @@ const registerUserController = async (req, res) => {
 
   // VALIDATING IF ALL THE FIELDS ARE SUPPLIED
   const allFieldsValidation = [fullname, email, password, username].some(
-    (field) => !field?.trim()
+    (field) => !field?.trim(),
   );
 
   if (allFieldsValidation) {
@@ -69,19 +69,49 @@ const logInUserController = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const isPasswordValid = await user.isPasswordCorrect(password);
+
     if (!isPasswordValid)
       return res.status(404).json({ message: "Password Incorrect" });
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-      user._id
+      user._id,
     );
 
-    const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshTokens -email"
-    );
+    await User.findByIdAndUpdate(user._id, {
+      $set: { loggedIn: true },
+    });
 
-    if (!loggedInUser)
-      return res.status(404).json({ message: "User not found!" });
+    const {
+      _id,
+      username,
+      fullname,
+      email: userEmail,
+      createdAt,
+      updatedAt,
+      likedVideos,
+      watchHistory,
+      loggedIn,
+    } = user;
+
+    const loggedInUser = {
+      _id,
+      username,
+      fullname,
+      userEmail,
+      createdAt,
+      updatedAt,
+      likedVideos,
+      watchHistory,
+      loggedIn,
+    };
+
+    // const loggedInUser = await User.findById(user._id).select(
+    //   "-password -refreshTokens -email"
+    // );
+
+    // if (!loggedInUser) {
+    //   return res.status(404).json({ message: "User not found!" });
+    // }
 
     return res.status(200).cookie("refreshToken", refreshToken, options).json({
       message: "Login Successful.",
@@ -102,6 +132,7 @@ const logoutUser = async (req, res) => {
 
     await User.findByIdAndUpdate(req.user._id, {
       $pull: { refreshTokens: incomingRefreshToken },
+      $set: { loggedIn: false },
     });
 
     return res
@@ -111,7 +142,7 @@ const logoutUser = async (req, res) => {
   } catch (error) {
     console.error(
       "Unable to logout user from logoutUser controller: ",
-      error.message
+      error.message,
     );
     return res
       .status(500)
@@ -136,7 +167,7 @@ const verifyToken = async (req, res) => {
   try {
     const decodedUser = jwt.verify(
       incomingAccessToken,
-      process.env.ACCESS_TOKEN_SECRET
+      process.env.ACCESS_TOKEN_SECRET,
     );
 
     return res.status(200).json({ isAuthenticated: true, user: decodedUser });
@@ -158,7 +189,7 @@ const generateNewAccessToken = async (req, res) => {
   try {
     const decodedToken = jwt.verify(
       incomingRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET
+      process.env.REFRESH_TOKEN_SECRET,
     );
 
     // FINDS THE USER WITH THE ID AND USER'S CORRESPONDING REFRESH TOKEN
@@ -175,7 +206,7 @@ const generateNewAccessToken = async (req, res) => {
 
     // GENERATING NEW TOKENS
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-      user._id
+      user._id,
     );
 
     // updating the new refresh token in database
@@ -228,7 +259,7 @@ const editAvatar = async (req, res) => {
   } catch (error) {
     console.error(
       "Error while running edit avatar controller: ",
-      error.message
+      error.message,
     );
     return res.status(500).json({
       message: "Error occurred while updating the avatar. Please try again.",

@@ -9,11 +9,39 @@ import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 
 const App = () => {
-  const { getUserFromLocalStorage } = useAuthStore((store) => store);
+  const {
+    // user,
+    getUserFromLocalStorage,
+    // setUser,
+    // setUserLoggedIn,
+    // setAccessToken,
+  } = useAuthStore((store) => store);
 
   useEffect(() => {
     getUserFromLocalStorage();
   }, []);
+
+  // useEffect(() => {
+  //   if (!user) return;
+
+  //   function logoutUser() {
+  //     fetch("http://localhost:8080/logout", {
+  //       credentials: "include",
+  //       keepalive: true,
+  //     });
+
+  //     localStorage.removeItem("user");
+  //     setUser(null);
+  //     setUserLoggedIn(false);
+  //     setAccessToken(null);
+  //   }
+
+  //   window.addEventListener("beforeunload", logoutUser);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", logoutUser);
+  //   };
+  // }, [user]);
 
   return (
     <>

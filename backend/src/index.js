@@ -19,7 +19,7 @@ const rootDir = path.resolve(__dirname, "..");
 
 const accessLogStream = fs.createWriteStream(
   path.join(rootDir, "http-log.log"),
-  { flags: "a" }
+  { flags: "a" },
 );
 
 dotenv.config();
@@ -28,17 +28,18 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(cookieParser());
-
-app.use(morgan("combined", { stream: accessLogStream }));
-
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-  })
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
+
+app.use(cookieParser());
+
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(express.json());
 app.use(videoRouter);
@@ -47,5 +48,5 @@ app.use(otpRouter);
 app.use(likesDislikesRoutes);
 
 connectDB().then(() =>
-  app.listen(PORT, () => console.log(`Listening at PORT: ${PORT}.`))
+  app.listen(PORT, () => console.log(`Listening at PORT: ${PORT}.`)),
 );

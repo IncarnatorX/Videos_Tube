@@ -27,7 +27,9 @@ const MyAccountPage = () => {
   useEffect(() => {
     (async function () {
       try {
-        const response = await api.get("/get-user-videos");
+        const response = await api.get("/get-user-videos", {
+          withCredentials: true,
+        });
 
         if (response.status === 200) {
           const { payload } = response.data;

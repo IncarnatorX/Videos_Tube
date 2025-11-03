@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    loggedIn: {
+      type: Boolean,
+    },
     avatar: {
       type: String,
     },
@@ -42,15 +45,15 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
     watchHistory: [
-        {
-            id: {
-                type: Schema.Types.ObjectId,
-                ref: "Video",
-            },
-            videoTitle: String
-        }
-],
-      default: []
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "Video",
+        },
+        videoTitle: String,
+      },
+    ],
+    default: [],
   },
   { timestamps: true }
 );

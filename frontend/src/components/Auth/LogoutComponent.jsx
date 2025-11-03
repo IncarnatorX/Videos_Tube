@@ -28,10 +28,15 @@ const LogoutComponent = () => {
   };
 
   async function handleUserLogout() {
+    // return;
     try {
-      const response = await api.post("/logout", {
-        withCredentials: true,
-      });
+      const response = await api.post(
+        "/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 200) {
         localStorage.removeItem("user");

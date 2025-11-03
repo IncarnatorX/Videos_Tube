@@ -19,7 +19,7 @@ const AuthLogin = () => {
 
   // const { setUserLoggedIn, setUser, setAccessToken } = useContext(AuthContext);
   const { setUserLoggedIn, setUser, setAccessToken } = useAuthStore(
-    (store) => store,
+    (store) => store
   );
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,7 +41,7 @@ const AuthLogin = () => {
       }
     } catch (error) {
       toast.error(
-        `Login Error: ${error.response.data.message || error.message}`,
+        `Login Error: ${error.response.data.message || error.message}`
       );
       navigate("/login");
       reset();

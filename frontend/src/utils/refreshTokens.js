@@ -10,7 +10,7 @@ async function refreshTokens(originalRequest) {
     const newRequestResponse = await api.post(
       "/refresh-token",
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
     if (newRequestResponse.status === 200) {
       console.log("✅ Refreshed Access token....", newRequestResponse.data);
@@ -18,9 +18,8 @@ async function refreshTokens(originalRequest) {
       setAccessToken(newRequestResponse.data.accessToken); // SETTING THE NEW ACCESS TOKEN
 
       // 🔥 Ensuring the new token is set before retrying the request
-      originalRequest.headers[
-        "authorization"
-      ] = `Bearer ${newRequestResponse.data.accessToken}`;
+      originalRequest.headers["authorization"] =
+        `Bearer ${newRequestResponse.data.accessToken}`;
 
       const refreshedUser = await api.get("/profile", {
         withCredentials: true,
@@ -40,7 +39,7 @@ async function refreshTokens(originalRequest) {
     }
   } catch (error) {
     console.error("🚨 Refresh token failed. Logging out...");
-    toast.error(error.response.data);
+    toast.error(error?.response?.data);
     console.error(error);
     localStorage.removeItem("user");
     setUser(null);

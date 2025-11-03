@@ -2,7 +2,6 @@ import { User } from "../models/user_model.js";
 import jwt from "jsonwebtoken";
 
 const verifyJWT = async (req, res, next) => {
-
   const incomingAccessToken =
     req.cookies.accessToken ||
     req.body.accessToken ||
@@ -11,17 +10,19 @@ const verifyJWT = async (req, res, next) => {
       ? req.headers["authorization"].split(" ")[1]
       : null);
 
-  if (!incomingAccessToken || incomingAccessToken === "null"){
-    return res.status(401).json({ message: "No incoming access token found." });
+  if (!incomingAccessToken || incomingAccessToken === "null") {
+    return res
+      .status(401)
+      .json({ message: "No incoming access token found.", success: false });
   }
 
   try {
     const decodedToken = jwt.verify(
       incomingAccessToken,
-      process.env.ACCESS_TOKEN_SECRET
+      process.env.ACCESS_TOKEN_SECRET,
     );
     const user = await User.findById(decodedToken?._id).select(
-      "-password -refreshTokens -email"
+      "-password -refreshTokens -email",
     );
 
     if (!user)
