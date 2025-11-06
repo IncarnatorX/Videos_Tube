@@ -1,31 +1,84 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useVideoStore } from "../../store/videoStore.js";
 import UploadFileButtons from "./UploadFileButtons";
 import api from "../../utils/api.js";
 import toast from "react-hot-toast";
 import { ThreeDot } from "react-loading-indicators";
-import PropTypes from "prop-types";
+import { useModalsStore } from "../../store/modalsStore.js";
+import { Controller, useForm } from "react-hook-form";
 
-const UploadVideoForm = ({ uploadVideoRef }) => {
+const defaultValues = {
+  title: "",
+  description: "",
+  videoFile: null,
+  thumbnail: null,
+};
+
+const UploadVideoForm = () => {
   // const { detailsUpdated, setDetailsUpdated } = useContext(VideoContext);
 
   const { detailsUpdated, setDetailsUpdated } = useVideoStore((store) => store);
 
+  const { uploadVideoModal, closeUploadVideoModal } = useModalsStore(
+    (store) => store
+  );
+
+  // console.log("uploadVideoModal DEBUG ", uploadVideoModal);
+
   const [uploadingVideo, setUploadingVideo] = useState(false);
 
-  async function handleVideoSubmit(event) {
-    event.preventDefault();
+  const uploadVideoRef = useRef(null);
 
-    setUploadingVideo(true);
+  const { control, handleSubmit, reset } = useForm({ defaultValues });
 
-    const formData = new FormData(event.target);
+  // USE EFFECT
+  useEffect(() => {
+    // if (!uploadVideoModal?.status) return;
+
+    if (uploadVideoRef.current && uploadVideoModal?.status) {
+      uploadVideoRef.current.showModal();
+    }
+
+    if (!uploadVideoModal?.status) {
+      uploadVideoRef.current.close();
+      reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uploadVideoModal?.status]);
+
+  // VIDEO SUBMIT HANDLER
+  // async function handleVideoSubmit(event) {
+  //   event.preventDefault();
+
+  //   const formData = new FormData(event.target);
+
+  //   console.log("formData", formData);
+
+  //   return;
+  // }
+
+  async function uploadVideoHandler(data) {
+    // console.log("DEBUG =>", data);
+
+    // setUploadingVideo(true);
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("videoFile", data.videoFile);
+    formData.append("thumbnail", data.thumbnail);
+
+    closeUploadVideoModal();
 
     try {
       const response = await api.post("/publish", formData, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       if (response.status === 200) {
-        uploadVideoRef.current.close();
+        closeUploadVideoModal();
         toast.success(response.data.message);
       } else {
         toast.error("Failed to upload video!! Please try again!");
@@ -33,9 +86,9 @@ const UploadVideoForm = ({ uploadVideoRef }) => {
     } catch (error) {
       console.error("Error while uploading the video: ", error.message);
     } finally {
-      event.target.reset();
       setDetailsUpdated(!detailsUpdated);
       setUploadingVideo(false);
+      closeUploadVideoModal();
     }
   }
 
@@ -43,32 +96,47 @@ const UploadVideoForm = ({ uploadVideoRef }) => {
     <dialog
       ref={uploadVideoRef}
       className="dialog fixed p-10 rounded-lg w-[800px] h-fit"
+      onClose={closeUploadVideoModal}
     >
       <form
-        onSubmit={handleVideoSubmit}
-        encType="multipart/form-data"
+        // onSubmit={handleVideoSubmit}
+        onSubmit={handleSubmit(uploadVideoHandler)}
+        // encType="multipart/form-data"
         className="flex flex-col items-center gap-4"
       >
         <h2 className="font-bold text-2xl">Upload Video</h2>
-        <input
-          type="text"
-          id="upload-title"
+
+        <Controller
+          control={control}
           name="title"
-          size={30}
-          placeholder="Enter Title"
-          className="border-2 border-[var(--border-color)] p-3 text-base outline-none w-full focus:border-[var(--border-focus-color)] rounded-md"
-          required
+          render={({ field }) => (
+            <input
+              {...field}
+              type="text"
+              id="upload-title"
+              size={30}
+              placeholder="Enter Title"
+              className="border-2 border-(--border-color) p-3 text-base outline-none w-full focus:border-(--border-focus-color) rounded-md"
+              required
+            />
+          )}
         />
 
-        <textarea
-          type="text"
-          id="upload-description"
+        <Controller
+          control={control}
           name="description"
-          placeholder="Enter Description"
-          className="w-full min-h-52 field-sizing-content p-2 outline-none border-2 border-[var(--border-color)] focus:border-[var(--border-focus-color)] rounded-md"
-          required
-        ></textarea>
-        <UploadFileButtons />
+          render={({ field }) => (
+            <textarea
+              {...field}
+              type="text"
+              id="upload-description"
+              placeholder="Enter Description"
+              className="w-full min-h-52 field-sizing-content p-2 outline-none border-2 border-(--border-color) focus:border-(--border-focus-color) rounded-md"
+              required
+            ></textarea>
+          )}
+        />
+        <UploadFileButtons control={control} />
         {uploadingVideo ? (
           <ThreeDot
             color="#1920ea"
@@ -87,12 +155,6 @@ const UploadVideoForm = ({ uploadVideoRef }) => {
       </form>
     </dialog>
   );
-};
-
-UploadVideoForm.propTypes = {
-  uploadVideoRef: PropTypes.shape({
-    current: PropTypes.any,
-  }),
 };
 
 export default UploadVideoForm;

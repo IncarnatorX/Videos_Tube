@@ -32,13 +32,13 @@ const deleteFromCloudinary = async (publicId, resource) => {
       });
     }
 
-    if (resource === "thumbnail") {
+    if (resource === "image") {
       await cloudinary.uploader.destroy(publicId);
     }
   } catch (error) {
     console.error(
       "Error while deleting the resources from cloudinary: ",
-      error.message
+      error.message,
     );
   }
 };

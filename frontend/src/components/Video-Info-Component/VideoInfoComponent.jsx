@@ -18,6 +18,8 @@ const VideoInfoComponent = () => {
 
   const { userLoggedIn, setUser, user } = useAuthStore((store) => store);
 
+  // console.log("user", user);
+
   const {
     detailsUpdated,
     setDetailsUpdated,
@@ -63,7 +65,7 @@ const VideoInfoComponent = () => {
       return;
     }
     const { current } = thumbsUpRef;
-    console.log(current);
+    // console.log(current);
     current.classList.add("animate-thumbs-up");
     setTimeout(() => {
       current.classList.remove("animate-thumbs-up");
@@ -145,10 +147,10 @@ const VideoInfoComponent = () => {
         const response = await api.post("/update-video-views", payload);
 
         if (response.status === 200) {
-          const { message, updatedUser, updatedVideo } = response.data;
+          const { /*message,*/ updatedUser, updatedVideo } = response.data;
           setCurrentVideo(updatedVideo);
           setUser(updatedUser);
-          toast.success(message);
+          // toast.success(message);
         }
       } catch (error) {
         console.error("Error occurred:", error.message);

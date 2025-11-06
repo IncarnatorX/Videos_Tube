@@ -7,7 +7,7 @@ import {
 import dotenv from "dotenv";
 import videoAndThumbnailDetails from "../utils/fetchVideoAndThumbnailDetails.js";
 import mongoose from "mongoose";
-import {User} from "../models/user_model.js";
+import { User } from "../models/user_model.js";
 
 dotenv.config();
 
@@ -82,7 +82,7 @@ const reUploadVideo = async (req, res) => {
       {
         $set: { videoFile: videoFileDetails.url },
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedVideo) {
@@ -97,30 +97,36 @@ const reUploadVideo = async (req, res) => {
 
 const commentsHandler = async (req, res) => {
   try {
-    const {comment, videoId, userId, fullname} = req.body;
-    if(!videoId){
-     return res.status(404).json({message: "Video id not found"});
+    const { comment, videoId, userId, fullname } = req.body;
+    if (!videoId) {
+      return res.status(404).json({ message: "Video id not found" });
     }
 
-    if(!userId){
-      return res.status(404).json({message: "User id not found"});
+    if (!userId) {
+      return res.status(404).json({ message: "User id not found" });
     }
 
-    if(!comment){
-      return res.status(404).json({message: "Comment not found"});
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
     }
 
     // await client.del(cacheKey); // clearing the cache before any updates happen
-    const updatedVideo = await Video.findByIdAndUpdate(videoId, {
-      $push: { comments: {comment, videoId, userId, fullname} },
-    }, {new : true});
+    const updatedVideo = await Video.findByIdAndUpdate(
+      videoId,
+      {
+        $push: { comments: { comment, videoId, userId, fullname } },
+      },
+      { new: true },
+    );
 
     if (!updatedVideo)
       res
         .status(404)
         .json({ message: "Error fetching and updating the video." });
 
-    res.status(200).json({ message: "Comment posted successfully.", updatedVideo });
+    res
+      .status(200)
+      .json({ message: "Comment posted successfully.", updatedVideo });
   } catch (error) {
     console.error(error.message);
   }
@@ -158,10 +164,10 @@ const publishVideo = async (req, res) => {
   } catch (error) {
     console.error(
       "Error While uploading the video in publishVideo controller: ",
-      error.message
+      error.message,
     );
     if (videoFile) await deleteFromCloudinary(videoFile.public_id, "video");
-    if (thumbnail) await deleteFromCloudinary(thumbnail.public_id, "thumbnail");
+    if (thumbnail) await deleteFromCloudinary(thumbnail.public_id, "image");
     return res
       .status(404)
       .json({ message: "Error while uploading the video. Please try again." });
@@ -195,38 +201,54 @@ const getUserVideos = async (req, res) => {
 };
 
 const updateVideoViews = async (req, res) => {
-  try{
-    const {videoId, userId, fullname, videoTitle} = req.body;
+  try {
+    const { videoId, userId, fullname, videoTitle } = req.body;
 
-    if(!videoId || !userId || !fullname ||!videoTitle){
-      return res.status(404).json({message: "Incompatible/Incomplete payload details." });
+    if (!videoId || !userId || !fullname || !videoTitle) {
+      return res
+        .status(404)
+        .json({ message: "Incompatible/Incomplete payload details." });
     }
 
-    const updatedVideo = await Video.findByIdAndUpdate(videoId, {
-      $inc: {views: 1},
-      $push: {viewsHistory: {id: userId, fullname}},
-    }, {new: true})
+    const updatedVideo = await Video.findByIdAndUpdate(
+      videoId,
+      {
+        $inc: { views: 1 },
+        $push: { viewsHistory: { id: userId, fullname } },
+      },
+      { new: true },
+    );
 
-    if(!updatedVideo){
-      return res.status(404).json({message: "Unable to update the video information." });
+    if (!updatedVideo) {
+      return res
+        .status(404)
+        .json({ message: "Unable to update the video information." });
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, {
-      $push: {watchHistory: {id: videoId, videoTitle}},
-    })
+      $push: { watchHistory: { id: videoId, videoTitle } },
+    });
 
-    if(!updatedUser){
-      return res.status(404).json({message: "Unable to update the user information." });
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ message: "Unable to update the user information." });
     }
 
-    return res.status(200).json({message: "Views updated successfully", updatedVideo, updatedUser})
-  }catch (error){
-    console.error("updateVideoViews controller errored out: ",error.message);
+    return res
+      .status(200)
+      .json({
+        message: "Views updated successfully",
+        updatedVideo,
+        updatedUser,
+      });
+  } catch (error) {
+    console.error("updateVideoViews controller errored out: ", error.message);
     return res.status(404).json({
       message: "Something went wrong while updating the views for the video.",
-    })
+    });
   }
-}
+};
 
 export {
   getAllVideos,
@@ -235,5 +257,5 @@ export {
   commentsHandler,
   publishVideo,
   getUserVideos,
-  updateVideoViews
+  updateVideoViews,
 };

@@ -13,7 +13,7 @@ const CommentsComponent = ({ handleAddComment }) => {
         placeholder="Add a comment..."
         className="w-full p-2 border-2 border-x-0 border-t-0 border-b-white text-white outline-none focus:border-fuchsia-300"
         onFocus={() => setInputIsFocused(true)}
-        onBlur={() => setInputIsFocused(false)}
+        // onBlur={() => setInputIsFocused(false)}
         required
       />
       {inputIsFocused && (
@@ -26,6 +26,7 @@ const CommentsComponent = ({ handleAddComment }) => {
           </button>
           <button
             type="button"
+            onClick={() => setInputIsFocused(false)}
             className="border-none outline-none text-white px-6 py-2 bg-red-700 rounded-xl cursor-pointer"
           >
             Cancel

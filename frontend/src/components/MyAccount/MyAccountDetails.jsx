@@ -3,31 +3,48 @@
 import { useNavigate } from "react-router";
 import getCreatedAtFormatted from "../../utils/getCreatedAt";
 import EditAvatarButton from "../Buttons/EditAvatarButton/EditAvatarButton";
-import PropTypes from "prop-types";
 import { useAuthStore } from "../../store/authStore";
+import stringToColor from "../../utils/stringToColor";
+import { useEffect, useState } from "react";
 
-const MyAccountDetails = ({ editAvatarRef }) => {
+const MyAccountDetails = () => {
   // const { user } = useContext(AuthContext);
   const { user } = useAuthStore((store) => store);
   console.log(user);
   const navigate = useNavigate();
 
-  function handleEditAvatarDialog() {
-    if (editAvatarRef.current) {
-      editAvatarRef.current.showModal();
-    }
-  }
+  const [userBGColorCode, setUserBGColorCode] = useState("");
+
+  useEffect(() => {
+    const fullname = user?.fullname;
+    if (!fullname) return;
+
+    const colorCode = stringToColor(fullname);
+
+    setUserBGColorCode(colorCode);
+  }, [user?.fullname]);
+
   return (
     <>
-      <h2 className="text-center py-2 text-white text-2xl ">My Account</h2>
-      <div className="grid grid-cols-12 text-white gap-2 p-6">
-        <div className="col-span-2 flex flex-col justify-center items-center gap-2">
-          <img src={user?.avatar} className="rounded-[50%] w-36 h-36" />
-          <EditAvatarButton handleEditAvatarDialog={handleEditAvatarDialog} />
+      <h2 className="text-center py-2 text-white text-2xl">My Account</h2>
+      <div className="flex text-white gap-2 p-6">
+        <div className="flex flex-col justify-center items-center gap-4 p-2">
+          {user?.avatar ? (
+            <img src={user?.avatar} className="rounded-[50%] w-36 h-36" />
+          ) : (
+            <div
+              className={`text-9xl rounded-full ${
+                userBGColorCode ? `bg-[${userBGColorCode}]` : "bg-gray-500"
+              } w-40 h-40 grid place-items-center`}
+            >
+              {user?.fullname?.[0]?.toUpperCase()}
+            </div>
+          )}
+          <EditAvatarButton />
         </div>
-        <div className="col-span-10 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <p className="text-4xl">
-            {user?.fullname[0].toUpperCase() + user?.fullname.slice(1)}
+            {user?.fullname?.[0].toUpperCase() + user?.fullname?.slice(1)}
           </p>
           <p>Username: @{user?.username}</p>
           <p>
@@ -47,10 +64,6 @@ const MyAccountDetails = ({ editAvatarRef }) => {
       </div>
     </>
   );
-};
-
-MyAccountDetails.propTypes = {
-  editAvatarRef: PropTypes.object,
 };
 
 export default MyAccountDetails;

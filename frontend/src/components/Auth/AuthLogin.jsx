@@ -67,7 +67,6 @@ const AuthLogin = () => {
           <label htmlFor="auth-email" className="text-black mb-1">
             Email
           </label>
-
           <Controller
             control={control}
             name="email"
@@ -141,7 +140,7 @@ const AuthLogin = () => {
         <button
           type="submit"
           disabled={!isValid}
-          className="w-fit bg-[var(--dark-background)] border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all disabled:cursor-not-allowed disabled:bg-gray-500"
+          className="w-fit bg-(--dark-background) border-0 text-white rounded-sm py-2.5 px-5 cursor-pointer transition-all disabled:cursor-not-allowed disabled:bg-gray-500"
         >
           Login
         </button>

@@ -13,16 +13,14 @@ import { useAuthStore } from "../store/authStore.js";
 const MyAccountPage = () => {
   // const { user, accessToken } = useContext(AuthContext);
 
-  const { user, accessToken } = useAuthStore((store) => store);
-
+  const { user } = useAuthStore((store) => store);
   const { setCurrentVideoID } = useVideoStore((store) => store);
+
   const [userVideos, setUserVideos] = useState([]);
 
   const editAvatarRef = useRef(null);
   const editDialogRef = useRef(null);
   const reuploadRef = useRef(null);
-
-  console.log("ACCESS TOKEN", accessToken);
 
   useEffect(() => {
     (async function () {
@@ -68,7 +66,7 @@ const MyAccountPage = () => {
       />
       <EditVideoDetails editDialogRef={editDialogRef} />
       <ReUploadVideoComponent reuploadRef={reuploadRef} />
-      <EditAvatarModel id={user?._id} editAvatarRef={editAvatarRef} />
+      <EditAvatarModel />
     </div>
   );
 };

@@ -6,7 +6,7 @@ const MyAccountPublishVideos = ({
   handleEditDialogOpening,
   handleReuploadDialogOpen,
 }) => {
-  console.log("userVideos", userVideos);
+  // console.log("userVideos", userVideos);
 
   return (
     <div className="text-white">

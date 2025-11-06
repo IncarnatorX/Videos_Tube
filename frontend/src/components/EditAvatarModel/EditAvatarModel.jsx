@@ -1,32 +1,45 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThreeDot } from "react-loading-indicators";
 import api from "../../utils/api";
 // import { AuthContext } from "../../Context/Context";
 import toast from "react-hot-toast";
-import { useAuthStore } from "../../store/authStore";
-import PropTypes from "prop-types";
 import "./EditAvatarModel.css";
+import Button from "../Buttons/Button/Button";
+import { useAvatarStore } from "../../store/avatarStore";
+import { useAuthStore } from "../../store/authStore";
 
-const EditAvatarModel = ({ id, editAvatarRef }) => {
-  // const { setUserLoggedIn, setUser } = useContext(AuthContext);
-  const { setUserLoggedIn, setUser } = useAuthStore((store) => store);
+const EditAvatarModel = () => {
+  const { avatarFile, avatarPreviewFile, setAvatarFile, setAvatarPreviewFile } =
+    useAvatarStore((store) => store);
+
+  const { setUser, setUserLoggedIn, user } = useAuthStore((store) => store);
 
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [userUpdated, setUserUpdated] = useState(false);
+
+  const avatarPreviewDialogRef = useRef(null);
+
+  function handleModalClose() {
+    avatarPreviewDialogRef.current.close();
+    setAvatarPreviewFile(null);
+    setAvatarFile(null);
+    setUploadingAvatar(false);
+  }
 
   async function getUpdatedUser() {
     localStorage.removeItem("user");
     const updatedUser = await api.get("/profile", { withCredentials: true });
-    localStorage.setItem("user", JSON.stringify(updatedUser.data));
-    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser.data.user));
+    setUser(updatedUser.data.user);
     setUserLoggedIn(true);
   }
 
   async function handleEditAvatarSubmission(event) {
     event.preventDefault();
     setUploadingAvatar(true);
+
     const formData = new FormData(event.target);
-    formData.append("_id", id);
+    formData.append("_id", user?._id);
+    formData.append("avatar", avatarFile);
 
     try {
       const response = await api.post("/avatar", formData, {
@@ -34,34 +47,45 @@ const EditAvatarModel = ({ id, editAvatarRef }) => {
       });
 
       if (response.status === 200) {
-        editAvatarRef.current.close();
         getUpdatedUser();
-        toast.success(response.data);
-        setUserUpdated(!userUpdated);
-        setUploadingAvatar(false);
+        handleModalClose();
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Error: ", error.message);
       toast.error("Error updating the avatar");
+    } finally {
+      setUploadingAvatar(false);
     }
   }
 
+  useEffect(() => {
+    if (!avatarPreviewFile) return;
+
+    avatarPreviewDialogRef.current.showModal();
+  }, [avatarPreviewFile]);
+
   return (
-    <dialog ref={editAvatarRef} className="m-auto p-5 rounded-2xl fixed">
+    <dialog
+      ref={avatarPreviewDialogRef}
+      className="backdrop:bg-black backdrop:opacity-80 outline-0 bg-none w-[50%] h-full bg-[#f7f7f7] m-auto rounded-md"
+    >
       <form
-        method="dialog"
         encType="multipart/form-data"
         onSubmit={handleEditAvatarSubmission}
+        className="flex flex-col items-center p-3 gap-3"
       >
-        <input
-          type="file"
-          id="avatar-input"
-          name="avatar"
-          accept="image/jpg image/png"
-          className="border-2 border-blue-500 rounded-md p-4"
-          required
+        <div className="flex flex-col gap-0.5">
+          <p className="text-center text-lg p-2">Avatar Preview</p>
+          <p className="text-sm text-gray-500 text-center">
+            Preview your image file before uploading....
+          </p>
+        </div>
+        <img
+          src={avatarPreviewFile}
+          alt="Image Preview"
+          className="w-fit h-80 rounded-md"
         />
-
         {uploadingAvatar ? (
           <ThreeDot
             color="#1920ea"
@@ -70,31 +94,20 @@ const EditAvatarModel = ({ id, editAvatarRef }) => {
             textColor="#1920ea"
           />
         ) : (
-          <button
-            type="submit"
-            value="Upload"
-            id="avatar-btn"
-            className="text-white bg-blue-500 py-2 px-4 rounded-md cursor-pointer"
-          >
+          <Button className="w-full" type="submit">
             Upload
-          </button>
+          </Button>
         )}
-
-        <button
-          className="text-white bg-red-500 py-2 px-4 rounded-md cursor-pointer close-btn"
+        <Button
+          className="bg-red-500 w-full"
+          onClick={handleModalClose}
           type="button"
-          onClick={() => editAvatarRef.current.close()}
         >
-          Close
-        </button>
+          Cancel
+        </Button>
       </form>
     </dialog>
   );
 };
 
 export default EditAvatarModel;
-
-EditAvatarModel.propTypes = {
-  id: PropTypes.string,
-  editAvatarRef: PropTypes.object,
-};

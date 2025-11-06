@@ -43,6 +43,7 @@ const LogoutComponent = () => {
         setUser(null);
         setUserLoggedIn(false);
         setAccessToken(null);
+        localStorage.clear();
         toast.success(response.data.message);
         navigate("/");
       }

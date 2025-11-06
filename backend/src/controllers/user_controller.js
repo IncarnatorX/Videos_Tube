@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 import { User } from "../models/user_model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 import generateAccessAndRefreshToken from "../utils/generateTokens.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import formatUser from "../utils/formatUser.js";
 
 dotenv.config();
 
@@ -81,37 +85,7 @@ const logInUserController = async (req, res) => {
       $set: { loggedIn: true },
     });
 
-    const {
-      _id,
-      username,
-      fullname,
-      email: userEmail,
-      createdAt,
-      updatedAt,
-      likedVideos,
-      watchHistory,
-      loggedIn,
-    } = user;
-
-    const loggedInUser = {
-      _id,
-      username,
-      fullname,
-      userEmail,
-      createdAt,
-      updatedAt,
-      likedVideos,
-      watchHistory,
-      loggedIn,
-    };
-
-    // const loggedInUser = await User.findById(user._id).select(
-    //   "-password -refreshTokens -email"
-    // );
-
-    // if (!loggedInUser) {
-    //   return res.status(404).json({ message: "User not found!" });
-    // }
+    const loggedInUser = formatUser(user);
 
     return res.status(200).cookie("refreshToken", refreshToken, options).json({
       message: "Login Successful.",
@@ -233,7 +207,9 @@ const getProfileController = async (req, res) => {
 
     if (!user) return res.status(400).json({ message: "No user found..." });
 
-    return res.status(200).json({ user });
+    const loggedInUser = formatUser(user);
+
+    return res.status(200).json({ user: loggedInUser });
   } catch (error) {
     console.error("Errored in getProfileController: ", error.message);
     return res
@@ -245,22 +221,29 @@ const getProfileController = async (req, res) => {
 const editAvatar = async (req, res) => {
   try {
     const { _id } = req.body;
+
     const avatarFilePath = req.file.path;
+
     if (!avatarFilePath)
       return res.status(404).json({ message: "No file provided!!" });
 
+    const user = await User.findById(_id);
+
+    await deleteFromCloudinary(user.avatarPublicId, "image");
+
     const avatarFile = await uploadOnCloudinary(avatarFilePath);
 
+    const avatarPublicId = avatarFile.public_id;
+
+    const avatarUrl = avatarFile.url;
+
     await User.findByIdAndUpdate(_id, {
-      $set: { avatar: avatarFile.url },
+      $set: { avatar: avatarUrl, avatarPublicId },
     });
 
     return res.status(200).json({ message: "Avatar uploaded successfully." });
   } catch (error) {
-    console.error(
-      "Error while running edit avatar controller: ",
-      error.message,
-    );
+    console.error("Error while running edit avatar controller: ", error);
     return res.status(500).json({
       message: "Error occurred while updating the avatar. Please try again.",
     });
