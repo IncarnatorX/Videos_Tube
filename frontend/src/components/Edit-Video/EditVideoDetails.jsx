@@ -12,7 +12,7 @@ const EditVideoDetails = ({ editDialogRef }) => {
   //   useContext(VideoContext);
 
   const { setDetailsUpdated, detailsUpdated, currentVideoID } = useVideoStore(
-    (store) => store
+    (store) => store,
   );
 
   const uploadTitleAndDescSubmission = async (e) => {
@@ -44,7 +44,7 @@ const EditVideoDetails = ({ editDialogRef }) => {
 
   return (
     <dialog ref={editDialogRef} className="dialog fixed">
-      <h2 className="font-bold text-2xl">Re-upload video</h2>
+      <h2 className="font-bold text-2xl">Edit video</h2>
       <form
         method="dialog"
         onSubmit={uploadTitleAndDescSubmission}
@@ -72,19 +72,21 @@ const EditVideoDetails = ({ editDialogRef }) => {
           className="w-full p-2 rounded-lg outline-0 border-2 border-[var(--border-color)] focus:border-[var(--border-focus-color)]"
         ></textarea>
 
-        <button
-          type="submit"
-          className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-blue-600 hover:bg-blue-700 transition-all"
-        >
-          Save Changes
-        </button>
-        <button
-          className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-red-600 hover:bg-red-700 transition-all"
-          onClick={() => editDialogRef.current.close()}
-          type="button"
-        >
-          Close Form
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="submit"
+            className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-blue-600 hover:bg-blue-700 transition-all"
+          >
+            Save Changes
+          </button>
+          <button
+            className="w-fit py-2 px-4 text-white border-0 outline-0 cursor-pointer rounded-md bg-red-600 hover:bg-red-700 transition-all"
+            onClick={() => editDialogRef.current.close()}
+            type="button"
+          >
+            Close Form
+          </button>
+        </div>
       </form>
     </dialog>
   );
